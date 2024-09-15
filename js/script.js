@@ -81,7 +81,7 @@ colorThemes.forEach((themeOption) => {
 	});
 });
 
-///////////////////////////                    document.onload = ;
+//// ///////////////////////                    document.onload = ;
 // window.addEventListener("load", () => {
 executeCodes();
 setTheme();
