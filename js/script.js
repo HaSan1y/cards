@@ -81,6 +81,15 @@ colorThemes.forEach((themeOption) => {
 	});
 });
 
+/// on hover theme switch////////////////////////////////////////////////////////////////////////////////////////
+const colorOptions = document.querySelectorAll(".color-option");
+
+colorOptions.forEach((option) => {
+	option.addEventListener("mouseover", () => {
+		const radioInput = option.querySelector('input[type="radio"]');
+		radioInput.checked = true;
+	});
+});
 //// ///////////////////////                    document.onload = ;
 // window.addEventListener("load", () => {
 executeCodes();
