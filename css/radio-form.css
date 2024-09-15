@@ -1,8 +1,9 @@
 /* From Uiverse.io by shadowmurphy */
 .radio-form {
-   display: block;
+   display: flex;
+   /* display: block;
+   max-width: 10em; */
    margin: auto;
-   max-width: 10em;
    position: relative;
 }
 
@@ -81,31 +82,7 @@
    box-shadow: 0 0 1em 0 currentColor;
 }
 
-@keyframes hop1 {
-
-   from,
-   to {
-      transform: translateX(0);
-   }
-
-   50% {
-      transform: translateX(-1.5em);
-   }
-}
-
-@keyframes hop2 {
-
-   from,
-   to {
-      transform: translateX(0);
-   }
-
-   50% {
-      transform: translateX(-1.5em);
-   }
-}
-
-@keyframes hop3 {
+@keyframes hop {
 
    from,
    to {
@@ -118,27 +95,36 @@
 }
 
 .radio-form input:nth-of-type(1):checked~.worm .worm__segment {
-   transform: translateY(0);
+   transform: translateX(0);
 }
 
-.radio-form input:nth-of-type(1):checked~.worm .worm__segment:before {
-   animation-name: hop1;
+.radio-form input:nth-of-type(1):checked~.worm .worm__segment:before,
+.radio-form input:nth-of-type(2):checked~.worm .worm__segment:before,
+.radio-form input:nth-of-type(3):checked~.worm .worm__segment:before,
+.radio-form input:nth-of-type(5):checked~.worm .worm__segment:before,
+.radio-form input:nth-of-type(6):checked~.worm .worm__segment:before,
+.radio-form input:nth-of-type(4):checked~.worm .worm__segment:before {
+   animation-name: hop;
 }
 
 .radio-form input:nth-of-type(2):checked~.worm .worm__segment {
-   transform: translateY(3em);
-}
-
-.radio-form input:nth-of-type(2):checked~.worm .worm__segment:before {
-   animation-name: hop2;
+   transform: translateX(2.68em);
 }
 
 .radio-form input:nth-of-type(3):checked~.worm .worm__segment {
-   transform: translateY(6em);
+   transform: translateX(5.35em);
 }
 
-.radio-form input:nth-of-type(3):checked~.worm .worm__segment:before {
-   animation-name: hop3;
+.radio-form input:nth-of-type(4):checked~.worm .worm__segment {
+   transform: translateX(8em);
+}
+
+.radio-form input:nth-of-type(5):checked~.worm .worm__segment {
+   transform: translateX(11em);
+}
+
+.radio-form input:nth-of-type(6):checked~.worm .worm__segment {
+   transform: translateX(14em);
 }
 
 @media screen and (prefers-color-scheme: dark) {

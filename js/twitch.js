@@ -1,4 +1,4 @@
-let x = "thinkerbella";
+let x = "shonzo";
 let player;
 var options = {
 	width: 400,
@@ -51,6 +51,12 @@ function updateChannelName() {
 			break;
 		case "tb":
 			buttonx.value = "thinkerbella";
+			break;
+		case "w":
+			buttonx.value = "spwooqi";
+			break;
+		case "s":
+			buttonx.value = "shonzo";
 			break;
 	}
 
