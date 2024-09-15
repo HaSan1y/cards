@@ -1086,4 +1086,9 @@ fieldset {
   bottom: 50px;
   right: 25px;
   opacity: 0.5;
+}
+
+svg {
+  height: 24px;
+  width: 24px;
 }/*# sourceMappingURL=style.css.map */
