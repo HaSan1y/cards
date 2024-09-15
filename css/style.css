@@ -431,17 +431,16 @@ main {
 }
 
 /*--------------------------------------------bootstrap----------------------*/
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  flex-grow: 1;
+.row,
+fieldset {
+  padding: 20px;
   margin: 0 200px !important;
-}
-
-.footer .row {
-  display: flex;
+  flex-grow: 1;
+  -moz-columns: auto;
+       columns: auto;
+  display: grid;
   flex-wrap: wrap;
-  margin: 0 !important;
+  justify-content: space-around;
 }
 
 .col-lg {
@@ -904,17 +903,6 @@ input:checked + .slider:before {
 
 div#card {
   position: relative;
-}
-
-.row,
-fieldset {
-  padding: 20px;
-  margin: 0;
-  -moz-columns: auto;
-       columns: auto;
-  display: grid;
-  flex-wrap: wrap;
-  justify-content: space-around;
 }
 
 .yourbanner {

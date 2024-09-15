@@ -233,13 +233,6 @@
 			</div>
 			<br />
 			<br />
-			<!-- <form method="post" class="xx" enctype="multipart/form-data">
-				<label for="files">
-					<input type="file" name="files" id="files" accept=".png" name="pic" multiple />
-					 accept='video/*' upload any video >
-				</label>
-				<button type="submit" id="uploadBtn">Upload PNG</button>//preventdefault???
-			</form> -->
 		</main>
 		<div class="row">
 			<div class="col-lg links">
@@ -259,6 +252,73 @@
 				<a class="btn btn-link" href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a>
 			</div>
 		</div>
+		<div class="embedholder">
+			<form class="radio-form" id="f">
+				<input value="a" name="hopping" type="radio" id="a" />
+				<label for="a"><span></span>C</label>
+				<input value="b" name="hopping" type="radio" id="b" />
+				<label for="b"><span></span>P</label>
+				<input value="c" name="hopping" type="radio" id="c" />
+				<label for="c"><span></span>T</label>
+				<input value="tb" name="hopping" type="radio" id="tb" />
+				<label for="tb"><span></span>tb</label>
+				<input value="w" name="hopping" type="radio" id="w" />
+				<label for="w"><span></span>w</label>
+				<input checked value="s" name="hopping" type="radio" id="s" />
+				<label for="s"><span></span>s</label>
+				<div class="worm">
+					<div class="worm__segment"></div>
+				</div>
+			</form>
+			<!-- <button type="submit" id="btnx">cerbervt</button> -->
+			<input type="text" placeholder="" id="buttonx" />
+			<!-- Add a placeholder for the Twitch embed -->
+			<div id="twitch-embed"></div>
+
+			<!--twitchchat embed doesnt work- ff embed not allowed: https issue? -->
+			<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
+			<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
+		</div>
+		<!-- youtube video -->
+		<iframe
+			id="asdf"
+			width="400"
+			height="200"
+			src="https://www.youtube-nocookie.com/embed/uhzi-ETgkYc"
+			title="YouTube video player"
+			frameborder="0"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			referrerpolicy="strict-origin-when-cross-origin"
+			allowfullscreen
+		></iframe>
+
+		<!-- candle -->
+		<div class="holder">
+			<div class="candle">
+				<div class="blinking-glow"></div>
+				<div class="thread"></div>
+				<div class="glow"></div>
+				<div class="flame"></div>
+			</div>
+		</div>
+
+		<!-- <form method="post" class="xx" enctype="multipart/form-data">
+			<label for="files">
+				<input type="file" name="files" id="files" accept=".png" name="pic" multiple />
+				 accept='video/*' upload any video >
+			</label>
+			<button type="submit" id="uploadBtn">Upload PNG</button>//preventdefault???
+		</form> -->
+
+		<!-- <section class="wowplayground">
+			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInLeft" data-wow-offset="5" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
+			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="1" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
+			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInDown" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
+			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
+			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
+			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
+		</section> -->
+
 		<!-- Footer -->
 		<div class="footer wow fadeIn" data-wow-delay="0.1s">
 			<div class="container">
@@ -343,64 +403,6 @@
 		<!-- Footer End -->
 		<!-- Back to Top -->
 		<a href="#" class="btn btn-primary back-to-top"><i>^</i></a>
-		<!-- <section class="wowplayground">
-			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInLeft" data-wow-offset="5" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
-			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="1" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
-			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInDown" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
-			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
-			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
-			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
-		</section> -->
-
-		<div class="embedholder">
-			<form class="radio-form" id="f">
-				<input value="a" name="hopping" type="radio" id="a" />
-				<label for="a"><span></span>C</label>
-				<input value="b" name="hopping" type="radio" id="b" />
-				<label for="b"><span></span>P</label>
-				<input value="c" name="hopping" type="radio" id="c" />
-				<label for="c"><span></span>T</label>
-				<input value="tb" name="hopping" type="radio" id="tb" />
-				<label for="tb"><span></span>tb</label>
-				<input value="w" name="hopping" type="radio" id="w" />
-				<label for="w"><span></span>w</label>
-				<input checked value="s" name="hopping" type="radio" id="s" />
-				<label for="s"><span></span>s</label>
-				<div class="worm">
-					<div class="worm__segment"></div>
-				</div>
-			</form>
-			<!-- <button type="submit" id="btnx">cerbervt</button> -->
-			<input type="text" placeholder="" id="buttonx" />
-			<!-- Add a placeholder for the Twitch embed -->
-			<div id="twitch-embed"></div>
-
-			<!--twitchchat embed doesnt work- ff embed not allowed: https issue? -->
-			<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
-			<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
-		</div>
-		<!-- youtube video -->
-		<iframe
-			id="asdf"
-			width="400"
-			height="200"
-			src="https://www.youtube-nocookie.com/embed/uhzi-ETgkYc"
-			title="YouTube video player"
-			frameborder="0"
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-			referrerpolicy="strict-origin-when-cross-origin"
-			allowfullscreen
-		></iframe>
-
-		<!-- candle -->
-		<div class="holder">
-			<div class="candle">
-				<div class="blinking-glow"></div>
-				<div class="thread"></div>
-				<div class="glow"></div>
-				<div class="flame"></div>
-			</div>
-		</div>
 
 		<!-- npm i wowjs //animate.css-->
 		<script src="js/wow/wow.min.js"></script>
