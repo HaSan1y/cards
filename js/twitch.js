@@ -1,8 +1,8 @@
 let x = "thinkerbella";
 let player;
 var options = {
-	width: 500,
-	height: 500,
+	width: 400,
+	height: 200,
 	channel: x,
 	//  video: "<video ID>",
 	//  collection: "<collection ID>",

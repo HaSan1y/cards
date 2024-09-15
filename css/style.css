@@ -1081,8 +1081,9 @@ fieldset {
     opacity: 1;
   }
 }
-.x {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.embedholder {
+  position: fixed;
+  bottom: 50px;
+  right: 25px;
+  opacity: 0.5;
 }/*# sourceMappingURL=style.css.map */
