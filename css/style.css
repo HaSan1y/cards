@@ -1084,6 +1084,13 @@ fieldset {
   opacity: 0.5;
 }
 
+#asdf {
+  position: fixed;
+  bottom: 50px;
+  left: 25px;
+  opacity: 0.5;
+}
+
 svg {
   height: 24px;
   width: 24px;

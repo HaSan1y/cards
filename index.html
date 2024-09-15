@@ -8,7 +8,7 @@
 		<!-- <meta http-equiv="Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" />
 <meta http-equiv="X-Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" /> -->
 		<meta Access-Control-Allow-Origin="no-cors" />
-		<meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube.com" />
+		<meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com" />
 
 		<title>cards</title>
 		<link href="img/favicon.ico" rel="icon" />
@@ -52,19 +52,19 @@
 				<div class="collapse navbar-collapse" id="navbarCollapse">
 					<div class="navbar-nav ms-auto">
 						<a href="index.html" class="nav-item nav-link">Home</a>
-						<a href="#" class="nav-item nav-link">About</a>
+						<a href="#card-holder" class="nav-item nav-link">About</a>
 						<div class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle">Projects</a>
 							<div class="dropdown-menu rounded-0 m-0">
 								<ul>
 									<li>
-										<a href="#" class="dropdown-item">Project 1</a>
+										<a href="https://h4-html-css.vercel.app/" class="dropdown-item">Portf 1</a>
 									</li>
 									<li>
-										<a href="#" class="dropdown-item">Project 2</a>
+										<a href="https://portf2-zeta.vercel.app/" class="dropdown-item">Portf 2</a>
 									</li>
 									<li>
-										<a href="#" class="dropdown-item">Project 3</a>
+										<a href="https://soloist.ai/script4sale" class="dropdown-item">script4u</a>
 									</li>
 								</ul>
 							</div>
@@ -74,7 +74,7 @@
 							<div class="dropdown-menu">
 								<ul>
 									<li>
-										<a href="#" class="dropdown-item">Testimonial</a>
+										<a href="https://github.com/HaSan1y" class="dropdown-item">Github</a>
 									</li>
 									<li>
 										<a href="#" class="dropdown-item active">404 Error</a>
@@ -82,9 +82,9 @@
 								</ul>
 							</div>
 						</div>
-						<a href="#" class="nav-item nav-link">Contact</a>
+						<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link">Contact</a>
 					</div>
-					<button type="button" class="btn sw btn-primary" onclick="import('./client-crudfs2server.js')">Switch db</button>
+					<!-- <button type="button" class="btn sw btn-primary" onclick="import('.js/client-aerver/client-crudfs2server.js')">Switch db</button> -->
 				</div>
 			</nav>
 		</div>
@@ -354,7 +354,7 @@
 
 		<div class="embedholder">
 			<form class="radio-form" id="f">
-				<input checked value="a" name="hopping" type="radio" id="a" />
+				<input value="a" name="hopping" type="radio" id="a" />
 				<label for="a"><span></span>C</label>
 				<input value="b" name="hopping" type="radio" id="b" />
 				<label for="b"><span></span>P</label>
@@ -364,7 +364,7 @@
 				<label for="tb"><span></span>tb</label>
 				<input value="w" name="hopping" type="radio" id="w" />
 				<label for="w"><span></span>w</label>
-				<input value="s" name="hopping" type="radio" id="s" />
+				<input checked value="s" name="hopping" type="radio" id="s" />
 				<label for="s"><span></span>s</label>
 				<div class="worm">
 					<div class="worm__segment"></div>
@@ -380,7 +380,7 @@
 			<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
 		</div>
 		<!-- youtube video -->
-		<!-- <iframe
+		<iframe
 			id="asdf"
 			width="400"
 			height="200"
@@ -390,7 +390,7 @@
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 			referrerpolicy="strict-origin-when-cross-origin"
 			allowfullscreen
-		></iframe> -->
+		></iframe>
 
 		<!-- candle -->
 		<div class="holder">
