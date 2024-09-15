@@ -1,21 +1,9 @@
 git config core.ignorecase false
 
 node_modules
+js/how
+js/client-server
+pic
+
 css/blog1.webp
-
-cgpd.md
-
-indexdb-master-example.html
-indexdb-master-ex.js
-
-server-crudfs2client.js
-client-crudfs2server.js
-sol.txt
-sen.txt
-
-express
-goog-translate.js
-withpromise-indexdb.js
-
-svg+brands.html
-preventdefault
+css/style.scss
