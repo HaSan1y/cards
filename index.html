@@ -14,6 +14,14 @@
 		<link href="img/favicon.ico" rel="icon" />
 
 		<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+		<!-- Load the Twitch embed script -->
+		<script src="https://player.twitch.tv/js/embed/v1.js" defer></script>
+		<!-- Create a Twitch.Player object. This will render within the placeholder div -->
+		<script type="text/javascript" src="js/twitch.js" defer></script>
+		<!-- <script src="js/client-crudfs2server.js"></script> -->
+		<script src="js/script.js" defer></script>
+		<script src="js/with-indexdb.js" defer></script>
+
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous" />
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -198,21 +206,21 @@
 				<!-- cards -->
 			</div>
 			<br />
-			
-		<!-- test card -->
-		<div class="myCard">
-			<div class="innerCard">
-				<div class="frontSide">
-					<p class="title">FRONT SIDE</p>
-					<p>Hover Me</p>
-				</div>
-				<div class="backSide">
-					<p class="title">BACK SIDE</p>
-					<p>Leave Me</p>
+
+			<!-- test card -->
+			<div class="myCard">
+				<div class="innerCard">
+					<div class="frontSide">
+						<p class="title">FRONT SIDE</p>
+						<p>Hover Me</p>
+					</div>
+					<div class="backSide">
+						<p class="title">BACK SIDE</p>
+						<p>Leave Me</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		
+
 			<div id="show">
 				<button type="button" id="remove" class="btn-primary" onclick="wipeData()" name="wipeIndexDBBtn">
 					<b> wipe-indexdb </b>
@@ -393,14 +401,6 @@
 				<div class="flame"></div>
 			</div>
 		</div>
-		<!-- Load the Twitch embed script -->
-		<script src="https://player.twitch.tv/js/embed/v1.js"></script>
-		<!-- Create a Twitch.Player object. This will render within the placeholder div -->
-		<script type="text/javascript" src="js/twitch.js"></script>
-
-		<!-- <script src="js/client-crudfs2server.js"></script> -->
-		<script src="js/script.js"></script>
-		<script src="js/with-indexdb.js"></script>
 
 		<!-- npm i wowjs //animate.css-->
 		<script src="js/wow/wow.min.js"></script>
