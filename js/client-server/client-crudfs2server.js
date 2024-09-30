@@ -31,6 +31,11 @@ async function displ() {
 				const card = document.createElement("div");
 				card.classList.add("myCard");
 				card.id = `card-${i}`;
+
+				const deleteButton = document.createElement("button");
+				deleteButton.textContent = "X";
+				deleteButton.classList.add("removebtn");
+
 				const heading = document.createElement("h2");
 				heading.textContent = sentences[i];
 				const paragraph = document.createElement("p");
@@ -55,8 +60,15 @@ async function displ() {
 				frontSide.appendChild(paragraph);
 				innerCard.appendChild(backSide);
 				innerCard.appendChild(frontSide);
+				frontSide.appendChild(deleteButton);
 				card.appendChild(innerCard);
 				cardHolder.appendChild(card);
+
+				deleteButton.onclick = (e) => {
+					// e.stopPropagation();
+					card.remove();
+					console.log("Card deleted");
+				};
 				totalCards++;
 			} else {
 				break;

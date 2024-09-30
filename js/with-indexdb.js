@@ -15,16 +15,17 @@ request.onerror = (request) => {
 	console.error("Error opening database:", request.errorCode);
 };
 
-// request.onupgradeneeded = (event) => {
-// 	const db = event.target.result;
-// 	const sentencesStore = db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
-// 	sentencesStore.createIndex("sentence", "sentence", { unique: true });
-// 	const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
+request.onupgradeneeded = (event) => {
+	// 'sentences' is not a known object store name, if i delete onupgradeneeded
+	const db = event.target.result;
+	const sentencesStore = db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
+	sentencesStore.createIndex("sentence", "sentence", { unique: true });
+	const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
 
-// 	solutionsStore.createIndex("solution", "solution", { unique: true });
+	solutionsStore.createIndex("solution", "solution", { unique: true });
 
-// 	console.log("4Databases create/load/indexed successfully");
-// };
+	console.log("4Databases create/load/indexed successfully");
+};
 
 request.onsuccess = (event) => {
 	// db = DBOpenRequest.result;
@@ -32,7 +33,7 @@ request.onsuccess = (event) => {
 
 	// event.target.parentNode.parentNode.removeChild(event.target.parentNode);
 	// note.innerHTML += `<li> "${dataTask}" Database opened successfully.</li>`
-	// note.appendChild(createListItem('App initialised.'));
+	// note.appendChild(createListItem('App initialized.'));
 	console.log("Database opened successfully");
 	display();
 };
