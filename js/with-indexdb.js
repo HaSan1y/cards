@@ -72,8 +72,6 @@ document.getElementById("txtbtn").addEventListener("submit", (event) => {
 });
 
 async function display() {
-	// First clear the content of the task list so that you don't get a huge long list of duplicate stuff each time
-	// the display is updated.
 	// while (cardHolder.firstChild) {
 	//   cardHolder.removeChild(cardHolder.lastChild);
 	// }
@@ -107,6 +105,7 @@ async function display() {
 function displayCards(sen, sol) {
 	let showmore = 6; // Initial number of cards to display
 	let totalCards = sol.length; // 0Keep track of the total number of cards displayed
+	//// receiving data from server
 	// if (totalCards + 10 < showmore) {//+10 never
 	//   const showMoreButton = document.getElementById('showmore') || document.createElement('button');
 	//   showMoreButton.textContent = 'Show More';
@@ -137,55 +136,79 @@ function displayCards(sen, sol) {
 	//       cursor.continue();
 	//     }
 	//   };
+	//// receiving data from indexdb
 	for (let i = 0; i < sen.length && totalCards < showmore; i++) {
 		const card = document.createElement("div");
-		card.classList.add("card", "bi", "bi-hand-index-fill");
-		card.id = `card-${i / 2}`;
+		card.classList.add("myCard", "bi", "bi-hand-index-fill");
+		card.id = `card-${Math.floor(i / 2)}`; //{totalCards}
+
 		const deleteButton = document.createElement("button");
-		card.append(deleteButton);
+		deleteButton.textContent = "X";
+		deleteButton.classList.add("removebtn");
+		deleteButton.onclick = (e) => {
+			e.stopPropagation();
+			card.remove();
+			console.log("Card deleted");
+		};
+
+		const innerCard = document.createElement("div");
+		innerCard.classList.add("innerCard");
+
+		const frontSide = document.createElement("div");
+		frontSide.classList.add("frontSide");
+
+		const backSide = document.createElement("div");
+		backSide.classList.add("backSide");
+
 		const heading = document.createElement("h2");
 		heading.textContent = sen[i].sentence;
+
 		const paragraph = document.createElement("p");
 		if (i + 1 < sen.length) {
 			paragraph.textContent = sen[i + 1].sentence;
 			i++;
 		}
-		card.appendChild(heading);
-		card.appendChild(paragraph);
 
-		deleteButton.textContent = "X";
-		deleteButton.setAttribute("class", "removebtn");
-		deleteButton.onclick = (e) => {
-			paragraph.parentNode.remove();
-			console.log(" deleteItem(event);");
-		};
-		cardHolder.appendChild(card);
-		totalCards++;
+		frontSide.appendChild(heading);
+		frontSide.appendChild(paragraph);
+		innerCard.appendChild(frontSide);
+		innerCard.appendChild(backSide);
+		card.appendChild(deleteButton);
+		card.appendChild(innerCard);
+
 		card.addEventListener("click", () => {
 			toggleCardContent(card);
 		});
+		cardHolder.appendChild(card);
+		totalCards++;
 	}
 }
 
 async function toggleCardContent(card) {
-	const [heading, paragraph] = [card.firstElementChild, card.lastElementChild];
+	const innerCard = card.querySelector(".innerCard");
+	const frontSide = innerCard.querySelector(".frontSide");
+	const backSide = innerCard.querySelector(".backSide");
 	const cardIndex = parseInt(card.id.split("-")[1]);
+
 	try {
 		const dbTransaction = db.transaction("solutions", "readonly");
 		const solutionsStore = dbTransaction.objectStore("solutions");
-		const solutionRequest = solutionsStore.get(cardIndex + 1);
-		solutionRequest.onsuccess = ({ target: { result: solution } }) => {
-			paragraph.textContent = solution ? solution.solution : "";
-		};
-		solutionRequest.onerror = ({ target: { errorCode } }) => {
-			console.error(`Error reading solution from database: ${errorCode}`);
-		};
+		const solution = await new Promise((resolve, reject) => {
+			const request = solutionsStore.get(cardIndex + 1);
+			request.onsuccess = (event) => resolve(event.target.result);
+			request.onerror = (event) => reject(event.target.error);
+		});
+
+		if (solution) {
+			backSide.textContent = solution.solution;
+			innerCard.classList.toggle("flipped");
+		}
 	} catch (error) {
-		console.error("Error reading file:", error);
+		console.error("Error reading solution from database:", error);
 	}
 }
 
-// wipeData indexdb called via button onclick="wipeData()"
+// called via button onclick="wipeData()"
 function wipeData() {
 	const removeDataFromStore = (storeName) => {
 		const transaction = db.transaction([storeName], "readwrite");
@@ -215,6 +238,9 @@ function wipeData() {
 		cards.forEach((card) => card.remove());
 		console.log(cards);
 	}
+	//reload browser
+	window.location.reload();
+	//
 	// const dataTask = event.target.getAttribute('data-task');
 	// const transaction = db.transaction(['toDoList'], 'readwrite');
 	// transaction.objectStore('toDoList').delete(dataTask);

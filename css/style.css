@@ -197,29 +197,8 @@ h2 {
   gap: 10px;
   padding: 10px;
   opacity: 0.8;
-}
-
-.bi-hand-index-fill::before {
-  opacity: 0.9;
-  animation: wave 4s infinite;
-}
-
-.card {
-  position: relative;
-  max-width: 300px;
-  padding: 1rem;
-  background-color: var(--clr-card-bg);
-  border-block-start: 0.5rem solid;
-  border-radius: 0.5rem;
-  opacity: 0.6;
-  box-shadow: 3px 3px 2px 2px var(--clr-heading);
-  cursor: pointer;
-}
-
-.card:hover,
-:focus {
-  filter: brightness(100%);
-  scale: 110%;
+  outline: 1px solid;
+  opacity: 0.5;
 }
 
 /* cardbtn2x */
@@ -242,13 +221,6 @@ h2 {
   padding: 5px !important;
   font-size: 8px;
   margin-bottom: 10px;
-}
-
-.links {
-  display: grid;
-  justify-content: space-evenly;
-  padding: 20px 0;
-  font-size: smaller;
 }
 
 /* switch3er */
@@ -394,7 +366,7 @@ main {
 }
 
 .footer .btn.btn-link:hover,
-.links .btn.btn-link:hover {
+.btn:hover {
   letter-spacing: 0.25px;
 }
 
@@ -431,21 +403,24 @@ main {
 }
 
 /*--------------------------------------------bootstrap----------------------*/
-.row,
-fieldset {
-  padding: 20px;
-  margin: 0 200px !important;
-  flex-grow: 1;
-  -moz-columns: auto;
-       columns: auto;
-  display: grid;
-  flex-wrap: wrap;
-  justify-content: space-around;
+.links {
+  outline: 1px solid;
+  -moz-columns: 4 auto;
+       columns: 4 auto;
+  opacity: 0.5;
 }
 
-.col-lg {
-  flex: 0 0 auto;
-  width: 25%;
+.row {
+  max-width: 1300px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
 .py-5 {
@@ -580,13 +555,13 @@ fieldset {
   text-align: right !important;
 }
 
-.btn-link {
+.btn {
   font-weight: 400;
   color: var(--clr-text);
   text-decoration: none;
 }
 
-.btn-link:hover {
+.btn:hover {
   color: var(--clr-heading);
 }
 
@@ -673,7 +648,7 @@ nav {
 }
 
 .dropdown-item:hover,
-.footer-menu .btn-link:hover,
+.footer-menu .btn:hover,
 .nav-link:hover,
 .dropdown-item.active {
   color: var(--primary);
@@ -931,8 +906,13 @@ div#card {
 
 /*///////////////////////////////////////////////////////////////////////////////////*/
 @media (max-width: 900px) {
-  .yourbanner {
+  .yourbanner,
+  .row {
     max-width: 400px;
+  }
+  .links {
+    -moz-columns: 2 auto;
+         columns: 2 auto;
   }
   .nav-bar {
     margin: auto;
@@ -1006,13 +986,13 @@ div#card {
   .navbar-expand-lg .navbar-toggler {
     display: none;
   }
-  .row,
   fieldset,
   #txtbtn {
     display: flex;
     justify-content: space-between;
   }
-  .yourbanner {
+  .yourbanner,
+  .row {
     max-width: 800px;
   }
 }
@@ -1026,7 +1006,8 @@ div#card {
   .color-picker {
     max-width: 1320px;
   }
-  .yourbanner {
+  .yourbanner,
+  .row {
     max-width: 1300px;
   }
 }

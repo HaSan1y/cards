@@ -202,24 +202,28 @@
 					<p>restart browser after clicking 'wipe-indexdb'. ids in indexdb wont reset to 0..</p>
 				</div>
 			</fieldset>
-			<div class="text-center" id="card-holder">
-				<!-- cards -->
-			</div>
-			<br />
 
-			<!-- test card -->
-			<div class="myCard">
-				<div class="innerCard">
-					<div class="frontSide">
-						<p class="title">FRONT SIDE</p>
-						<p>Hover Me</p>
-					</div>
-					<div class="backSide">
-						<p class="title">BACK SIDE</p>
-						<p>Leave Me</p>
+			<div class="text-center" id="card-holder">
+				<!-- test card -->
+				<div class="myCard">
+					<div class="innerCard">
+						<div class="frontSide">
+							<p class="title">FRONT SIDE</p>
+							<p>Hover Me</p>
+						</div>
+						<div class="backSide">
+							<p class="title">BACK SIDE</p>
+							<p>Leave Me</p>
+						</div>
 					</div>
 				</div>
+
+				<!-- cards -->
+				<!-- card bi bi-hand-->
+				<!-- h2 -->
+				<!-- p -->
 			</div>
+			<br />
 
 			<div id="show">
 				<button type="button" id="remove" class="btn-primary" onclick="wipeData()" name="wipeIndexDBBtn">
@@ -233,84 +237,92 @@
 			</div>
 			<br />
 			<br />
-		</main>
-		<div class="row">
-			<div class="col-lg links">
-				<a class="btn btn-link" href="https://humanbenchmark.com/" name="linkhumanbenchmark">humanbenchmark</a>
-				<a class="btn btn-link" href="https://www.duolingo.com" name="linkduolingo">duolingo</a>
-				<a class="btn btn-link" href="https://quillbot.com/">quillbot</a>
-				<a class="btn btn-link" href="https://www.grammarly.com/paraphrasing-tool">grammarly</a>
-				<a class="btn btn-link" href="https://www.feedough.com/">feedough</a>
-				<a class="btn btn-link" href="https://jenni.ai/">jenni.ai</a>
+
+			<div class="links">
+				<!-- <div class="col-lg links"> -->
+				<p><a class="btn" href="https://humanbenchmark.com/" name="linkhumanbenchmark">humanbenchmark</a></p>
+				<p><a class="btn" href="https://www.duolingo.com" name="linkduolingo">duolingo</a></p>
+				<p><a class="btn" href="https://quillbot.com/">quillbot</a></p>
+				<p><a class="btn" href="https://www.grammarly.com/paraphrasing-tool">grammarly</a></p>
+				<p><a class="btn" href="https://www.feedough.com/">feedough</a></p>
+				<p><a class="btn" href="https://jenni.ai/">jenni.ai</a></p>
+				<!-- </div>
+				<div class="col-lg links"> -->
+				<p><a class="btn" href="https://www.getmagical.com/">getmagical</a></p>
+				<p><a class="btn" href="https://www.unriddle.ai/">unriddle.ai</a></p>
+				<p><a class="btn" href="https://mr-dialect.com/de-ch/deutsch-raetoromanisch-uebersetzer-2/">mr.dialect</a></p>
+				<p><a class="btn" href="http://openpsychometrics.org/">openpsychometrics</a></p>
+				<p><a class="btn" href="https://www.deepl.com/write#en/">deepl</a></p>
+				<p><a class="btn" href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a></p>
+				<!-- </div> -->
 			</div>
-			<div class="col-lg links">
-				<a class="btn btn-link" href="https://www.getmagical.com/">getmagical</a>
-				<a class="btn btn-link" href="https://www.unriddle.ai/">unriddle.ai</a>
-				<a class="btn btn-link" href="https://mr-dialect.com/de-ch/deutsch-raetoromanisch-uebersetzer-2/">mr-dialect</a>
-				<a class="btn btn-link" href="http://openpsychometrics.org/">openpsychometrics</a>
-				<a class="btn btn-link" href="https://www.deepl.com/write#en/">deepl</a>
-				<a class="btn btn-link" href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a>
+			<div class="embedholder">
+				<form class="radio-form" id="f">
+					<input value="a" name="hopping" type="radio" id="a" />
+					<label for="a"><span></span>C</label>
+					<input value="b" name="hopping" type="radio" id="b" />
+					<label for="b"><span></span>P</label>
+					<input value="c" name="hopping" type="radio" id="c" />
+					<label for="c"><span></span>T</label>
+					<input value="tb" name="hopping" type="radio" id="tb" />
+					<label for="tb"><span></span>tb</label>
+					<input value="w" name="hopping" type="radio" id="w" />
+					<label for="w"><span></span>w</label>
+					<input checked value="s" name="hopping" type="radio" id="s" />
+					<label for="s"><span></span>s</label>
+					<div class="worm">
+						<div class="worm__segment"></div>
+					</div>
+				</form>
+				<!-- <button type="submit" id="btnx">cerbervt</button> -->
+
+				<input type="text" list="streamers" placeholder="" id="buttonx" />
+				<datalist id="streamers">
+					<option value="cerbervt"></option>
+					<option value="plush"></option>
+					<option value="trumporkamala2024"></option>
+					<option value="thinkerbella"></option>
+					<option value="spwooqi"></option>
+					<option value="shonzo"></option>
+				</datalist>
+				<!-- Add a placeholder for the Twitch embed -->
+				<div id="twitch-embed"></div>
+
+				<!--twitchchat embed doesnt work- ff embed not allowed: https issue? -->
+				<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
+				<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
 			</div>
-		</div>
-		<div class="embedholder">
-			<form class="radio-form" id="f">
-				<input value="a" name="hopping" type="radio" id="a" />
-				<label for="a"><span></span>C</label>
-				<input value="b" name="hopping" type="radio" id="b" />
-				<label for="b"><span></span>P</label>
-				<input value="c" name="hopping" type="radio" id="c" />
-				<label for="c"><span></span>T</label>
-				<input value="tb" name="hopping" type="radio" id="tb" />
-				<label for="tb"><span></span>tb</label>
-				<input value="w" name="hopping" type="radio" id="w" />
-				<label for="w"><span></span>w</label>
-				<input checked value="s" name="hopping" type="radio" id="s" />
-				<label for="s"><span></span>s</label>
-				<div class="worm">
-					<div class="worm__segment"></div>
+			<!-- youtube video -->
+			<iframe
+				id="asdf"
+				width="400"
+				height="200"
+				src="https://www.youtube-nocookie.com/embed/uhzi-ETgkYc"
+				title="YouTube video player"
+				frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				referrerpolicy="strict-origin-when-cross-origin"
+				allowfullscreen
+			></iframe>
+
+			<!-- candle -->
+			<div class="holder">
+				<div class="candle">
+					<div class="blinking-glow"></div>
+					<div class="thread"></div>
+					<div class="glow"></div>
+					<div class="flame"></div>
 				</div>
-			</form>
-			<!-- <button type="submit" id="btnx">cerbervt</button> -->
-			<input type="text" placeholder="" id="buttonx" />
-			<!-- Add a placeholder for the Twitch embed -->
-			<div id="twitch-embed"></div>
-
-			<!--twitchchat embed doesnt work- ff embed not allowed: https issue? -->
-			<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
-			<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
-		</div>
-		<!-- youtube video -->
-		<iframe
-			id="asdf"
-			width="400"
-			height="200"
-			src="https://www.youtube-nocookie.com/embed/uhzi-ETgkYc"
-			title="YouTube video player"
-			frameborder="0"
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-			referrerpolicy="strict-origin-when-cross-origin"
-			allowfullscreen
-		></iframe>
-
-		<!-- candle -->
-		<div class="holder">
-			<div class="candle">
-				<div class="blinking-glow"></div>
-				<div class="thread"></div>
-				<div class="glow"></div>
-				<div class="flame"></div>
 			</div>
-		</div>
 
-		<!-- <form method="post" class="xx" enctype="multipart/form-data">
+			<!-- <form method="post" class="xx" enctype="multipart/form-data">
 			<label for="files">
 				<input type="file" name="files" id="files" accept=".png" name="pic" multiple />
 				 accept='video/*' upload any video >
 			</label>
 			<button type="submit" id="uploadBtn">Upload PNG</button>//preventdefault???
 		</form> -->
-
-		<!-- <section class="wowplayground">
+			<!-- <section class="wowplayground">
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInLeft" data-wow-offset="5" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="1" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInDown" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
@@ -318,7 +330,7 @@
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
 		</section> -->
-
+		</main>
 		<!-- Footer -->
 		<div class="footer wow fadeIn" data-wow-delay="0.1s">
 			<div class="container">
@@ -399,6 +411,7 @@
 				</div>
 			</div>
 		</div>
+		<a href="d.tsx"></a>
 		<!-- <button type="button" id="tofile" onclick="addTextToFile()">clientside js save 'title' into .txt-file</button> -->
 		<!-- Footer End -->
 		<!-- Back to Top -->

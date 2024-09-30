@@ -1,9 +1,42 @@
+.bi-hand-index-fill::before {
+   opacity: 0.9;
+   animation: wave 4s infinite;
+   scale: 90%;
+}
+
+/* .card {
+// 	position: relative;
+// 	max-width: 300px;
+// 	padding: 1rem;
+// 	background-color: var(--clr-card-bg);
+// 	border-block-start: 0.5rem solid;
+// 	border-radius: 0.5rem;
+// 	opacity: 0.6;
+// 	box-shadow: 3px 3px 2px 2px var(--clr-heading);
+// 	cursor: pointer;
+ }*/
+
+.myCard:hover,
+:focus {
+   filter: brightness(100%);
+   scale: 110%;
+}
+
 /* From Uiverse.io by htwarriors108 */
 .myCard {
    background-color: transparent;
    width: 190px;
    height: 254px;
    perspective: 1000px;
+   position: relative;
+   max-width: 300px;
+   padding: 1rem;
+   background-color: var(--clr-card-bg);
+   border-block-start: 0.5rem solid;
+   border-radius: 0.5rem;
+   opacity: 0.6;
+   box-shadow: 3px 3px 2px 2px var(--clr-heading);
+   cursor: pointer;
 }
 
 .title {
@@ -21,6 +54,7 @@
    transition: transform 0.8s;
    transform-style: preserve-3d;
    cursor: pointer;
+   /* overflow: hidden; */
 }
 
 .myCard:hover .innerCard {
@@ -43,6 +77,7 @@
    color: white;
    box-shadow: 0 0 0.3em rgba(255, 255, 255, 0.5);
    font-weight: 700;
+   overflow: hidden;
 }
 
 .frontSide,
