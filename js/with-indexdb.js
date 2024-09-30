@@ -139,7 +139,7 @@ function displayCards(sen, sol) {
 	//// receiving data from indexdb
 	for (let i = 0; i < sen.length && totalCards < showmore; i++) {
 		const card = document.createElement("div");
-		card.classList.add("myCard", "bi", "bi-hand-index-fill");
+		card.classList.add("myCard");
 		card.id = `card-${Math.floor(i / 2)}`; //{totalCards}
 
 		const deleteButton = document.createElement("button");
@@ -155,7 +155,7 @@ function displayCards(sen, sol) {
 		innerCard.classList.add("innerCard");
 
 		const frontSide = document.createElement("div");
-		frontSide.classList.add("frontSide");
+		frontSide.classList.add("frontSide", "bi", "bi-hand-index-fill");
 
 		const backSide = document.createElement("div");
 		backSide.classList.add("backSide");

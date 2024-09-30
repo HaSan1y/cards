@@ -16,7 +16,8 @@ const executeCodes = () => {
 			});
 		});
 	}
-	if (!document.cookie.includes("terms-accepted")) {
+	//terms disabled && 1 == 0
+	if (!document.cookie.includes("terms-accepted") && 1 == 0) {
 		closeDisclaimerModal.addEventListener("click", () => {
 			if (acknowledgeDisclaimer.checked) {
 				document.cookie = "acpttermsBy= ${terms-accepted}; SameSite=Strict; max-age= " + 60 * 60 * 24 * 30;
