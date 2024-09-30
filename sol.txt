@@ -1,6 +1,2 @@
-g
-yx
-qqq
-kkk
-aaa
-cv
+e
+f 

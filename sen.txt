@@ -1,12 +1,4 @@
-d
-f 
-xx
-c
-q
-qq
-k
-kk
 a
-aa
-bn
-mn
+b
+c 
+d 

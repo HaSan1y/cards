@@ -2,7 +2,7 @@ git config core.ignorecase false
 
 node_modules
 js/how
-js/client-server
+js/client-server/expresstest
 pic
 
 css/blog1.webp
