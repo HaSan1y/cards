@@ -4,6 +4,17 @@
    scale: 90%;
 }
 
+/* cards */
+#cardHolder {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
+   gap: 10px;
+   padding: 10px;
+   opacity: 0.8;
+   outline: 1px solid;
+   opacity: 0.5;
+}
+
 /* .card {
 // 	position: relative;
 // 	max-width: 300px;

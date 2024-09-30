@@ -3,23 +3,29 @@
 window.onload = () => {
 	document.documentElement.scrollIntoView();
 };
-const cardHolder = document.getElementById("card-holder");
+
 // self.indexedDB.open
+// if (typeof request === "undefined") {
+// 	request = window.indexedDB.open("myDatabase", 1, { objectStores: 0 });
+// } else {
+// }
+// const cardHolder = document.getElementById("cardHolder");
 const request = window.indexedDB.open("myDatabase", 1, { objectStores: 0 });
 request.onerror = (request) => {
 	console.error("Error opening database:", request.errorCode);
 };
 
-request.onupgradeneeded = (event) => {
-	const db = event.target.result;
-	const sentencesStore = db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
-	sentencesStore.createIndex("sentence", "sentence", { unique: true });
-	const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
-	// creates outertable
-	solutionsStore.createIndex("solution", "solution", { unique: true });
-	// create inner table
-	console.log("4Databases create/load/indexed successfully");
-};
+// request.onupgradeneeded = (event) => {
+// 	const db = event.target.result;
+// 	const sentencesStore = db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
+// 	sentencesStore.createIndex("sentence", "sentence", { unique: true });
+// 	const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
+
+// 	solutionsStore.createIndex("solution", "solution", { unique: true });
+
+// 	console.log("4Databases create/load/indexed successfully");
+// };
+
 request.onsuccess = (event) => {
 	// db = DBOpenRequest.result;
 	db = event.target.result;
@@ -49,6 +55,7 @@ document.getElementById("txtbtn").addEventListener("submit", (event) => {
 	solutions.forEach((solution) => {
 		solutionsStore.add({ solution: solutions[0] });
 	});
+
 	transaction.onsuccess = (event) => {
 		console.log(`data success: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]}`, event.target.error);
 	};
@@ -58,12 +65,11 @@ document.getElementById("txtbtn").addEventListener("submit", (event) => {
 		console.log(`Data added to ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store successfully`);
 		display();
 	};
-
 	transaction.onerror = (event) => {
 		console.error(`Error reading Data: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
 	};
 
-	// maybe make a single table in indexdb
+	// maybe make a single table for all3 inputs in indexdb
 	// const objectStoreRequest = transaction.add(newItem[0]);
 	// objectStoreRequest.onsuccess = (event) => {
 	//   note.appendChild(createListItem('Request successful.'));

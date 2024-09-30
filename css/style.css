@@ -195,17 +195,6 @@ h2 {
   padding: 10px 10px 0 10px;
 }
 
-/* cards */
-#card-holder {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
-  gap: 10px;
-  padding: 10px;
-  opacity: 0.8;
-  outline: 1px solid;
-  opacity: 0.5;
-}
-
 /* cardbtn2x */
 #show {
   display: flex;
@@ -312,7 +301,7 @@ fieldset {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  box-orient: vertical;
+  -webkit-line-clamp: 3;
   line-clamp: 3;
 }
 
@@ -409,10 +398,11 @@ main {
 
 /*--------------------------------------------bootstrap----------------------*/
 .links {
-  outline: 1px solid;
+  outline: 0.1px solid;
   -moz-columns: 4 auto;
        columns: 4 auto;
   opacity: 0.5;
+  padding: 20px;
 }
 
 .row {
@@ -425,7 +415,6 @@ main {
 
 .btn {
   display: inline-block;
-  margin-bottom: 10px;
 }
 
 .py-5 {
@@ -842,22 +831,6 @@ input:checked + .slider:before {
   transform: scale(1.2);
 }
 
-*::-moz-placeholder, *::-moz-placeholder::first-line, *::-moz-placeholder::content {
-  display: flex;
-  color: #000 !important;
-  align-items: center;
-  background: red;
-}
-
-*::placeholder,
-*::placeholder::first-line,
-*::placeholder::content {
-  display: flex;
-  color: #000 !important;
-  align-items: center;
-  background: red;
-}
-
 .deactivated {
   outline: 2px solid red;
   background-color: #666;
@@ -890,7 +863,6 @@ div#card {
   outline: rgba(255, 0, 0, 0.164) 1px dotted;
   font-size: 8px;
   margin: auto;
-  float: "995px";
   height: 50px;
 }
 .yourbanner img {
@@ -921,7 +893,6 @@ div#card {
   }
   .nav-bar {
     margin: auto;
-    padding: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1068,4 +1039,13 @@ div#card {
 svg {
   height: 24px;
   width: 24px;
+}
+
+.clientCardText {
+  font-size: smaller !important;
+  color: #1f0505 !important;
+}
+
+.script-output {
+  color: #1f0505;
 }/*# sourceMappingURL=style.css.map */
