@@ -1,4 +1,6 @@
 let activeScript = null;
+let isSwitched;
+isSwitched == true ? false : true;
 
 function switchScript() {
 	const scripts = ["./js/with-indexdb.js", "./js/client-server/client-crudfs2server.js"];
@@ -7,7 +9,7 @@ function switchScript() {
 	const currentIndex = activeScript ? scripts.indexOf(activeScript) : 0;
 
 	// Switch to the next script
-	const nextIndex = currentIndex ? 0 : +1;
+	const nextIndex = currentIndex ? 0 : currentIndex == 1 ? -1 : +1;
 
 	// Load the new script
 	const newScript = document.createElement("script");
