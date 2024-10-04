@@ -3,23 +3,47 @@ const cards = document.querySelectorAll("#card");
 // } else {
 // 	cards = document.querySelectorAll("#card");
 // }
+
 // class Counter {
 // 	constructor() {
 // 		this.z = 0;
 // 	}
-
 // 	increment() {
 // 		this.z++;
 // 	}
 // }
-
 // const counter = new Counter();
 let kek = 8;
 let sentences = [];
 let totalCards = 0;
-let showmore = 8; // Initial number of cards to display
+let showmore = 8;
+if (!isIDB) {
+	const submitButtonContainer = document.getElementById("dbbtn");
+	const existingButton = submitButtonContainer.querySelector(".indexdbsubmitbtn");
 
-async function display() {
+	if (existingButton) {
+		submitButtonContainer.removeChild(existingButton);
+	}
+
+	const newSubmitButton = document.createElement("button");
+	newSubmitButton.textContent = "Add text to Server";
+	newSubmitButton.type = "submit";
+	newSubmitButton.classList.add("btn-primary", "serversubmitbtn");
+
+	submitButtonContainer.appendChild(newSubmitButton);
+	submitButtonContainer.id = "txtbtn";
+
+	const showMoreButton = document.createElement("button");
+	showMoreButton.textContent = "reload Server-txt-DB";
+	showMoreButton.setAttribute("id", "showmore");
+	showMoreButton.type = "button";
+	showMoreButton.classList.add("btn-primary");
+	document.getElementById("buttons").appendChild(showMoreButton);
+	const x = document.getElementById("removeIDB");
+	if (x) x.remove();
+}
+
+async function displ() {
 	try {
 		// const filePath = counter.z === 0 ? "sen.txt" : `sen${counter.z}.txt`;
 		const filePath = "sen.txt";
@@ -28,12 +52,8 @@ async function display() {
 		const data = await response.text();
 		sentences = data.trim().split("\n");
 
-		const showMoreButton = document.createElement("button");
-		showMoreButton.textContent = "Show More";
-		showMoreButton.setAttribute("id", "showmore");
-		showMoreButton.classList.add("btn-primary");
-		showMoreButton.addEventListener("click", () => {
-			showMoreCards(showMoreButton, sentences, showmore);
+		document.getElementById("showmore").addEventListener("click", () => {
+			showMoreCards(this, sentences);
 		});
 		for (let i = 0; i < sentences.length && totalCards < showmore; i++) {
 			const card = document.createElement("div");
@@ -76,7 +96,6 @@ async function display() {
 			};
 			totalCards++;
 		}
-		// show.appendChild(showMoreButton);
 	} catch (error) {
 		console.error("Error reading file:", error);
 	}
@@ -167,7 +186,8 @@ async function postData(url, data) {
 //    document.body.removeChild(link);
 //  }
 //////////////////////////////////////////////////////////////////////////////////////////
-function showMoreCards(button, sentences, showmore) {
+//triggered via btn created on displ
+function showMoreCards(button, sentences) {
 	let totalCards = document.querySelectorAll(".card").length + kek;
 	kek += 8;
 	let cardsToShow = totalCards + showmore * 2;
@@ -206,4 +226,4 @@ function remove() {
 	}
 }
 
-document.onload = display();
+document.onload = displ();

@@ -5,6 +5,31 @@ const dbVersion = 1;
 let db;
 // self.indexedDB.open
 const cardHolder = document.getElementById("cardHolder");
+if (isIDB) {
+	const submitButtonContainer = document.getElementById("txtbtn");
+	const existingButton = submitButtonContainer.querySelector(".serversubmitbtn");
+
+	if (existingButton) {
+		submitButtonContainer.removeChild(existingButton);
+	}
+
+	const newSubmitButton = document.createElement("button");
+	newSubmitButton.textContent = "Add text to indexDB";
+	newSubmitButton.type = "submit";
+	newSubmitButton.classList.add("btn-primary", "indexdbsubmitbtn");
+
+	submitButtonContainer.appendChild(newSubmitButton);
+	submitButtonContainer.id = "dbbtn";
+
+	const wipeDBButton = document.createElement("button");
+	wipeDBButton.textContent = "wipe IndexDB";
+	wipeDBButton.type = "button";
+	wipeDBButton.setAttribute("id", "removeIDB");
+	wipeDBButton.setAttribute("onclick", "wipeData()");
+	wipeDBButton.classList.add("btn-primary");
+	document.getElementById("buttons").appendChild(wipeDBButton);
+	document.getElementById("showmore").remove();
+}
 async function initializeApp() {
 	try {
 		await openDatabase();
@@ -37,7 +62,7 @@ function openDatabase() {
 			db = event.target.result;
 
 			console.log("Database opened successfully");
-			// display();
+			display();
 			resolve(db);
 		};
 	});
@@ -99,7 +124,7 @@ async function display() {
 }
 
 function displayCards(sen, sol) {
-	let showmore = 6;
+	let showmore = 6; //display max 6
 	let totalCards = sol.length;
 	for (let i = 0; i < sen.length && totalCards < showmore; i++) {
 		const card = document.createElement("div");
@@ -214,13 +239,14 @@ function wipeData() {
 	window.location.reload();
 }
 
-window.onload = async () => {
+(async () => {
 	document.documentElement.scrollIntoView();
 	try {
+		console.log("opening database:");
 		initializeApp();
-		// display();
 	} catch (error) {
 		console.error("Failed to open database:", error);
 	}
-};
-document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
+})();
+
+document.getElementById("dbbtn").addEventListener("submit", handleSubmit);

@@ -186,11 +186,11 @@
 			</div>
 			<!-- submit form -->
 			<fieldset>
-				<form id="txtbtn" name="txtbtn">
+				<form id="dbbtn" name="dbbtn">
 					<label for="t1"> <input type="text" name="t1" id="t1" name="t1" placeholder="title" maxlength="12" required /></label>
 					<label for="t2"> <input type="text" name="t2" id="t2" name="t2" placeholder="question" maxlength="12" required /></label>
 					<label for="t3"> <input type="text" name="t3" id="t3" name="t3" placeholder="solution" maxlength="12" required /></label>
-					<button type="submit" class="btn-primary" name="submitBtn"><b> Add text to indexDB|Server </b></button>
+					<!-- <button type="submit" class="btn-primary" name="submitBtn"><b> Add text to indexDB|Server </b></button> -->
 				</form>
 				<div class="bugs">
 					<p>
@@ -231,17 +231,16 @@
 			<br />
 
 			<div id="buttons">
-				<button type="button" id="remove" class="btn-primary" onclick="wipeData()" name="wipeIndexDBBtn">
-					<b> wipe-indexdb </b>
-				</button>
-				<button type="button" id="dis" class="btn-primary" onclick="showMoreCards()" name="reload">
-					<b> reload </b>
-				</button>
+				<!-- <button type="button" id="removeIDB" class="btn-primary" onclick="wipeData()" name="wipeIndexDBbtn">
+					<b> wipe-IndexDB </b>
+				</button> -->
 				<!-- <button type="button" id="z+" class="btn-primary" onclick="counter.increment();//z++" name="switch file with a button press z+">
 					<b> z++ </b>
 				</button> -->
-
-				<!-- showmorebtn -->
+				<!--inserted on client-SERVER.js
+				 <button type="button" id="dis" class="btn-primary" onclick="showMoreCards()" name="reload">
+					<b> reload Server-txt-DB </b>
+				</button> -->
 			</div>
 			<br />
 			<!-- &ndash;- &nbsp; &amp;& -->
@@ -281,6 +280,8 @@
 				</form>
 
 				<input type="text" list="streamers" placeholder="" id="buttonx" />
+				<!-- Add a placeholder for the Twitch embed -->
+				<!-- <div id="twitch-embed"></div> -->
 				<datalist id="streamers">
 					<option value="cerbervt"></option>
 					<option value="plush"></option>
@@ -289,15 +290,12 @@
 					<option value="spwooqi"></option>
 					<option value="shonzo"></option>
 				</datalist>
-				<!-- Add a placeholder for the Twitch embed -->
-				<!-- <div id="twitch-embed"></div> -->
-
 				<!--twitchchat embed doesnt work- ff embed not allowed: https issue? -->
 				<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
 				<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
 			</div>
 			<!-- youtube video -->
-			<iframe
+			<!-- <iframe
 				id="asdf"
 				width="400"
 				height="200"
@@ -307,7 +305,7 @@
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 				referrerpolicy="strict-origin-when-cross-origin"
 				allowfullscreen
-			></iframe>
+			></iframe> -->
 
 			<!-- candle -->
 			<div class="holder">

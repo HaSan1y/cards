@@ -1,6 +1,6 @@
 let activeScript = null;
-let isSwitched;
-isSwitched == true ? false : true;
+
+let isIDB;
 
 function switchScript() {
 	const scripts = ["./js/with-indexdb.js", "./js/client-server/client-crudfs2server.js"];
@@ -15,7 +15,11 @@ function switchScript() {
 	const newScript = document.createElement("script");
 	newScript.src = scripts[nextIndex];
 	document.head.appendChild(newScript);
-
+	if (nextIndex === 0) {
+		isIDB = true;
+	} else if (nextIndex === 1) {
+		isIDB = false;
+	}
 	// Wait for the script to load
 	newScript.onload = () => {
 		activeScript = scripts[nextIndex];
@@ -43,8 +47,6 @@ function updateOutput() {
 	outputDiv.textContent = activeScript ? `Active script: ${activeScript}` : "No script loaded";
 }
 
-// Initial setup
 updateOutput();
 
-// Add event listener to switch button
 document.getElementById("switch-script").addEventListener("click", switchScript);
