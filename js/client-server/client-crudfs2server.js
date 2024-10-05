@@ -1,76 +1,83 @@
+// if (!isIDB) {
 const cards = document.querySelectorAll("#card");
-// if (typeof cards === "undefined") {
-// } else {
-// 	cards = document.querySelectorAll("#card");
-// }
-
-// class Counter {
-// 	constructor() {
-// 		this.z = 0;
-// 	}
-// 	increment() {
-// 		this.z++;
-// 	}
-// }
-// const counter = new Counter();
-let kek = 8;
-let sentences = [];
-let totalCards = 0;
-let showmore = 8;
-if (!isIDB) {
-	const submitButtonContainer = document.getElementById("dbbtn");
-	const existingButton = submitButtonContainer.querySelector(".indexdbsubmitbtn");
-
-	if (existingButton) {
-		submitButtonContainer.removeChild(existingButton);
+// if (typeof cards === "undefined") {}
+// improvements: global, errorreports, postgresql/expressjs/koa.js, separate codeblocks, comments,react,tests
+class Counter {
+	constructor() {
+		this.z = 0;
+		this.kek = 8;
+		this.totalCards = 0;
+		this.showmore = 2;
 	}
-
-	const newSubmitButton = document.createElement("button");
-	newSubmitButton.textContent = "Add text to Server";
-	newSubmitButton.type = "submit";
-	newSubmitButton.classList.add("btn-primary", "serversubmitbtn");
-
-	submitButtonContainer.appendChild(newSubmitButton);
-	submitButtonContainer.id = "txtbtn";
-
-	const showMoreButton = document.createElement("button");
-	showMoreButton.textContent = "reload Server-txt-DB";
-	showMoreButton.setAttribute("id", "showmore");
-	showMoreButton.type = "button";
-	showMoreButton.classList.add("btn-primary");
-	document.getElementById("buttons").appendChild(showMoreButton);
-	const x = document.getElementById("removeIDB");
-	if (x) x.remove();
+	increment() {
+		this.z++;
+	}
 }
+const counter = new Counter();
+let sentences = [];
+let solution = [];
 
-async function displ() {
+async function fetchFile(filePath) {
+	try {
+		const response = await fetch(filePath);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return await response.text();
+	} catch (error) {
+		console.error(`Error reading file: ${filePath}`, error);
+		return null;
+	}
+}
+async function getsensolData() {
 	try {
 		// const filePath = counter.z === 0 ? "sen.txt" : `sen${counter.z}.txt`;
 		const filePath = "sen.txt";
-		const response = await fetch(filePath);
-		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-		const data = await response.text();
-		sentences = data.trim().split("\n");
-
-		document.getElementById("showmore").addEventListener("click", () => {
-			showMoreCards(this, sentences);
-		});
-		for (let i = 0; i < sentences.length && totalCards < showmore; i++) {
+		const solFilePath = "sol.txt";
+		const [data, solData] = await Promise.all([fetchFile(filePath), fetchFile(solFilePath)]);
+		if (!data || !solData) {
+			return null;
+		}
+		const sentences = data.trim().split("\n");
+		const solution = solData.trim().split("\n");
+		return { sentences, solution };
+	} catch (error) {
+		console.error("Error reading file:", error);
+	}
+}
+(async function displ() {
+	const result = await getsensolData();
+	if (result) {
+		const { sentences, solution } = result;
+		console.log(sentences, solution);
+		let solindex = 0;
+		for (let i = 0; i < sentences.length && counter.totalCards < counter.showmore; i++) {
 			const card = document.createElement("div");
 			card.classList.add("myCard");
 			card.id = `card-${i}`;
 
 			const heading = document.createElement("h2");
 			heading.textContent = sentences[i];
+
+			const backSide = document.createElement("h2");
+			if (solindex < solution.length) {
+				backSide.textContent = solution[solindex];
+			} else {
+				backSide.textContent = "No solution available.";
+			}
+
 			const paragraph = document.createElement("p");
 			if (i + 1 < sentences.length) {
-				paragraph.textContent = i + 1 < sentences.length ? sentences[i + 1] : "No additional content.";
-				i++;
+				paragraph.textContent = sentences[i + 1];
+			} else {
+				paragraph.textContent = "No additional content.";
 			}
-			card.addEventListener("click", () => {
-				toggleCardContent(card, sentences);
-			});
+			i++;
+			solindex++;
 
+			// card.addEventListener("click", () => {
+			// 	toggleCardContent(card, sentences);
+			// }); card eventlistener  interfering with indexdbjs
 			const deleteButton = document.createElement("button");
 			deleteButton.textContent = "Delete";
 			deleteButton.classList.add("delete-button");
@@ -78,7 +85,6 @@ async function displ() {
 			innerCard.classList.add("innerCard");
 			const frontSide = document.createElement("div");
 			frontSide.classList.add("frontSide");
-			const backSide = document.createElement("div");
 			backSide.classList.add("backSide");
 
 			innerCard.appendChild(frontSide);
@@ -94,18 +100,14 @@ async function displ() {
 				card.remove();
 				console.log("Card deleted");
 			};
-			totalCards++;
+			counter.totalCards++;
 		}
-	} catch (error) {
-		console.error("Error reading file:", error);
 	}
-}
+})();
 
 async function toggleCardContent(card, sentences) {
 	const heading = card.querySelector("h2");
 	const paragraph = card.querySelector("p");
-	// const paragraph = card.firstElementChild.firstElementChild;
-
 	const cardIndex = parseInt(card.id.split("-")[1]);
 	heading.textContent = sentences[cardIndex];
 	if (cardIndex < sentences.length) {
@@ -127,52 +129,6 @@ async function toggleCardContent(card, sentences) {
 	}
 }
 
-document.getElementById("txtbtn").addEventListener("submit", async (event) => {
-	event.preventDefault();
-
-	const t1 = document.getElementById("t1").value;
-	const t2 = document.getElementById("t2").value;
-	const solution = document.getElementById("t3").value;
-	await postData("http://127.0.0.1:3000/sen", [t1, t2]);
-	await postData("http://127.0.0.1:3000/sol", [solution]);
-	// const sentences = [t1, t2];
-	// const solution = [solution];
-});
-
-// fetch("http://127.0.0.1:3000/sen", {
-// 	method: "POST",
-// 	headers: { "Content-Type": "application/json" },
-// 	body: JSON.stringify(sentences),
-// })
-// 	.then((response) => response.text())
-// 	.then((data) => console.log(data))
-// 	.catch((error) => console.error("Error writing to sen.txt:", error));
-// fetch("http://127.0.0.1:3000/sol", {
-// 	method: "POST",
-// 	headers: { "Content-Type": "application/json" },
-// 	body: JSON.stringify(solution),
-// })
-// 	.then((response) => response.text())
-// 	.then((data) => console.log(data))
-// 	.catch((error) => console.error("Error writing to sol.txt:", error));
-async function postData(url, data) {
-	try {
-		const response = await fetch(url, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(data),
-		});
-
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		const result = await response.text();
-	} catch (error) {
-		console.error(`Error posting data to ${url}:`, error);
-	}
-}
-//////////////////////////////////////////////////////////////////////////////////////////
-//update sen.txt + sol.txt        blob-clientside-app
 //  function addTextToFile() {
 //    var text = document.getElementById('t1').value;
 //    var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
@@ -185,45 +141,67 @@ async function postData(url, data) {
 //    link.click();
 //    document.body.removeChild(link);
 //  }
-//////////////////////////////////////////////////////////////////////////////////////////
-//triggered via btn created on displ
-function showMoreCards(button, sentences) {
-	let totalCards = document.querySelectorAll(".card").length + kek;
-	kek += 8;
-	let cardsToShow = totalCards + showmore * 2;
-	for (let i = totalCards; i < cardsToShow && i < sentences.length; i++) {
-		const card = document.createElement("div");
-		card.classList.add("card", "bi", "bi-hand-index-fill");
-		card.id = `card-${i}`;
 
-		const heading = document.createElement("h2");
-		heading.textContent = sentences[i];
-
-		const paragraph = document.createElement("p");
-		if (i + 1 < sentences.length) {
-			paragraph.textContent = sentences[i + 1];
-			i++;
+//triggered via btn created on top
+async function showMoreCards() {
+	const result = await getsensolData();
+	if (result) {
+		const { sentences, solution } = result;
+		console.log(sentences, solution);
+		counter.totalCards = document.querySelectorAll(".card").length + counter.kek;
+		counter.kek += 4;
+		let cardsToShow = counter.totalCards + counter.showmore * 2;
+		if (cardsToShow >= sentences.length) {
+			const y = document.getElementById("showmore");
+			y.style.display = "none";
+			return;
 		}
-		card.addEventListener("click", () => {
-			toggleCardContent(card, sentences);
-		});
-		card.appendChild(heading);
-		card.appendChild(paragraph);
-		cardHolder.appendChild(card);
-	}
-	if (cardsToShow >= sentences.length) {
-		button.style.display = "none";
+		for (let i = counter.totalCards; i < cardsToShow && i < sentences.length; i++) {
+			displ();
+		}
 	}
 }
 
 function remove() {
 	const cards = document.querySelectorAll(".card");
-	for (let i = cards.length - 1; i >= cards.length - kek + 8 && i >= 0; i--) {
-		if (kek > i) {
+	for (let i = cards.length - 1; i >= cards.length - counter.kek + 8 && i >= 0; i--) {
+		if (counter.kek > i) {
 			cards[i].remove();
-			kek--;
+			counter.kek--;
 		}
 	}
 }
 
-document.onload = displ();
+async function postsensolData(event) {
+	event.preventDefault();
+	const t1 = document.getElementById("t1").value;
+	const t2 = document.getElementById("t2").value;
+	const solution = document.getElementById("t3").value;
+
+	// const senResponse = await postData("http://127.0.0.1:3000/sen", [{ t1, t2 }]);
+	// const solResponse = await postData("http://127.0.0.1:3000/sol", [solution]);
+	// const data = {
+	// 	sentences: [t1, t2],
+	// 	solution: solution,
+	// };if json
+
+	fetch("http://127.0.0.1:3000/sen", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		// body: JSON.stringify(sentences),
+		body: JSON.stringify([t1, t2]), // Send an array of strings
+	})
+		.then((response) => response.text())
+		.then((data) => console.log(data))
+		.catch((error) => console.error("Error writing to sen.txt:", error));
+	fetch("http://127.0.0.1:3000/sol", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify([solution]),
+		// { solution: solution }
+	})
+		.then((response) => response.text())
+		.then((data) => console.log(data))
+		.catch((error) => console.error("Error writing to sol.txt:", error));
+}
+// }

@@ -117,3 +117,70 @@ setTheme();
 //     .then(data => console.log(data));
 // })
 // });
+
+const cardHolder = document.getElementById("cardHolder");
+
+// const existingButton = submitButtonContainer.getElementById("serversubmitbtn");
+// if (existingButton) {
+// 	submitButtonContainer.removeChild(existingButton);
+// }
+function switchDatabase() {
+	var select = document.getElementById("selectswitchdb");
+	var selectedValue = select.value;
+	const isServer = selectedValue === "server";
+	const isIndexDB = selectedValue === "indexdb";
+	if (isServer) {
+		console.log("Switching to server database");
+		const ssubmitButtonContainer = document.getElementById("dbbtn");
+		// const existingButton = ssubmitButtonContainer.getElementById("indexdbsubmitbtn");
+		// if (existingButton) {
+		// 	submitButtonContainer.removeChild(existingButton);
+		// }
+		const nnewSubmitButton = document.createElement("button");
+		nnewSubmitButton.textContent = "Add text to Server";
+		nnewSubmitButton.type = "submit";
+		nnewSubmitButton.classList.add("btn-primary");
+		nnewSubmitButton.id = "serversubmitbtn";
+		ssubmitButtonContainer.appendChild(nnewSubmitButton);
+		// submitButtonContainer.id = "isaform";
+		const showMoreButton = document.createElement("button");
+		showMoreButton.type = "button";
+		showMoreButton.id = "showmore";
+		showMoreButton.classList.add("btn-primary");
+		showMoreButton.textContent = "reload Server-txt-DB";
+		// showMoreButton.onclick = showMoreCards(); idk todo
+		document.getElementById("buttons").appendChild(showMoreButton);
+		// const y = document.getElementById("wipeDBButton");
+		// if (y) ssubmitButtonContainer.removeChild(y);
+		dboptionswitcher.style.display = "none";
+		dbbtn.style.display = "block";
+		document.getElementById("dbbtn").addEventListener("submit", postsensolData);
+	} else if (isIndexDB) {
+		console.log("Switching to IndexedDB");
+		const submitButtonContainer = document.getElementById("txtbtn");
+		const newSubmitButton = document.createElement("button");
+		newSubmitButton.textContent = "Add text to indexDB";
+		newSubmitButton.type = "submit";
+		newSubmitButton.classList.add("btn-primary");
+		newSubmitButton.id = "indexdbsubmitbtn";
+
+		submitButtonContainer.appendChild(newSubmitButton);
+		// submitButtonContainer.id = "dbbtn";
+
+		const wipeDBButton = document.createElement("button");
+		wipeDBButton.textContent = "wipe IndexDB";
+		wipeDBButton.type = "button";
+		wipeDBButton.id = "wipeDBButton";
+		wipeDBButton.setAttribute("onclick", "wipeData()");
+		wipeDBButton.classList.add("btn-primary");
+		document.getElementById("buttons").appendChild(wipeDBButton);
+		// const y = document.getElementById("serversubmitbtn");
+		// if (y) y.remove();
+		// const x = document.getElementById("showmore");
+		// if (x) showmore.remove();
+		// openDatabase();
+		dboptionswitcher.style.display = "none";
+		txtbtn.style.display = "flex";
+		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
+	}
+}

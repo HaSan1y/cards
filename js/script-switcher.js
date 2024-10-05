@@ -2,44 +2,46 @@ let activeScript = null;
 
 let isIDB;
 
-function switchScript() {
-	const scripts = ["./js/with-indexdb.js", "./js/client-server/client-crudfs2server.js"];
+async function switchScript() {
+	const modules = ["./js/with-indexdb.js", "./js/client-server/client-crudfs2server.js"];
 
-	// Find the index of the current active script
-	const currentIndex = activeScript ? scripts.indexOf(activeScript) : 0;
+	const nextIndex = activeScript ? (scripts.indexOf(activeScript) + 1) % scripts.length : 0;
 
-	// Switch to the next script
-	const nextIndex = currentIndex ? 0 : currentIndex == 1 ? -1 : +1;
-
-	// Load the new script
-	const newScript = document.createElement("script");
-	newScript.src = scripts[nextIndex];
-	document.head.appendChild(newScript);
-	if (nextIndex === 0) {
-		isIDB = true;
-	} else if (nextIndex === 1) {
-		isIDB = false;
+	isIDB = nextIndex === 0;
+	try {
+		const module = await import(modules[nextIndex]);
+		// Call a specific function from the module if needed
+		module.init();
+		activeScript = modules[nextIndex];
+	} catch (error) {
+		console.error(`Failed to load module: ${modules[nextIndex]}`, error);
 	}
-	// Wait for the script to load
-	newScript.onload = () => {
-		activeScript = scripts[nextIndex];
 
-		// Remove the old script if it exists
-		if (currentIndex !== 0) {
-			const oldScript = document.querySelector(`script[src="${scripts[currentIndex]}"]`);
-			if (oldScript) {
-				oldScript.remove();
-			}
-		}
-
-		// Update output
-		updateOutput();
-	};
-
-	newScript.onerror = () => {
-		console.error(`Failed to load script: ${scripts[nextIndex]}`);
-		updateOutput();
-	};
+	updateOutput();
+	// const currentIndex = activeScript ? scripts.indexOf(activeScript) : 0;
+	// const nextIndex = currentIndex ? 0 : currentIndex == 1 ? 0 : +1;
+	// const newScript = document.createElement("script");
+	// newScript.src = scripts[nextIndex];
+	// document.head.appendChild(newScript);
+	// if (nextIndex === 0) {
+	// 	isIDB = true;
+	// } else if (nextIndex === 1) {
+	// 	isIDB = false;
+	// }
+	// newScript.onload = () => {
+	// 	activeScript = scripts[nextIndex];
+	// 	if (currentIndex !== 0) {
+	// 		const oldScript = document.querySelector(`script[src="${scripts[currentIndex]}"]`);
+	// 		if (oldScript) {
+	// 			oldScript.remove();
+	// 		}
+	// 	}
+	// 	updateOutput();
+	// };
+	// newScript.onerror = () => {
+	// 	console.error(`Failed to load script: ${scripts[nextIndex]}`);
+	// 	updateOutput();
+	// };
 }
 
 function updateOutput() {

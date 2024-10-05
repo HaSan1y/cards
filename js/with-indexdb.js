@@ -1,60 +1,15 @@
 //developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
-
 const dbName = "myDatabase";
 const dbVersion = 1;
 let db;
 // self.indexedDB.open
-const cardHolder = document.getElementById("cardHolder");
-if (isIDB) {
-	const submitButtonContainer = document.getElementById("txtbtn");
-	const existingButton = submitButtonContainer.querySelector(".serversubmitbtn");
 
-	if (existingButton) {
-		submitButtonContainer.removeChild(existingButton);
-	}
-
-	const newSubmitButton = document.createElement("button");
-	newSubmitButton.textContent = "Add text to indexDB";
-	newSubmitButton.type = "submit";
-	newSubmitButton.classList.add("btn-primary", "indexdbsubmitbtn");
-
-	submitButtonContainer.appendChild(newSubmitButton);
-	submitButtonContainer.id = "dbbtn";
-
-	const wipeDBButton = document.createElement("button");
-	wipeDBButton.textContent = "wipe IndexDB";
-	wipeDBButton.type = "button";
-	wipeDBButton.setAttribute("id", "removeIDB");
-	wipeDBButton.setAttribute("onclick", "wipeData()");
-	wipeDBButton.classList.add("btn-primary");
-	document.getElementById("buttons").appendChild(wipeDBButton);
-	document.getElementById("showmore").remove();
-}
-async function initializeApp() {
-	try {
-		await openDatabase();
-		// Now you can use db safely
-	} catch (error) {
-		console.error("Failed to open database:", error);
-	}
-}
 function openDatabase() {
 	return new Promise((resolve, reject) => {
-		const request = indexedDB.open("myDatabase", 1);
+		const request = indexedDB.open(dbName, dbVersion);
 		request.onerror = (event) => {
-			console.error("Error opening database:", event.target.errorCode);
-			reject(event.target.errorCode);
-		};
-
-		request.onupgradeneeded = (event) => {
-			// 'sentences' is not a known object store name, if i delete onupgradeneeded
-			const db = event.target.result;
-			const sentencesStore = db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
-			sentencesStore.createIndex("sentence", "sentence", { unique: true });
-			const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
-
-			solutionsStore.createIndex("solution", "solution", { unique: true });
-			console.log("4Databases create/load/indexed successfully");
+			console.error("Error opening database:", event.target.error);
+			reject(event.target.error);
 		};
 
 		request.onsuccess = (event) => {
@@ -62,21 +17,37 @@ function openDatabase() {
 			db = event.target.result;
 
 			console.log("Database opened successfully");
-			display();
 			resolve(db);
+			// display();
+		};
+
+		request.onupgradeneeded = (event) => {
+			db = event.target.result;
+			console.log("Database upgrade needed");
+
+			if (!db.objectStoreNames.contains("sentences")) {
+				const sentencesStore = db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
+				sentencesStore.createIndex("sentence", "sentence", { unique: true });
+			}
+
+			if (!db.objectStoreNames.contains("solutions")) {
+				const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
+				solutionsStore.createIndex("solution", "solution", { unique: true });
+			}
+
+			console.log("Database upgraded successfully");
 		};
 	});
 }
 
 async function handleSubmit(event) {
 	event.preventDefault();
-
-	const [t1, t2, t3] = [document.getElementById("t1").value, document.getElementById("t2").value, document.getElementById("t3").value];
-	const sentences = [t1, t2];
-	const solutions = [t3];
+	const [tt1, tt2, tt3] = [document.getElementById("tt1").value, document.getElementById("tt2").value, document.getElementById("tt3").value];
+	const sentences = [tt1, tt2];
+	const solutions = [tt3];
 
 	try {
-		db = await openDatabase();
+		await openDatabase();
 		const transaction = db.transaction(["sentences", "solutions"], "readwrite");
 		const [sentencesStore, solutionsStore] = [transaction.objectStore("sentences"), transaction.objectStore("solutions")];
 
@@ -85,21 +56,18 @@ async function handleSubmit(event) {
 		});
 		// sentencesStore.put({ id: sentencesStore.indexNames.length, sentence: sentences[1] });
 		solutions.forEach((solution) => {
-			solutionsStore.add({ solution: solutions[0] });
+			solutionsStore.add({ solution: solution });
 		});
 
-		transaction.onsuccess = (event) => {
-			console.log(`data success: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]}`, event.target.error);
-		};
 		transaction.oncomplete = () => {
 			console.log(`Data added to ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store successfully`);
 			display();
 		};
 		transaction.onerror = (event) => {
-			console.error(`Error reading Data: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
+			console.error(`Transaction error: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
 		};
 	} catch (error) {
-		console.error("Error opening database:", error);
+		console.error("Error handling submit:", error);
 	}
 }
 
@@ -132,12 +100,12 @@ function displayCards(sen, sol) {
 		card.id = `card-${Math.floor(i / 2)}`;
 
 		const deleteButton = document.createElement("button");
-		deleteButton.textContent = "X";
+		deleteButton.textContent = "delete";
 		deleteButton.classList.add("removebtn");
 		deleteButton.onclick = (e) => {
 			e.stopPropagation();
 			card.remove();
-			console.log("Card deleted");
+			console.log("Card deleteddb");
 		};
 
 		const innerCard = document.createElement("div");
@@ -166,7 +134,7 @@ function displayCards(sen, sol) {
 		card.appendChild(innerCard);
 
 		card.addEventListener("click", () => {
-			toggleCardContent(card);
+			toggleCardContentdb(card);
 		});
 		cardHolder.appendChild(card);
 		totalCards++;
@@ -177,7 +145,7 @@ async function ensureDatabaseConnection() {
 		await openDatabase();
 	}
 }
-async function toggleCardContent(card) {
+async function toggleCardContentdb(card) {
 	try {
 		await ensureDatabaseConnection();
 		if (!db) {
@@ -236,17 +204,5 @@ function wipeData() {
 		cards.forEach((card) => card.remove());
 		console.log(cards);
 	}
-	window.location.reload();
+	// window.location.reload();
 }
-
-(async () => {
-	document.documentElement.scrollIntoView();
-	try {
-		console.log("opening database:");
-		initializeApp();
-	} catch (error) {
-		console.error("Failed to open database:", error);
-	}
-})();
-
-document.getElementById("dbbtn").addEventListener("submit", handleSubmit);

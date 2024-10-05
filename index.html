@@ -6,28 +6,28 @@
 		<!-- <meta'https://127.0.0.1:5500';/> -->
 		<!-- <meta http-equiv="Content-Security-Policy" content="Access-Control-Allow-Origin='https://github.com/HaSan1y/res'; Vary='Origin'"> -->
 		<!-- <meta http-equiv="Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" />
-<meta http-equiv="X-Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" /> -->
-		<meta Access-Control-Allow-Origin="no-cors" />
-		<meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com" />
+		<meta http-equiv="X-Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" /> -->
+		<!-- <meta Access-Control-Allow-Origin="no-cors" /> -->
+		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com" /> -->
 
 		<title>cards</title>
 		<link href="img/favicon.ico" rel="icon" />
 
-		<script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 		<!-- Load the Twitch embed script -->
-		<script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script>
+		<!-- <script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
 		<!-- Create a Twitch.Player object. This will render within the placeholder div -->
-		<script type="text/javascript" src="js/twitch.js"></script>
-		<script type="text/javascript" src="js/script.js" defer></script>
+		<!-- <script type="text/javascript" src="js/twitch.js"></script> -->
 
-		<script type="text/javascript" src="./js/script-switcher.js" defer></script>
-		<!-- <script type="text/javascript" src="./js/with-indexdb.js" defer></script> -->
-		<!-- <script type="text/javascript" src="./js/client-server/client-crudfs2server.js" defer></script> -->
+		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
+		<script type="text/javascript" src="js/script.js" defer></script>
+		<!-- <script type="text/javascript" src="./js/script-switcher.js" defer></script> -->
+		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
+		<script type="text/javascript" src="./js/client-server/client-crudfs2server.js" defer></script>
 
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous" />
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
+		<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> -->
 
 		<link rel="stylesheet" href="css/style.css" />
 		<link rel="stylesheet" href="css/animate/animate.min.css" />
@@ -37,6 +37,7 @@
 		<!-- <link rel="stylesheet" href="css/radio-form.css" /> -->
 	</head>
 	<noscript> this website needs javascript </noscript>
+
 	<body id="body">
 		<!-- nav-header -->
 
@@ -185,32 +186,41 @@
 				<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
 			</div>
 			<!-- submit form -->
-			<fieldset>
-				<form id="dbbtn" name="dbbtn">
-					<label for="t1"> <input type="text" name="t1" id="t1" name="t1" placeholder="title" maxlength="12" required /></label>
-					<label for="t2"> <input type="text" name="t2" id="t2" name="t2" placeholder="question" maxlength="12" required /></label>
-					<label for="t3"> <input type="text" name="t3" id="t3" name="t3" placeholder="solution" maxlength="12" required /></label>
-					<!-- <button type="submit" class="btn-primary" name="submitBtn"><b> Add text to indexDB|Server </b></button> -->
-				</form>
-				<div class="bugs">
-					<p>
-						works as long as you <i><b>always</b></i> input unique inputs on each input..
-					</p>
-					<p>restart browser after clicking 'wipe-indexdb'. ids in indexdb wont reset to 0..</p>
-					<p hidden>might not work on firefox due to some extensions interfering with the functionality, i recommend using google chrome in such cases.</p>
-					<p hidden>dont forget to run the server on a provider which allows crud onto their server</p>
-					<p><b>1.st</b> decide on which DB</p>
-					<p hidden>i will figure out later what to do with redeclaration-issue of let, const. if u have an idea let me know.</p>
-					<button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button>
-					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
-					<div id="script-output"></div>
-					<p><b>2.nd </b> _unempty, unique -Data can be Submitted via the 3xInput-Fields.</p>
+			<form id="dbbtn" style="display: none">
+				<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required /></label>
+				<label for="t2"> <input type="text" id="t2" name="t2" placeholder="question" maxlength="12" required /></label>
+				<label for="t3"> <input type="text" id="t3" name="t3" placeholder="solution" maxlength="12" required /></label>
+			</form>
+			<form id="txtbtn" style="display: none">
+				<label for="tt1"> <input type="text" id="tt1" name="t1" placeholder="title" maxlength="12" required /></label>
+				<label for="tt2"> <input type="text" id="tt2" name="t2" placeholder="question" maxlength="12" required /></label>
+				<label for="tt3"> <input type="text" id="tt3" name="t3" placeholder="solution" maxlength="12" required /></label>
+			</form>
+			<div class="bugs">
+				<p>
+					works as long as you <i><b>always</b></i> input unique inputs on each input..
+				</p>
+				<p>restart browser after clicking 'wipe-indexdb'. ids in indexdb wont reset to 0..</p>
+				<p hidden>might not work on firefox due to some extensions interfering with the functionality, i recommend using google chrome in such cases.</p>
+				<p hidden>dont forget to run the server on a provider which allows crud onto their server</p>
+				<p><b>1.st</b> decide on which DB</p>
+				<p hidden>i will figure out later what to do with redeclaration-issue of let, const. if u have an idea let me know.</p>
+				<div id="dboptionswitcher">
+					<select id="selectswitchdb">
+						<option value="server">server</option>
+						<option value="indexdb">indexdb</option>
+					</select>
+					<button onclick="switchDatabase()">Switch Database</button>
 				</div>
-			</fieldset>
+				<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
+				<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
+				<div id="script-output"></div>
+				<p><b>2.nd </b> _unempty, unique -Data can be Submitted via the 3xInput-Fields.</p>
+			</div>
 
 			<div class="text-center" id="cardHolder">
-				<!-- test card -->
-				<div class="myCard">
+				<!-- test card structure-->
+				<!-- <div class="myCard">
 					<div class="innerCard">
 						<div class="frontSide">
 							<p class="title">FRONT SIDE</p>
@@ -221,30 +231,15 @@
 							<p>Leave Me</p>
 						</div>
 					</div>
-				</div>
-
-				<!-- cards -->
-				<!-- card bi bi-hand-->
-				<!-- h2 -->
-				<!-- p -->
+				</div> -->
 			</div>
 			<br />
 
 			<div id="buttons">
-				<!-- <button type="button" id="removeIDB" class="btn-primary" onclick="wipeData()" name="wipeIndexDBbtn">
-					<b> wipe-IndexDB </b>
-				</button> -->
 				<!-- <button type="button" id="z+" class="btn-primary" onclick="counter.increment();//z++" name="switch file with a button press z+">
 					<b> z++ </b>
-				</button> -->
-				<!--inserted on client-SERVER.js
-				 <button type="button" id="dis" class="btn-primary" onclick="showMoreCards()" name="reload">
-					<b> reload Server-txt-DB </b>
-				</button> -->
+				</button>&ndash;- &nbsp; &amp;& -->
 			</div>
-			<br />
-			<!-- &ndash;- &nbsp; &amp;& -->
-
 			<div class="links">
 				<p><a rel="nofollow" class="btn" href="https://humanbenchmark.com/" name="linkhumanbenchmark">humanbenchmark</a></p>
 				<p><a rel="nofollow" class="btn" href="https://www.duolingo.com" name="linkduolingo">duolingo</a></p>
@@ -317,12 +312,12 @@
 				</div>
 			</div>
 
-			<!-- <form method="post" class="xx" enctype="multipart/form-data">
+			<!-- <frm method="post" class="xx" enctype="multipart/form-data">//preventdefault???
 			<label for="files">
 				<input type="file" name="files" id="files" accept=".png" name="pic" multiple />
 				 accept='video/*' upload any video >
 			</label>
-			<button type="submit" id="uploadBtn">Upload PNG</button>//preventdefault???
+			<button type="submit" id="uploadBtn">Upload PNG</button>
 		</form> -->
 			<!-- <section class="wowplayground">
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInLeft" data-wow-offset="5" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
@@ -332,95 +327,96 @@
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
 			<img src="pic/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
 		</section> -->
+			<div class="footer wow fadeIn" data-wow-delay="0.1s">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg">
+							<h5>Get In Touch</h5>
+							<p><i class="fa fa-map-marker-alt"></i>123 Street, New York, USA</p>
+							<p><i class="fa fa-phone-alt"></i>+012 345 67890</p>
+							<p><i class="fa fa-envelope"></i>info@example.com</p>
+							<div class="d-flex pt-2">
+								<a class="btn btn-social" href="#"><i class="fab fa-twitter"></i></a>
+								<a class="btn btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+								<a class="btn btn-social" href="#"><i class="fab fa-youtube"></i></a>
+								<a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+							</div>
+						</div>
+						<div class="col-lg">
+							<h5>Quick Links</h5>
+							<a class="btn btn-link" href="#">About Us</a>
+							<a class="btn btn-link" href="#">Contact Us</a>
+							<a class="btn btn-link" href="#">Our Services</a>
+							<a class="btn btn-link" href="#">Privacy Policy</a>
+							<a class="btn btn-link" href="#">Terms & Condition</a>
+						</div>
+						<div class="col-lg">
+							<h5>Photo Gallery</h5>
+							<div class="pt-2">
+								<div class="">
+									<div class="col-4">
+										<img class="img-fluid rounded p-1" src="#" alt="" />
+									</div>
+									<div class="col-4">
+										<img class="img-fluid rounded p-1" src="#" alt="" />
+									</div>
+									<div class="col-4">
+										<img class="img-fluid rounded p-1" src="#" alt="" />
+									</div>
+								</div>
+								<div class="">
+									<div class="col-4">
+										<img class="img-fluid rounded p-1" src="#" alt="" />
+									</div>
+									<div class="col-4">
+										<img class="img-fluid rounded p-1" src="#" alt="" />
+									</div>
+									<div class="col-4">
+										<img class="img-fluid rounded p-1" src="#" alt="" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg">
+							<h5>Newsletter</h5>
+							<p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+
+							<form class="position-relative mx-auto" style="max-width: 400px">
+								<label for="email">email</label>
+								<input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email" autocomplete="off" name="newsletter" id="email" />
+								<button class="btn btn-primary py-2 position-absolute end-0" name="signupBtn">SignUp</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="container">
+					<div class="copyright row">
+						<div class="text-center text-md-start mb-md-0">
+							&copy;
+							<!--a class="" href="#">Your Site Name</a>, All Rights ?.-->
+							<span> <a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+						</div>
+						<div class="text-center text-md-end">
+							<div class="footer-menu">
+								<a class="btn-link" href="#">Home</a>
+								<a class="btn-link" href="#">Cookies</a>
+								<a class="btn-link" href="#">Help</a>
+								<a class="btn-link" href="#">Terms</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Footer End -->
 		</main>
 		<!-- Footer -->
-		<div class="footer wow fadeIn" data-wow-delay="0.1s">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg">
-						<h5>Get In Touch</h5>
-						<p><i class="fa fa-map-marker-alt"></i>123 Street, New York, USA</p>
-						<p><i class="fa fa-phone-alt"></i>+012 345 67890</p>
-						<p><i class="fa fa-envelope"></i>info@example.com</p>
-						<div class="d-flex pt-2">
-							<a class="btn btn-social" href="#"><i class="fab fa-twitter"></i></a>
-							<a class="btn btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
-							<a class="btn btn-social" href="#"><i class="fab fa-youtube"></i></a>
-							<a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
-						</div>
-					</div>
-					<div class="col-lg">
-						<h5>Quick Links</h5>
-						<a class="btn btn-link" href="#">About Us</a>
-						<a class="btn btn-link" href="#">Contact Us</a>
-						<a class="btn btn-link" href="#">Our Services</a>
-						<a class="btn btn-link" href="#">Privacy Policy</a>
-						<a class="btn btn-link" href="#">Terms & Condition</a>
-					</div>
-					<div class="col-lg">
-						<h5>Photo Gallery</h5>
-						<div class="pt-2">
-							<div class="">
-								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
-								</div>
-								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
-								</div>
-								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
-								</div>
-							</div>
-							<div class="">
-								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
-								</div>
-								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
-								</div>
-								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg">
-						<h5>Newsletter</h5>
-						<p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-
-						<form class="position-relative mx-auto" style="max-width: 400px">
-							<label for="email">email</label>
-							<input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email" autocomplete="off" name="newsletter" id="email" />
-							<button type="button" class="btn btn-primary py-2 position-absolute end-0" name="signupBtn">SignUp</button>
-						</form>
-					</div>
-				</div>
-			</div>
-			<div class="container">
-				<div class="copyright row">
-					<div class="text-center text-md-start mb-md-0">
-						&copy; <a class="" href="#">Your Site Name</a>, All Right Reserved.
-						<span> <a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
-					</div>
-					<div class="text-center text-md-end">
-						<div class="footer-menu">
-							<a class="btn-link" href="#">Home</a>
-							<a class="btn-link" href="#">Cookies</a>
-							<a class="btn-link" href="#">Help</a>
-							<a class="btn-link" href="#">Terms</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<!-- <button type="button" id="tofile" onclick="addTextToFile()">clientside js save 'title' into .txt-file</button> -->
-		<!-- Footer End -->
 		<!-- Back to Top -->
 		<a href="#" class="btn btn-primary back-to-top"><i>^</i></a>
 
 		<!-- npm i wowjs //animate.css-->
 		<script src="js/wow/wow.min.js"></script>
-		<!-- v has to be lastly initialed -->
+		<!-- v has to be lastly initiated new WOW().init()-->
 		<script>
 			new WOW().init();
 		</script>
