@@ -186,38 +186,39 @@
 				<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
 			</div>
 			<!-- submit form -->
-			<form id="dbbtn" style="display: none">
-				<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required /></label>
-				<label for="t2"> <input type="text" id="t2" name="t2" placeholder="question" maxlength="12" required /></label>
-				<label for="t3"> <input type="text" id="t3" name="t3" placeholder="solution" maxlength="12" required /></label>
-			</form>
-			<form id="txtbtn" style="display: none">
-				<label for="tt1"> <input type="text" id="tt1" name="t1" placeholder="title" maxlength="12" required /></label>
-				<label for="tt2"> <input type="text" id="tt2" name="t2" placeholder="question" maxlength="12" required /></label>
-				<label for="tt3"> <input type="text" id="tt3" name="t3" placeholder="solution" maxlength="12" required /></label>
-			</form>
-			<div class="bugs">
-				<p>
-					works as long as you <i><b>always</b></i> input unique inputs on each input..
-				</p>
-				<p>restart browser after clicking 'wipe-indexdb'. ids in indexdb wont reset to 0..</p>
-				<p hidden>might not work on firefox due to some extensions interfering with the functionality, i recommend using google chrome in such cases.</p>
-				<p hidden>dont forget to run the server on a provider which allows crud onto their server</p>
-				<p><b>1.st</b> decide on which DB</p>
-				<p hidden>i will figure out later what to do with redeclaration-issue of let, const. if u have an idea let me know.</p>
-				<div id="dboptionswitcher">
-					<select id="selectswitchdb">
-						<option value="server">server</option>
-						<option value="indexdb">indexdb</option>
-					</select>
-					<button onclick="switchDatabase()">Switch Database</button>
+			<fieldset>
+				<div class="bugs">
+					<p>
+						works as long as you <i><b>always</b></i> input unique inputs on each input..
+					</p>
+					<p>restart browser after clicking 'wipe-indexdb'. ids in indexdb wont reset to 0..</p>
+					<p hidden>might not work on firefox due to some extensions interfering with the functionality, i recommend using google chrome in such cases.</p>
+					<p hidden>dont forget to run the server on a provider which allows crud onto their server</p>
+					<p><b>1.st</b> decide on which DB</p>
+					<p hidden>i will figure out later what to do with redeclaration-issue of let, const. if u have an idea let me know.</p>
+					<div id="dboptionswitcher">
+						<select id="selectswitchdb">
+							<option value="server">server</option>
+							<option value="indexdb">indexdb</option>
+						</select>
+						<button onclick="switchDatabase()">Switch Database</button>
+					</div>
+					<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
+					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
+					<div id="script-output"></div>
+					<p><b>2.nd </b> _unempty, unique -Data can be Submitted via the 3xInput-Fields.</p>
 				</div>
-				<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
-				<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
-				<div id="script-output"></div>
-				<p><b>2.nd </b> _unempty, unique -Data can be Submitted via the 3xInput-Fields.</p>
-			</div>
-
+				<form id="dbbtn" style="display: none">
+					<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required /></label>
+					<label for="t2"> <input type="text" id="t2" name="t2" placeholder="question" maxlength="12" required /></label>
+					<label for="t3"> <input type="text" id="t3" name="t3" placeholder="solution" maxlength="12" required /></label>
+				</form>
+				<form id="txtbtn" style="display: none">
+					<label for="tt1"> <input type="text" id="tt1" name="t1" placeholder="title" maxlength="12" required /></label>
+					<label for="tt2"> <input type="text" id="tt2" name="t2" placeholder="question" maxlength="12" required /></label>
+					<label for="tt3"> <input type="text" id="tt3" name="t3" placeholder="solution" maxlength="12" required /></label>
+				</form>
+			</fieldset>
 			<div class="text-center" id="cardHolder">
 				<!-- test card structure-->
 				<!-- <div class="myCard">
@@ -237,8 +238,11 @@
 
 			<div id="buttons">
 				<!-- <button type="button" id="z+" class="btn-primary" onclick="counter.increment();//z++" name="switch file with a button press z+">
-					<b> z++ </b>
-				</button>&ndash;- &nbsp; &amp;& -->
+					<b> z++ </b>-->
+				<!-- <button type="button" class="btn-primary" onclick="remove()">
+					<b> rem </b>
+				</button> -->
+				<!--/button>&ndash;- &nbsp; &amp;& -->
 			</div>
 			<div class="links">
 				<p><a rel="nofollow" class="btn" href="https://humanbenchmark.com/" name="linkhumanbenchmark">humanbenchmark</a></p>

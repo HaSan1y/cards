@@ -4,18 +4,24 @@ const cards = document.querySelectorAll("#card");
 // improvements: global, errorreports, postgresql/expressjs/koa.js, separate codeblocks, comments,react,tests
 class Counter {
 	constructor() {
-		this.z = 0;
-		this.kek = 8;
+		this.switchedFiles = 0;
 		this.totalCards = 0;
-		this.showmore = 2;
+		this.maxCardsOverflow = 6;
+		this.howoftenOverflowed = 0;
+		this.sentences = [];
+		this.solution = [];
 	}
 	increment() {
-		this.z++;
+		this.switchedFiles++;
+	}
+	incrementmax() {
+		this.maxCardsOverflow += 3;
+		// todo apparently i dont know math
 	}
 }
 const counter = new Counter();
-let sentences = [];
-let solution = [];
+// let sentences = [];
+// let solution = [];
 
 async function fetchFile(filePath) {
 	try {
@@ -31,7 +37,7 @@ async function fetchFile(filePath) {
 }
 async function getsensolData() {
 	try {
-		// const filePath = counter.z === 0 ? "sen.txt" : `sen${counter.z}.txt`;
+		// const filePath = counter.switchedFiles === 0 ? "sen.txt" : `sen${counter.switchedFiles}.txt`;
 		const filePath = "sen.txt";
 		const solFilePath = "sol.txt";
 		const [data, solData] = await Promise.all([fetchFile(filePath), fetchFile(solFilePath)]);
@@ -45,16 +51,22 @@ async function getsensolData() {
 		console.error("Error reading file:", error);
 	}
 }
-(async function displ() {
+async function displ() {
 	const result = await getsensolData();
 	if (result) {
 		const { sentences, solution } = result;
-		console.log(sentences, solution);
-		let solindex = 0;
-		for (let i = 0; i < sentences.length && counter.totalCards < counter.showmore; i++) {
+
+		let x = counter.maxCardsOverflow <= 6 ? 0 : counter.maxCardsOverflow + 3 * counter.howoftenOverflowed;
+		let solindex = counter.maxCardsOverflow <= 6 ? 0 : counter.maxCardsOverflow - 3;
+		// let startIndex = counter.totalCards;
+
+		for (let i = x; i < sentences.length && counter.totalCards < counter.maxCardsOverflow; i++) {
 			const card = document.createElement("div");
 			card.classList.add("myCard");
+
 			card.id = `card-${i}`;
+			// const uniqueCardId = `card-${startIndex + counter.totalCards}`;
+			// card.id = uniqueCardId;
 
 			const heading = document.createElement("h2");
 			heading.textContent = sentences[i];
@@ -103,7 +115,7 @@ async function getsensolData() {
 			counter.totalCards++;
 		}
 	}
-})();
+}
 
 async function toggleCardContent(card, sentences) {
 	const heading = card.querySelector("h2");
@@ -144,30 +156,30 @@ async function toggleCardContent(card, sentences) {
 
 //triggered via btn created on top
 async function showMoreCards() {
+	console.log("test");
 	const result = await getsensolData();
 	if (result) {
 		const { sentences, solution } = result;
 		console.log(sentences, solution);
-		counter.totalCards = document.querySelectorAll(".card").length + counter.kek;
-		counter.kek += 4;
-		let cardsToShow = counter.totalCards + counter.showmore * 2;
+		counter.totalCards = document.querySelectorAll(".myCard").length;
+		counter.howoftenOverflowed += 1;
+		counter.incrementmax() * counter.howoftenOverflowed;
+		let cardsToShow = counter.totalCards + counter.maxCardsOverflow;
 		if (cardsToShow >= sentences.length) {
-			const y = document.getElementById("showmore");
-			y.style.display = "none";
+			document.getElementById("showmorec").style.display = "none";
 			return;
 		}
-		for (let i = counter.totalCards; i < cardsToShow && i < sentences.length; i++) {
-			displ();
-		}
+		displ();
 	}
 }
 
 function remove() {
-	const cards = document.querySelectorAll(".card");
-	for (let i = cards.length - 1; i >= cards.length - counter.kek + 8 && i >= 0; i--) {
-		if (counter.kek > i) {
+	// remove all cards except first 6
+	for (let i = cards.length - 1; i >= cards.length - this.maxCardsOverflow + 6 && i >= 0; i--) {
+		if (this.maxCardsOverflow > i) {
 			cards[i].remove();
-			counter.kek--;
+			this.maxCardsOverflow--;
+			counter.howoftenOverflowed = 0;
 		}
 	}
 }
@@ -205,3 +217,4 @@ async function postsensolData(event) {
 		.catch((error) => console.error("Error writing to sol.txt:", error));
 }
 // }
+displ();

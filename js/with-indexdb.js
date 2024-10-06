@@ -33,6 +33,8 @@ function openDatabase() {
 			if (!db.objectStoreNames.contains("solutions")) {
 				const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
 				solutionsStore.createIndex("solution", "solution", { unique: true });
+				// solutionsStore.add({ id: 0, solution: "initialization" });
+				// createObjectStore.id = 0;
 			}
 
 			console.log("Database upgraded successfully");
@@ -43,26 +45,33 @@ function openDatabase() {
 async function handleSubmit(event) {
 	event.preventDefault();
 	const [tt1, tt2, tt3] = [document.getElementById("tt1").value, document.getElementById("tt2").value, document.getElementById("tt3").value];
-	const sentences = [tt1, tt2];
-	const solutions = [tt3];
+	const sentences = [tt1, tt2].filter(Boolean);
+	const solutions = [tt3].filter(Boolean);
 
 	try {
 		await openDatabase();
 		const transaction = db.transaction(["sentences", "solutions"], "readwrite");
 		const [sentencesStore, solutionsStore] = [transaction.objectStore("sentences"), transaction.objectStore("solutions")];
 
-		sentences.forEach((sentence) => {
-			sentencesStore.add({ sentence: sentence });
-		});
+		// sentences.forEach((sentence) => {
+		// 	sentencesStore.add({ sentence: sentence });
+		// });
 		// sentencesStore.put({ id: sentencesStore.indexNames.length, sentence: sentences[1] });
-		solutions.forEach((solution) => {
-			solutionsStore.add({ solution: solution });
-		});
+		// solutions.forEach((solution, id) => {
+		// 	solutionsStore.add({ solution: solution, id });
+		// });
+		for (const sentence of sentences) {
+			await sentencesStore.add({ sentence });
+		}
+		for (const solution of solutions) {
+			await solutionsStore.add({ solution });
+		}
 
-		transaction.oncomplete = () => {
-			console.log(`Data added to ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store successfully`);
-			display();
-		};
+		await transaction.complete;
+		console.log(`Data added to ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store successfully`);
+		display();
+		// transaction.oncomplete = () => {
+		// };
 		transaction.onerror = (event) => {
 			console.error(`Transaction error: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
 		};
@@ -92,9 +101,9 @@ async function display() {
 }
 
 function displayCards(sen, sol) {
-	let showmore = 6; //display max 6
+	let showmoredb = 6; //display max 6
 	let totalCards = sol.length;
-	for (let i = 0; i < sen.length && totalCards < showmore; i++) {
+	for (let i = 0; i < sen.length && totalCards < showmoredb; i++) {
 		const card = document.createElement("div");
 		card.classList.add("myCard");
 		card.id = `card-${Math.floor(i / 2)}`;
@@ -159,14 +168,20 @@ async function toggleCardContentdb(card) {
 		const dbTransaction = db.transaction("solutions", "readonly");
 		const solutionsStore = dbTransaction.objectStore("solutions");
 
-		// const allSolutions = await new Promise((resolve, reject) => {
-		// 	const request = solutionsStore.getAll();
-		const solution = await new Promise((resolve, reject) => {
-			const request = solutionsStore.get(cardIndex + 1);
+		// const solution = await new Promise((resolve, reject) => {
+		// 	const request = solutionsStore.get(cardIndex + 1);
 
+		// 	request.onsuccess = (event) => resolve(event.target.result);
+		// 	request.onerror = (event) => reject(event.target.error);
+		// });
+		const allSolutions = await new Promise((resolve, reject) => {
+			const request = solutionsStore.getAll();
 			request.onsuccess = (event) => resolve(event.target.result);
 			request.onerror = (event) => reject(event.target.error);
 		});
+
+		// Find the solution that matches the card index
+		const solution = allSolutions[cardIndex];
 
 		if (solution) {
 			backSide.textContent = solution.solution;
@@ -197,6 +212,7 @@ function wipeData() {
 	};
 	removeDataFromStore("sentences");
 	removeDataFromStore("solutions");
+	removeDataFromStore("sentences");
 
 	const cards = document.querySelectorAll('[id^="card-"]');
 
