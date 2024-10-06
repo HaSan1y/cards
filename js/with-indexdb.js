@@ -247,11 +247,51 @@ async function deleteFromDatabase(id) {
 		const sentencesStore = transaction.objectStore("sentences");
 		const solutionsStore = transaction.objectStore("solutions");
 
-		await sentencesStore.delete(parseInt(id));
-		await solutionsStore.delete(parseInt(id));
+		const idAsInt = parseInt(id, 10); // Validate and parse the ID as an integer
+		if (isNaN(idAsInt)) {
+			console.error(`Invalid ID: ${id}`);
+			return;
+		}
+		const deleteSentenceRequest = sentencesStore.delete(idAsInt);
+		deleteSentenceRequest.onsuccess = () => {
+			console.log("hello!!!!!!!!!"); // Log success message
+		};
+		deleteSentenceRequest.onerror = (event) => {
+			console.error(`Error deleting sentence with ID ${idAsInt}:`, event.target.error);
+		};
 
-		await transaction.complete;
-		console.log(`Data with id ${id} deleted from database`);
+		const deleteSentenceRequest2 = sentencesStore.delete(idAsInt + 1);
+		deleteSentenceRequest2.onsuccess = () => {
+			console.log("hello!!!!!!!!!"); // Log success message
+		};
+		deleteSentenceRequest2.onerror = (event) => {
+			console.error(`Error deleting sentence with ID ${idAsInt + 1}:`, event.target.error);
+		};
+
+		const deleteSolutionRequest = solutionsStore.delete(Math.floor(idAsInt / 2) + 1);
+		deleteSolutionRequest.onsuccess = () => {
+			console.log(Math.floor(idAsInt / 2) + 1); // Log success message
+		};
+		deleteSolutionRequest.onerror = (event) => {
+			console.error(`Error deleting solution with ID ${Math.floor(idAsInt / 2)}:`, event.target.error);
+		};
+
+		transaction.oncomplete = () => {
+			console.log(`Data with ID ${idAsInt} deleted from database`);
+		};
+		transaction.onerror = (event) => {
+			console.error(`Error deleting data with ID ${idAsInt}:`, event.target.error);
+		};
+		// await sentencesStore.delete(parseInt(id));
+		// console.log("hello!!!!!!!!!");
+		// await sentencesStore.delete(parseInt(id) + 1);
+
+		// console.log("hello!!!!!!!!!");
+		// await solutionsStore.delete(Math.floor(parseInt(id) / 2));
+		// console.log(Math.floor(parseInt(id) / 2));
+
+		// await transaction.complete;
+		// console.log(`Data with id ${id} deleted from database`);
 	} catch (error) {
 		console.error("Error deleting from database:", error);
 	}
