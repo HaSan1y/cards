@@ -34,7 +34,6 @@ function openDatabase() {
 				const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
 				solutionsStore.createIndex("solution", "solution", { unique: true });
 				// solutionsStore.add({ id: 0, solution: "initialization" });
-				// createObjectStore.id = 0;
 			}
 
 			console.log("Database upgraded successfully");
@@ -60,8 +59,12 @@ async function handleSubmit(event) {
 		// solutions.forEach((solution, id) => {
 		// 	solutionsStore.add({ solution: solution, id });
 		// });
+		const addedIds = [];
 		for (const sentence of sentences) {
-			await sentencesStore.add({ sentence });
+			const request = sentencesStore.add({ sentence });
+			request.onsuccess = (event) => {
+				addedIds.push(event.target.result);
+			};
 		}
 		for (const solution of solutions) {
 			await solutionsStore.add({ solution });
@@ -69,9 +72,9 @@ async function handleSubmit(event) {
 
 		await transaction.complete;
 		console.log(`Data added to ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store successfully`);
-		display();
+		await display(addedIds);
 		// transaction.oncomplete = () => {
-		// };
+
 		transaction.onerror = (event) => {
 			console.error(`Transaction error: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
 		};
@@ -79,8 +82,8 @@ async function handleSubmit(event) {
 		console.error("Error handling submit:", error);
 	}
 }
-
-async function display() {
+let displayedCardIds = new Set();
+async function display(newIds = []) {
 	const sentencesRequest = db.transaction("sentences", "readonly").objectStore("sentences").getAll();
 	sentencesRequest.onsuccess = (event) => {
 		const sentences = event.target.result;
@@ -89,7 +92,7 @@ async function display() {
 		solutionsRequest.onsuccess = (event) => {
 			const solutions = event.target.result;
 			console.log(solutions, sentences);
-			displayCards(sentences, solutions);
+			displayCards(sentences, solutions, newIds);
 		};
 		solutionsRequest.onerror = (event) => {
 			console.error("Error reading solution from database:", event.target.errorCode);
@@ -100,100 +103,159 @@ async function display() {
 	};
 }
 
-function displayCards(sen, sol) {
-	let showmoredb = 6; //display max 6
-	let totalCards = sol.length;
-	for (let i = 0; i < sen.length && totalCards < showmoredb; i++) {
-		const card = document.createElement("div");
-		card.classList.add("myCard");
-		card.id = `card-${Math.floor(i / 2)}`;
+function displayCards(sen, sol, newIds) {
+	let displayMax = 10;
+	let totalCards = document.querySelectorAll(".myCard").length;
+	let i = 0;
+	let solIndex = 0;
 
-		const deleteButton = document.createElement("button");
-		deleteButton.textContent = "delete";
-		deleteButton.classList.add("removebtn");
-		deleteButton.onclick = (e) => {
-			e.stopPropagation();
-			card.remove();
-			console.log("Card deleteddb");
-		};
-
-		const innerCard = document.createElement("div");
-		innerCard.classList.add("innerCard");
-
-		const frontSide = document.createElement("div");
-		frontSide.classList.add("frontSide", "bi", "bi-hand-index-fill");
-
-		const backSide = document.createElement("div");
-		backSide.classList.add("backSide");
-
-		const heading = document.createElement("h2");
-		heading.textContent = sen[i].sentence;
-
-		const paragraph = document.createElement("p");
-		if (i + 1 < sen.length) {
-			paragraph.textContent = sen[i + 1].sentence;
-			i++;
+	while (i < sen.length && totalCards < displayMax) {
+		const cardId = `card-${sen[i].id}`;
+		// 	 `card-${Math.floor(i / 2)}`;
+		if (!displayedCardIds.has(cardId) || newIds.includes(sen[i].id)) {
+			let sentences = [sen[i]];
+			if (i + 1 < sen.length) {
+				sentences.push(sen[i + 1]);
+			}
+			const card = createCard(sentences, sol[solIndex], cardId);
+			cardHolder.appendChild(card);
+			displayedCardIds.add(cardId);
+			totalCards++;
+			solIndex++;
+			i += 2;
+		} else {
+			i += 2; // Increment the index by 2 if the card is already displayed
 		}
-
-		frontSide.appendChild(heading);
-		frontSide.appendChild(paragraph);
-		innerCard.appendChild(frontSide);
-		innerCard.appendChild(backSide);
-		card.appendChild(deleteButton);
-		card.appendChild(innerCard);
-
-		card.addEventListener("click", () => {
-			toggleCardContentdb(card);
-		});
-		cardHolder.appendChild(card);
-		totalCards++;
 	}
+	// for (let i = 0; i < sen.length && totalCards < showmoredb; i++) {
+	// 	if (displayedCardIds.has(cardId)) {//.includes
+	// 		continue; // Skip creating the card if it's already displayed
+	// 	}
+
+	// }
+}
+function createCard(sentences, solution, cardId) {
+	const card = document.createElement("div");
+	card.classList.add("myCard");
+	card.id = cardId;
+
+	const deleteButton = document.createElement("button");
+	deleteButton.textContent = "delete";
+	deleteButton.classList.add("removebtn");
+	deleteButton.onclick = (e) => {
+		e.stopPropagation();
+		card.remove();
+		displayedCardIds.delete(cardId);
+		deleteFromDatabase(cardId.split("-")[1]);
+		console.log("Card deleted");
+	};
+
+	const innerCard = document.createElement("div");
+	innerCard.classList.add("innerCard");
+
+	const frontSide = document.createElement("div");
+	frontSide.classList.add("frontSide", "bi", "bi-hand-index-fill");
+
+	const backSide = document.createElement("div");
+	backSide.classList.add("backSide");
+	const sentence1 = document.createElement("h2");
+	sentence1.textContent = sentences[0].sentence;
+
+	const sentence2 = document.createElement("p");
+	if (sentences[1]) {
+		sentence2.textContent = sentences[1].sentence;
+	} else {
+		sentence2.textContent = "";
+	}
+	// const heading = document.createElement("h2");
+	// const paragraph = document.createElement("p");
+	// for (let i = 0; i < sentences.length; i++) {
+	// 	// && totalCards < showmoredb
+	// 	heading.textContent = sentences[i].sentence;
+	// 	// if (i + 1 < sen.length) {
+	// 	paragraph.textContent = sentences[i + 1].sentence;
+	// 	i++;
+	// }
+	frontSide.appendChild(sentence1);
+	frontSide.appendChild(sentence2);
+	// frontSide.appendChild(heading);
+	// frontSide.appendChild(paragraph);
+	innerCard.appendChild(frontSide);
+	innerCard.appendChild(backSide);
+	card.appendChild(deleteButton);
+	card.appendChild(innerCard);
+
+	card.addEventListener("click", () => {
+		toggleCardContentdb(card, solution);
+	});
+
+	return card;
+}
+
+async function toggleCardContentdb(card, solution) {
+	const innerCard = card.querySelector(".innerCard");
+	const backSide = innerCard.querySelector(".backSide");
+
+	if (solution) {
+		backSide.textContent = solution.solution;
+		innerCard.classList.toggle("flipped");
+	} else {
+		console.warn(`No solution found for card ${card.id}`);
+	}
+	// try {
+	// 	await ensureDatabaseConnection();
+	// 	if (!db) {
+	// 		throw new Error("Database not available");
+	// 	}
+	// 	const innerCard = card.querySelector(".innerCard");
+	// 	const frontSide = innerCard.querySelector(".frontSide");
+	// 	const backSide = innerCard.querySelector(".backSide");
+	// 	const cardIndex = parseInt(card.id.split("-")[1]);
+	// 	const dbTransaction = db.transaction("solutions", "readonly");
+	// 	const solutionsStore = dbTransaction.objectStore("solutions");
+	// 	// const solution = await new Promise((resolve, reject) => {
+	// 	// 	const request = solutionsStore.get(cardIndex + 1);
+	// 	// 	request.onsuccess = (event) => resolve(event.target.result);
+	// 	// 	request.onerror = (event) => reject(event.target.error);
+	// 	// });
+	// 	const allSolutions = await new Promise((resolve, reject) => {
+	// 		const request = solutionsStore.getAll();
+	// 		request.onsuccess = (event) => resolve(event.target.result);
+	// 		request.onerror = (event) => reject(event.target.error);
+	// 	});
+	// 	// Find the solution that matches the card index
+	// 	const solution = allSolutions[cardIndex];
+	// 	if (solution) {
+	// 		backSide.textContent = solution.solution;
+	// 		innerCard.classList.toggle("flipped");
+	// 	} else {
+	// 		console.warn(`No solution found for card index ${cardIndex}`);
+	// 	}
+	// } catch (error) {
+	// 	console.error("Error reading solution from database:", error);
+	// }
 }
 async function ensureDatabaseConnection() {
 	if (!db || db.closed) {
 		await openDatabase();
 	}
 }
-async function toggleCardContentdb(card) {
+async function deleteFromDatabase(id) {
 	try {
 		await ensureDatabaseConnection();
-		if (!db) {
-			throw new Error("Database not available");
-		}
-		const innerCard = card.querySelector(".innerCard");
-		const frontSide = innerCard.querySelector(".frontSide");
-		const backSide = innerCard.querySelector(".backSide");
-		const cardIndex = parseInt(card.id.split("-")[1]);
+		const transaction = db.transaction(["sentences", "solutions"], "readwrite");
+		const sentencesStore = transaction.objectStore("sentences");
+		const solutionsStore = transaction.objectStore("solutions");
 
-		const dbTransaction = db.transaction("solutions", "readonly");
-		const solutionsStore = dbTransaction.objectStore("solutions");
+		await sentencesStore.delete(parseInt(id));
+		await solutionsStore.delete(parseInt(id));
 
-		// const solution = await new Promise((resolve, reject) => {
-		// 	const request = solutionsStore.get(cardIndex + 1);
-
-		// 	request.onsuccess = (event) => resolve(event.target.result);
-		// 	request.onerror = (event) => reject(event.target.error);
-		// });
-		const allSolutions = await new Promise((resolve, reject) => {
-			const request = solutionsStore.getAll();
-			request.onsuccess = (event) => resolve(event.target.result);
-			request.onerror = (event) => reject(event.target.error);
-		});
-
-		// Find the solution that matches the card index
-		const solution = allSolutions[cardIndex];
-
-		if (solution) {
-			backSide.textContent = solution.solution;
-			innerCard.classList.toggle("flipped");
-		} else {
-			console.warn(`No solution found for card index ${cardIndex}`);
-		}
+		await transaction.complete;
+		console.log(`Data with id ${id} deleted from database`);
 	} catch (error) {
-		console.error("Error reading solution from database:", error);
+		console.error("Error deleting from database:", error);
 	}
 }
-
 // called via button onclick="wipeData()"
 function wipeData() {
 	const removeDataFromStore = (storeName) => {
@@ -212,7 +274,7 @@ function wipeData() {
 	};
 	removeDataFromStore("sentences");
 	removeDataFromStore("solutions");
-	removeDataFromStore("sentences");
+	// removeDataFromStore("sentences");
 
 	const cards = document.querySelectorAll('[id^="card-"]');
 
@@ -220,5 +282,5 @@ function wipeData() {
 		cards.forEach((card) => card.remove());
 		console.log(cards);
 	}
-	// window.location.reload();
+	window.location.reload();
 }
