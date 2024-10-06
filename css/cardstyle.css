@@ -1,31 +1,19 @@
-.bi-hand-index-fill::before {
+/* .bi-hand-index-fill::before {
    opacity: 0.9;
    animation: wave 4s infinite;
    scale: 90%;
-}
+} */
 
 /* cards */
 #cardHolder {
    display: grid;
    grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
-   gap: 10px;
-   padding: 10px;
-   opacity: 0.8;
+   gap: 20px;
+   padding: 20px;
    outline: 1px solid;
    opacity: 0.5;
+   /* columns: 2; */
 }
-
-/* .card {
-// 	position: relative;
-// 	max-width: 300px;
-// 	padding: 1rem;
-// 	background-color: var(--clr-card-bg);
-// 	border-block-start: 0.5rem solid;
-// 	border-radius: 0.5rem;
-// 	opacity: 0.6;
-// 	box-shadow: 3px 3px 2px 2px var(--clr-heading);
-// 	cursor: pointer;
- }*/
 
 .myCard:hover,
 :focus {
@@ -38,7 +26,7 @@
    background-color: transparent;
    width: 190px;
    height: 254px;
-   perspective: 1000px;
+   perspective: 10000px;
    position: relative;
    max-width: 300px;
    padding: 1rem;

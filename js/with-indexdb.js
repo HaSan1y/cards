@@ -18,7 +18,6 @@ function openDatabase() {
 
 			console.log("Database opened successfully");
 			resolve(db);
-			// display();
 		};
 
 		request.onupgradeneeded = (event) => {
@@ -78,6 +77,7 @@ async function handleSubmit(event) {
 		transaction.onerror = (event) => {
 			console.error(`Transaction error: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
 		};
+		window.location.reload();
 	} catch (error) {
 		console.error("Error handling submit:", error);
 	}
@@ -127,12 +127,6 @@ function displayCards(sen, sol, newIds) {
 			i += 2; // Increment the index by 2 if the card is already displayed
 		}
 	}
-	// for (let i = 0; i < sen.length && totalCards < showmoredb; i++) {
-	// 	if (displayedCardIds.has(cardId)) {//.includes
-	// 		continue; // Skip creating the card if it's already displayed
-	// 	}
-
-	// }
 }
 function createCard(sentences, solution, cardId) {
 	const card = document.createElement("div");
@@ -150,15 +144,17 @@ function createCard(sentences, solution, cardId) {
 		console.log("Card deleted");
 	};
 
-	const innerCard = document.createElement("div");
+	const innerCard = document.createElement("article");
 	innerCard.classList.add("innerCard");
 
 	const frontSide = document.createElement("div");
-	frontSide.classList.add("frontSide", "bi", "bi-hand-index-fill");
+	frontSide.classList.add("frontSide");
+	// frontSide.classList.add("frontSide", "bi", "bi-hand-index-fill");
 
 	const backSide = document.createElement("div");
 	backSide.classList.add("backSide");
 	const sentence1 = document.createElement("h2");
+	sentence1.classList.add("title");
 	sentence1.textContent = sentences[0].sentence;
 
 	const sentence2 = document.createElement("p");
@@ -167,28 +163,15 @@ function createCard(sentences, solution, cardId) {
 	} else {
 		sentence2.textContent = "";
 	}
-	// const heading = document.createElement("h2");
-	// const paragraph = document.createElement("p");
-	// for (let i = 0; i < sentences.length; i++) {
-	// 	// && totalCards < showmoredb
-	// 	heading.textContent = sentences[i].sentence;
-	// 	// if (i + 1 < sen.length) {
-	// 	paragraph.textContent = sentences[i + 1].sentence;
-	// 	i++;
-	// }
 	frontSide.appendChild(sentence1);
 	frontSide.appendChild(sentence2);
-	// frontSide.appendChild(heading);
-	// frontSide.appendChild(paragraph);
 	innerCard.appendChild(frontSide);
 	innerCard.appendChild(backSide);
-	card.appendChild(deleteButton);
+	innerCard.appendChild(deleteButton);
 	card.appendChild(innerCard);
-
 	card.addEventListener("click", () => {
 		toggleCardContentdb(card, solution);
 	});
-
 	return card;
 }
 
@@ -207,9 +190,7 @@ async function toggleCardContentdb(card, solution) {
 	// 	if (!db) {
 	// 		throw new Error("Database not available");
 	// 	}
-	// 	const innerCard = card.querySelector(".innerCard");
 	// 	const frontSide = innerCard.querySelector(".frontSide");
-	// 	const backSide = innerCard.querySelector(".backSide");
 	// 	const cardIndex = parseInt(card.id.split("-")[1]);
 	// 	const dbTransaction = db.transaction("solutions", "readonly");
 	// 	const solutionsStore = dbTransaction.objectStore("solutions");
@@ -238,6 +219,7 @@ async function toggleCardContentdb(card, solution) {
 async function ensureDatabaseConnection() {
 	if (!db || db.closed) {
 		await openDatabase();
+		display();
 	}
 }
 async function deleteFromDatabase(id) {
@@ -282,16 +264,7 @@ async function deleteFromDatabase(id) {
 		transaction.onerror = (event) => {
 			console.error(`Error deleting data with ID ${idAsInt}:`, event.target.error);
 		};
-		// await sentencesStore.delete(parseInt(id));
-		// console.log("hello!!!!!!!!!");
-		// await sentencesStore.delete(parseInt(id) + 1);
-
-		// console.log("hello!!!!!!!!!");
-		// await solutionsStore.delete(Math.floor(parseInt(id) / 2));
-		// console.log(Math.floor(parseInt(id) / 2));
-
-		// await transaction.complete;
-		// console.log(`Data with id ${id} deleted from database`);
+		window.location.reload();
 	} catch (error) {
 		console.error("Error deleting from database:", error);
 	}
@@ -314,7 +287,6 @@ function wipeData() {
 	};
 	removeDataFromStore("sentences");
 	removeDataFromStore("solutions");
-	// removeDataFromStore("sentences");
 
 	const cards = document.querySelectorAll('[id^="card-"]');
 

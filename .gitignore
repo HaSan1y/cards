@@ -1,9 +1,11 @@
 git config core.ignorecase false
 
 node_modules
+
 js/how
 js/client-server/expresstest
-pic
+js/script-switcher
 
-css/blog1.webp
+image/blog1.webp
+
 css/style.scss

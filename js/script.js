@@ -164,6 +164,7 @@ function switchDatabase() {
 		document.getElementById("buttons").appendChild(wipeDBButton);
 		dboptionswitcher.style.display = "none";
 		txtbtn.style.display = "flex";
+		ensureDatabaseConnection();
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
 	}
 }
