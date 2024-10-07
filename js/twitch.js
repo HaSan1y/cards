@@ -8,7 +8,7 @@ function loadScript(src, callback) {
 }
 
 loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
-	let x = "shonzo";
+	let x = "trumporkamala2024";
 	var options = {
 		width: 400,
 		height: 200,
@@ -61,9 +61,7 @@ loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
 			case "b":
 				buttonx.value = "plush";
 				break;
-			case "c":
-				buttonx.value = "trumporkamala2024";
-				break;
+
 			case "tb":
 				buttonx.value = "thinkerbella";
 				break;
@@ -72,6 +70,9 @@ loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
 				break;
 			case "s":
 				buttonx.value = "shonzo";
+				break;
+			case "c":
+				buttonx.value = "trumporkamala2024";
 				break;
 		}
 

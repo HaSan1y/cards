@@ -1,10 +1,11 @@
 .removebtn {
    outline: 2px solid red;
-   opacity: 0.4;
+   opacity: 0.3;
    border-radius: 5px;
    cursor: pointer;
    background-color: #666;
-   padding: 10px;
+   padding: 3px;
+   color: white;
 
    &:hover {
       opacity: 1;
@@ -14,6 +15,7 @@
 }
 
 #card {
+   scale: 0.5;
    padding: 20px;
    outline: 1px dotted;
 }
@@ -21,10 +23,11 @@
 #cardHolder {
    display: grid;
    grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
-   gap: 20px;
-   padding: 20px;
+   gap: 10px;
+   padding: 40px;
    outline: 1px dotted;
    opacity: 0.3;
+   border-radius: 0.5rem;
 }
 
 /* From Uiverse.io by htwarriors108 */
@@ -32,16 +35,15 @@
    background-color: transparent;
    width: 190px;
    height: 254px;
-   perspective: 2000px;
-   /* position: relative;
-   max-width: 300px;
-   padding: 1.5rem;
+   perspective: 500000px;
+   position: relative;
+   max-width: 250px;
+   padding: 1rem;
    background-color: var(--clr-card-bg);
    border-block-start: 0.4rem solid;
    border-radius: 0.5rem;
-   opacity: 0.6;*/
-   /* box-shadow: 3px 3px 2px 2px var(--clr-heading); */
-
+   opacity: 0.6;
+   box-shadow: 3px 3px 2px 2px var(--clr-heading);
 }
 
 .title {
@@ -82,6 +84,7 @@
    border-radius: 1rem;
    color: white;
    box-shadow: 0 0 0.3em rgba(255, 255, 255, 0.5);
+   font-size: 1rem;
    font-weight: 700;
 }
 

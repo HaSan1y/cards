@@ -11,14 +11,14 @@
 		<!-- <meta http-equiv="Content-Security-Policy" content="Access-Control-Allow-Origin='https://github.com/HaSan1y/res'; Vary='Origin'"> -->
 		<!-- <meta http-equiv="Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" />
 		<meta http-equiv="X-Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" /> -->
-		<!-- <meta Access-Control-Allow-Origin="no-cors" /> -->
+		<meta Access-Control-Allow-Origin="no-cors" />
 		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com" /> -->
 		<title>cards</title>
 
 		<!-- Load the Twitch embed script -->
-		<!-- <script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
+		<script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script>
 		<!-- Create a Twitch.Player object. This will render within the placeholder div -->
-		<!-- <script type="text/javascript" src="js/twitch.js"></script> -->
+		<script type="text/javascript" src="js/twitch.js"></script>
 
 		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
 		<script type="text/javascript" src="js/script.js" defer></script>
@@ -100,11 +100,11 @@
 			</label>
 			<span>All</span> -->
 
-			<!-- <label class="switch">
+		<!-- <label class="switch">
 				<input type="checkbox" />
 				<span class="slider round"></span>
 			</label> </div>-->
-		
+
 		<!-- cookie -->
 
 		<header class="wrapper">
@@ -177,25 +177,23 @@
 		</form>
 
 		<main>
-			<div class="msg">
-				<!-- <p contenteditable="true">I Hasan Yildirim constructed this Website &rBarr;</p> -->
-				<!-- <p>made of course, with a little (sometimes confusing) help of chatgpd. Beware, Site is still under Construction.</p> -->
-				<br />
-				<p hidden>Site-logic:</p>
-				<p hidden>Client can Store/retrieve Text 2x Front-side(question), 1x Backside(Solution).</p>
-				<p hidden>Click on any Card to view its (Backside) Solution (pre-written by you)Text.</p>
-
-				<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
-			</div>
 			<!-- submit form -->
 			<fieldset>
-				<div class="bugs">
+				<div class="bugs msg">
 					<p>
+						<!-- <p contenteditable="true">I Hasan Yildirim constructed this Website &rBarr;</p> -->
+						<!-- <p>made of course, with a little (sometimes confusing) help of chatgpd. Beware, Site is still under Construction.</p> -->
+						<br />
+						<p hidden>Site-logic:</p>
+						<p hidden>Client can Store/retrieve Text 2x Front-side(question), 1x Backside(Solution).</p>
+						<p hidden>Click on any Card to view its (Backside) Solution (pre-written by you)Text.</p>
 						works as long as you <i><b>always</b></i> input unique inputs on each input..
 					</p>
 					<p>restart browser after clicking 'wipe-indexdb'. ids in indexdb wont reset to 0..</p>
 					<p hidden>might not work on firefox due to some extensions interfering with the functionality, i recommend using google chrome in such cases.</p>
 					<p hidden>dont forget to run the server on a provider which allows crud onto their server</p>
+					<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+					
 					<p><b>1.st</b> decide on which DB</p>
 					<p hidden>i will figure out later what to do with redeclaration-issue of let, const. if u have an idea let me know.</p>
 					<div id="dboptionswitcher">
@@ -268,14 +266,14 @@
 					<label for="a"><span></span>C</label>
 					<input value="b" name="hopping" type="radio" id="b" />
 					<label for="b"><span></span>P</label>
-					<input value="c" name="hopping" type="radio" id="c" />
-					<label for="c"><span></span>T</label>
 					<input value="tb" name="hopping" type="radio" id="tb" />
 					<label for="tb"><span></span>tb</label>
 					<input value="w" name="hopping" type="radio" id="w" />
 					<label for="w"><span></span>w</label>
-					<input checked value="s" name="hopping" type="radio" id="s" />
+					<input value="s" name="hopping" type="radio" id="s" />
 					<label for="s"><span></span>s</label>
+					<input value="c" name="hopping" type="radio" id="c" checked />
+					<label for="c"><span></span>T</label>
 					<div class="worm">
 						<div class="worm__segment"></div>
 					</div>
@@ -283,7 +281,7 @@
 
 				<input type="text" list="streamers" placeholder="" id="buttonx" />
 				<!-- Add a placeholder for the Twitch embed -->
-				<!-- <div id="twitch-embed"></div> -->
+				<div id="twitch-embed"></div>
 				<datalist id="streamers">
 					<option value="cerbervt"></option>
 					<option value="plush"></option>
@@ -422,15 +420,12 @@
 		<a href="#" class="btn btn-primary back-to-top"><i>^</i></a>
 
 		<script type="text/javascript">
-			function googleTranslateElementImit(){
-				new google.translate.TranslateElement
-				({pageLanguage:'en'},'google_translate_element');
-				// ("google_translate_element",auto,
-				//  "google_translate_element");
+			function googleTranslateElementImit() {
+				new google.translate.TranslateElement({ pageLanguage: "en" }, "google_translate_element");
 			}
 		</script>
 		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementImit"></script>
-		
+
 		<!-- npm i wowjs //animate.css-->
 		<script src="js/wow/wow.min.js"></script>
 		<!-- v has to be lastly initiated new WOW().init()-->

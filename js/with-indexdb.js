@@ -148,8 +148,10 @@ function createCard(sentences, solution, cardId) {
 	innerCard.classList.add("innerCard");
 	const frontSide = document.createElement("div");
 	frontSide.classList.add("frontSide");
-	const backSide = document.createElement("h2");
+	const backSide = document.createElement("div");
 	backSide.classList.add("backSide");
+	const backHead = document.createElement("h2");
+	backHead.classList.add("backHead");
 
 	const sentence1 = document.createElement("h2");
 	sentence1.classList.add("title");
@@ -164,7 +166,8 @@ function createCard(sentences, solution, cardId) {
 	frontSide.appendChild(sentence2);
 	innerCard.appendChild(frontSide);
 	innerCard.appendChild(backSide);
-	card.appendChild(deleteButton);
+	backSide.appendChild(deleteButton);
+	backSide.appendChild(backHead);
 	card.appendChild(innerCard);
 	card.addEventListener("click", () => {
 		toggleCardContentdb(card, solution);
@@ -174,10 +177,10 @@ function createCard(sentences, solution, cardId) {
 
 async function toggleCardContentdb(card, solution) {
 	const innerCard = card.querySelector(".innerCard");
-	const backSide = innerCard.querySelector(".backSide");
+	const backHead = innerCard.querySelector(".backHead");
 
 	if (solution) {
-		backSide.textContent = solution.solution;
+		backHead.textContent = solution.solution;
 		innerCard.classList.toggle("flipped");
 	} else {
 		console.warn(`No solution found for card ${card.id}`);

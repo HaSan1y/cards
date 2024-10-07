@@ -158,19 +158,6 @@ h2 {
 }
 
 /* terms */
-#disclaimerModal {
-  display: grid;
-  justify-self: center;
-  align-self: center;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  max-width: 1100px;
-  padding: 10px;
-  margin: auto;
-  position: relative;
-}
-
 .modal-footer {
   display: flex;
   border-radius: 5px;
@@ -188,14 +175,13 @@ h2 {
   visibility: hidden;
 }
 
-/* main */
 .main {
   display: block;
   margin-inline: auto;
   padding: 10px 10px 0 10px;
 }
 
-/* cardbtn2x */
+/* cardbtncontainer */
 #buttons {
   display: flex;
   justify-content: space-evenly;
@@ -211,21 +197,7 @@ h2 {
   font-size: 10px;
 }
 
-.sw {
-  padding: 5px !important;
-  font-size: 8px;
-  margin-bottom: 10px;
-}
-
 /* switch3er */
-.swhol {
-  display: flex;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  margin-inline: auto;
-}
-
 h5 {
   list-style-type: none;
   display: grid;
@@ -398,11 +370,14 @@ main {
 
 /*--------------------------------------------bootstrap----------------------*/
 .links {
-  outline: 0.1px solid;
+  opacity: 0.3;
+  outline: 1px dotted;
   -moz-columns: 4 auto;
        columns: 4 auto;
   opacity: 0.5;
   padding: 20px;
+  font-size: small;
+  border-radius: 5px;
 }
 
 .row {
@@ -852,8 +827,13 @@ input:checked + .slider:before {
 }
 
 .bugs {
+  line-height: 1;
   margin: 0;
   font-size: 12px;
+  font-weight: bolder;
+  text-align: left;
+  padding: 10px;
+  text-transform: uppercase;
   display: grid;
   justify-content: center;
   align-items: center;
@@ -867,8 +847,8 @@ input:checked + .slider:before {
     max-width: 400px;
   }
   .links {
-    -moz-columns: 2 auto;
-         columns: 2 auto;
+    -moz-columns: 2;
+         columns: 2;
   }
   .nav-bar {
     margin: auto;
@@ -895,6 +875,10 @@ input:checked + .slider:before {
   main,
   .color-picker {
     max-width: 800px;
+  }
+  .links {
+    -moz-columns: 4;
+         columns: 4;
   }
   .navbar-light .navbar-nav .nav-link {
     margin-right: 0;
@@ -997,13 +981,4 @@ input:checked + .slider:before {
 svg {
   height: 24px;
   width: 24px;
-}
-
-.clientCardText {
-  font-size: smaller !important;
-  color: #1f0505 !important;
-}
-
-.script-output {
-  color: #1f0505;
 }/*# sourceMappingURL=style.css.map */
