@@ -164,7 +164,7 @@ function createCard(sentences, solution, cardId) {
 	frontSide.appendChild(sentence2);
 	innerCard.appendChild(frontSide);
 	innerCard.appendChild(backSide);
-	innerCard.appendChild(deleteButton);
+	card.appendChild(deleteButton);
 	card.appendChild(innerCard);
 	card.addEventListener("click", () => {
 		toggleCardContentdb(card, solution);
