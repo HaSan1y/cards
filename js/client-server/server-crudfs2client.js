@@ -53,3 +53,16 @@ app.listen(port, () => console.log(`Server listening at ${port}`));
 //    fs.writeFileSync(filePath, newContents, 'utf8');
 //  }
 //  xxx.addEventListener('click', () => { deleteLines('sen.txt', [0, 1, 2]); })
+
+//  function addTextToFile() {
+//    var text = document.getElementById('t1').value;
+//    var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+//    var link = document.createElement("a");
+//    var url = URL.createObjectURL(blob);
+//    link.setAttribute("href", url);
+//    link.setAttribute("download", "file.txt");
+//    link.style.visibility = 'hidden';
+//    document.body.appendChild(link);
+//    link.click();
+//    document.body.removeChild(link);
+//  }

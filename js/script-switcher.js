@@ -44,11 +44,11 @@ async function switchScript() {
 	// };
 }
 
-function updateOutput() {
-	const outputDiv = document.getElementById("script-output");
-	outputDiv.textContent = activeScript ? `Active script: ${activeScript}` : "No script loaded";
-}
+// function updateOutput() {
+// 	const outputDiv = document.getElementById("script-output");
+// 	outputDiv.textContent = activeScript ? `Active script: ${activeScript}` : "No script loaded";
+// }
 
-updateOutput();
+// updateOutput();
 
 document.getElementById("switch-script").addEventListener("click", switchScript);

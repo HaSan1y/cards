@@ -2,9 +2,9 @@
    outline: 2px solid red;
    opacity: 0.4;
    border-radius: 5px;
-   cursor: not-allowed;
+   cursor: pointer;
    background-color: #666;
-   margin: 0 10px;
+   padding: 10px;
 
    &:hover {
       opacity: 1;
@@ -13,14 +13,18 @@
    }
 }
 
+#card {
+   padding: 20px;
+   outline: 1px dotted;
+}
+
 #cardHolder {
    display: grid;
    grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
    gap: 20px;
    padding: 20px;
-   outline: 1px solid;
-   opacity: 0.5;
-   /* columns: 2; */
+   outline: 1px dotted;
+   opacity: 0.3;
 }
 
 /* From Uiverse.io by htwarriors108 */

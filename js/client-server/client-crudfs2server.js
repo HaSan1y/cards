@@ -1,4 +1,3 @@
-// if (!isIDB) {
 const cards = document.querySelectorAll("#card");
 // if (typeof cards === "undefined") {}
 // improvements: global, errorreports, postgresql/expressjs/koa.js, separate codeblocks, comments,react,tests
@@ -20,8 +19,6 @@ class Counter {
 	}
 }
 const counter = new Counter();
-// let sentences = [];
-// let solution = [];
 
 async function fetchFile(filePath) {
 	try {
@@ -37,7 +34,7 @@ async function fetchFile(filePath) {
 }
 async function getsensolData() {
 	try {
-		// const filePath = counter.switchedFiles === 0 ? "sen.txt" : `sen${counter.switchedFiles}.txt`;
+		// const filePath = counter.switchedFiles === 0 ? "sen.txt" : counter.switchedFiles === 1 ? `sen${counter.switchedFiles}.txt` : "sen.txt";
 		const filePath = "sen.txt";
 		const solFilePath = "sol.txt";
 		const [data, solData] = await Promise.all([fetchFile(filePath), fetchFile(solFilePath)]);
@@ -65,8 +62,7 @@ async function displ() {
 			card.classList.add("myCard");
 
 			card.id = `card-${i}`;
-			// const uniqueCardId = `card-${startIndex + counter.totalCards}`;
-			// card.id = uniqueCardId;
+			// card.id = `card-${startIndex + counter.totalCards}`;
 
 			const heading = document.createElement("h2");
 			heading.classList.add("title");
@@ -142,22 +138,8 @@ async function toggleCardContent(card, sentences) {
 	}
 }
 
-//  function addTextToFile() {
-//    var text = document.getElementById('t1').value;
-//    var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-//    var link = document.createElement("a");
-//    var url = URL.createObjectURL(blob);
-//    link.setAttribute("href", url);
-//    link.setAttribute("download", "file.txt");
-//    link.style.visibility = 'hidden';
-//    document.body.appendChild(link);
-//    link.click();
-//    document.body.removeChild(link);
-//  }
-
 //triggered via btn created on top
 async function showMoreCards() {
-	console.log("test");
 	const result = await getsensolData();
 	if (result) {
 		const { sentences, solution } = result;
@@ -176,12 +158,10 @@ async function showMoreCards() {
 
 function remove() {
 	// remove all cards except first 6
-	for (let i = cards.length - 1; i >= cards.length - this.maxCardsOverflow + 6 && i >= 0; i--) {
-		if (this.maxCardsOverflow > i) {
-			cards[i].remove();
-			this.maxCardsOverflow--;
-			counter.howoftenOverflowed = 0;
-		}
+	for (let i = cards.length - 1; i >= cards.length - counter.maxCardsOverflow + 6 && i >= 0 && counter.maxCardsOverflow > i; i--) {
+		cards[i].remove();
+		counter.maxCardsOverflow--;
+		counter.howoftenOverflowed = 0;
 	}
 }
 
@@ -217,5 +197,3 @@ async function postsensolData(event) {
 		.then((data) => console.log(data))
 		.catch((error) => console.error("Error writing to sol.txt:", error));
 }
-// }
-// displ();
