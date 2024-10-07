@@ -1,10 +1,18 @@
-/* .bi-hand-index-fill::before {
-   opacity: 0.9;
-   animation: wave 4s infinite;
-   scale: 90%;
-} */
+.removebtn {
+   outline: 2px solid red;
+   opacity: 0.4;
+   border-radius: 5px;
+   cursor: not-allowed;
+   background-color: #666;
+   margin: 0 10px;
 
-/* cards */
+   &:hover {
+      opacity: 1;
+      background-color: rgba(255, 0, 0, 0.192);
+      cursor: pointer;
+   }
+}
+
 #cardHolder {
    display: grid;
    grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
@@ -15,27 +23,21 @@
    /* columns: 2; */
 }
 
-.myCard:hover,
-:focus {
-   filter: brightness(100%);
-   scale: 110%;
-}
-
 /* From Uiverse.io by htwarriors108 */
 .myCard {
    background-color: transparent;
    width: 190px;
    height: 254px;
-   perspective: 10000px;
-   position: relative;
+   perspective: 2000px;
+   /* position: relative;
    max-width: 300px;
-   padding: 1rem;
+   padding: 1.5rem;
    background-color: var(--clr-card-bg);
-   border-block-start: 0.5rem solid;
+   border-block-start: 0.4rem solid;
    border-radius: 0.5rem;
-   opacity: 0.6;
-   box-shadow: 3px 3px 2px 2px var(--clr-heading);
-   cursor: pointer;
+   opacity: 0.6;*/
+   /* box-shadow: 3px 3px 2px 2px var(--clr-heading); */
+
 }
 
 .title {
@@ -53,16 +55,17 @@
    transition: transform 0.8s;
    transform-style: preserve-3d;
    cursor: pointer;
-   /* overflow: hidden; */
 }
 
 .myCard:hover .innerCard {
    transform: rotateY(180deg);
+   /* scale: 110%; */
 }
 
 .frontSide,
 .backSide {
    position: absolute;
+   letter-spacing: 2px;
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -76,12 +79,13 @@
    color: white;
    box-shadow: 0 0 0.3em rgba(255, 255, 255, 0.5);
    font-weight: 700;
-   overflow: hidden;
 }
 
 .frontSide,
 .frontSide::before {
    background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(200, 80, 192) 46%, rgb(255, 204, 112) 100%);
+   animation: animatez 2s linear infinite;
+   /* too flashy? */
 }
 
 .backSide,
@@ -119,5 +123,14 @@
 
    100% {
       opacity: 0.3;
+
+   }
+
+}
+
+@keyframes animatez {
+   100% {
+      filter: hue-rotate(360deg);
+      /* filter: blur(5px); */
    }
 }

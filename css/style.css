@@ -837,27 +837,6 @@ input:checked + .slider:before {
   cursor: not-allowed;
 }
 
-.removebtn {
-  top: 0;
-  right: 0;
-  position: absolute;
-  outline: 2px solid red;
-  opacity: 0.4;
-  border-radius: 25px;
-  cursor: not-allowed;
-  background-color: #666;
-  margin: 0 10px;
-}
-.removebtn:hover {
-  opacity: 1;
-  background-color: red;
-  cursor: pointer;
-}
-
-div#card {
-  position: relative;
-}
-
 .yourbanner {
   max-width: 1300px;
   outline: rgba(255, 0, 0, 0.164) 1px dotted;
@@ -987,20 +966,6 @@ div#card {
     max-width: 1300px;
   }
 }
-@keyframes wave {
-  10% {
-    transform: rotate(240deg) scaleX(-1);
-  }
-  50% {
-    transform: rotate(180deg) scaleX(-1);
-  }
-  75% {
-    transform: rotate(240deg) scaleX(-1);
-  }
-  100% {
-    transform: rotate(120deg) scaleX(-1);
-  }
-}
 #blink {
   animation: blink 1s linear infinite;
 }
@@ -1026,13 +991,6 @@ div#card {
   position: fixed;
   bottom: 50px;
   right: 25px;
-  opacity: 0.5;
-}
-
-#asdf {
-  position: fixed;
-  bottom: 50px;
-  left: 25px;
   opacity: 0.5;
 }
 

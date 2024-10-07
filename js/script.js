@@ -144,6 +144,7 @@ function switchDatabase() {
 		document.getElementById("buttons").appendChild(showMoreButton);
 		dboptionswitcher.style.display = "none";
 		dbbtn.style.display = "block";
+		displ();
 		document.getElementById("dbbtn").addEventListener("submit", postsensolData);
 	} else if (isIndexDB) {
 		console.log("Switching to IndexedDB");

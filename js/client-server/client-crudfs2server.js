@@ -69,6 +69,7 @@ async function displ() {
 			// card.id = uniqueCardId;
 
 			const heading = document.createElement("h2");
+			heading.classList.add("title");
 			heading.textContent = sentences[i];
 
 			const backSide = document.createElement("h2");
@@ -92,7 +93,7 @@ async function displ() {
 			// }); card eventlistener  interfering with indexdbjs
 			const deleteButton = document.createElement("button");
 			deleteButton.textContent = "Delete";
-			deleteButton.classList.add("delete-button");
+			deleteButton.classList.add("removebtn");
 			const innerCard = document.createElement("div");
 			innerCard.classList.add("innerCard");
 			const frontSide = document.createElement("div");
@@ -217,4 +218,4 @@ async function postsensolData(event) {
 		.catch((error) => console.error("Error writing to sol.txt:", error));
 }
 // }
-displ();
+// displ();

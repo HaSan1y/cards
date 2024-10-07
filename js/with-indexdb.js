@@ -134,7 +134,7 @@ function createCard(sentences, solution, cardId) {
 	card.id = cardId;
 
 	const deleteButton = document.createElement("button");
-	deleteButton.textContent = "delete";
+	deleteButton.textContent = "Delete";
 	deleteButton.classList.add("removebtn");
 	deleteButton.onclick = (e) => {
 		e.stopPropagation();
@@ -144,19 +144,16 @@ function createCard(sentences, solution, cardId) {
 		console.log("Card deleted");
 	};
 
-	const innerCard = document.createElement("article");
+	const innerCard = document.createElement("div");
 	innerCard.classList.add("innerCard");
-
 	const frontSide = document.createElement("div");
 	frontSide.classList.add("frontSide");
-	// frontSide.classList.add("frontSide", "bi", "bi-hand-index-fill");
-
-	const backSide = document.createElement("div");
+	const backSide = document.createElement("h2");
 	backSide.classList.add("backSide");
+
 	const sentence1 = document.createElement("h2");
 	sentence1.classList.add("title");
 	sentence1.textContent = sentences[0].sentence;
-
 	const sentence2 = document.createElement("p");
 	if (sentences[1]) {
 		sentence2.textContent = sentences[1].sentence;
