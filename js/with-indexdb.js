@@ -8,6 +8,8 @@ class Count {
 		this.displayMax = 10;
 		this.db;
 		this.displayedCardIds = new Set();
+		this.solution = [];
+		this.sentence = [];
 	}
 	increment() {
 		this.displayMax += 1;
@@ -97,7 +99,7 @@ async function handleSubmit(event) {
 		// 	};
 		// 	document.getElementById("buttons").appendChild(plzreloadpage);
 		// }
-		window.location.reload();
+		// window.location.reload();
 	} catch (error) {
 		console.error("Error handling submit:", error);
 	}
@@ -122,11 +124,10 @@ async function display(newIds = []) {
 		};
 	};
 }
-
 function displayCards(sen, sol, newIds) {
 	let totalCards = document.querySelectorAll(".myCard").length;
 	let i = 0;
-	let solIndex = 0;
+	let solIndex = sessionStorage.getItem("solIndex") || 0;
 
 	while (i < sen.length && totalCards < count.displayMax) {
 		const cardId = `card-${sen[i].id}`;
@@ -141,12 +142,17 @@ function displayCards(sen, sol, newIds) {
 			count.displayedCardIds.add(cardId);
 			totalCards++;
 			solIndex++;
+			count.increment();
 			i += 2;
 		} else {
 			i += 2; // Increment the index by 2 if the card is already displayed
 		}
+		sessionStorage.setItem("solIndex", solIndex);
 	}
 }
+window.addEventListener("beforeunload", () => {
+	sessionStorage.setItem("solIndex", 0);
+});
 function createCard(sentences, solution, cardId) {
 	const card = document.createElement("div");
 	card.classList.add("myCard");
@@ -286,15 +292,8 @@ async function deleteFromDatabase(id) {
 		if (count.displayMax > 10) {
 			count.displayMax--;
 		}
-		// if (!reload) {
-		const plzreloadpage = document.createElement("button");
-		plzreloadpage.textContent = "indexDB Issue?! ->Plz Reload Page";
-		plzreloadpage.id = "reload";
-		plzreloadpage.onclick = (e) => {
-			window.location.reload();
-		};
-		document.getElementById("buttons").appendChild(plzreloadpage);
-		// }
+
+		window.location.reload();
 	} catch (error) {
 		console.error("Error deleting from database:", error);
 	}
