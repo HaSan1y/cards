@@ -1,12 +1,23 @@
 //developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
-const dbName = "myDatabase";
-const dbVersion = 1;
-let db;
-// self.indexedDB.open
 
+// self.indexedDB.open
+class Count {
+	constructor() {
+		this.dbName = "myDatabase";
+		this.dbVersion = 1;
+		this.displayMax = 10;
+		this.db;
+		this.displayedCardIds = new Set();
+	}
+	increment() {
+		this.displayMax += 1;
+	}
+}
+
+const count = new Count();
 function openDatabase() {
 	return new Promise((resolve, reject) => {
-		const request = indexedDB.open(dbName, dbVersion);
+		const request = indexedDB.open(count.dbName, count.dbVersion);
 		request.onerror = (event) => {
 			console.error("Error opening database:", event.target.error);
 			reject(event.target.error);
@@ -14,23 +25,23 @@ function openDatabase() {
 
 		request.onsuccess = (event) => {
 			// db = DBOpenRequest.result;
-			db = event.target.result;
+			count.db = event.target.result;
 
 			console.log("Database opened successfully");
-			resolve(db);
+			resolve(count.db);
 		};
 
 		request.onupgradeneeded = (event) => {
-			db = event.target.result;
+			count.db = event.target.result;
 			console.log("Database upgrade needed");
 
-			if (!db.objectStoreNames.contains("sentences")) {
-				const sentencesStore = db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
+			if (!count.db.objectStoreNames.contains("sentences")) {
+				const sentencesStore = count.db.createObjectStore("sentences", { keyPath: "id", autoIncrement: true });
 				sentencesStore.createIndex("sentence", "sentence", { unique: true });
 			}
 
-			if (!db.objectStoreNames.contains("solutions")) {
-				const solutionsStore = db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
+			if (!count.db.objectStoreNames.contains("solutions")) {
+				const solutionsStore = count.db.createObjectStore("solutions", { keyPath: "id", autoIncrement: true });
 				solutionsStore.createIndex("solution", "solution", { unique: true });
 				// solutionsStore.add({ id: 0, solution: "initialization" });
 			}
@@ -48,7 +59,7 @@ async function handleSubmit(event) {
 
 	try {
 		await openDatabase();
-		const transaction = db.transaction(["sentences", "solutions"], "readwrite");
+		const transaction = count.db.transaction(["sentences", "solutions"], "readwrite");
 		const [sentencesStore, solutionsStore] = [transaction.objectStore("sentences"), transaction.objectStore("solutions")];
 
 		// sentences.forEach((sentence) => {
@@ -77,18 +88,27 @@ async function handleSubmit(event) {
 		transaction.onerror = (event) => {
 			console.error(`Transaction error: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
 		};
+		// if (!reload) {
+		// 	const plzreloadpage = document.createElement("button");
+		// 	plzreloadpage.textContent = "indexDB Issue?! ->Plz Reload Page";
+		// 	plzreloadpage.id = "reload";
+		// 	plzreloadpage.onclick = (e) => {
+		// 		window.location.reload();
+		// 	};
+		// 	document.getElementById("buttons").appendChild(plzreloadpage);
+		// }
 		window.location.reload();
 	} catch (error) {
 		console.error("Error handling submit:", error);
 	}
 }
-let displayedCardIds = new Set();
+
 async function display(newIds = []) {
-	const sentencesRequest = db.transaction("sentences", "readonly").objectStore("sentences").getAll();
+	const sentencesRequest = count.db.transaction("sentences", "readonly").objectStore("sentences").getAll();
 	sentencesRequest.onsuccess = (event) => {
 		const sentences = event.target.result;
 
-		solutionsRequest = db.transaction("solutions", "readonly").objectStore("solutions").getAll();
+		solutionsRequest = count.db.transaction("solutions", "readonly").objectStore("solutions").getAll();
 		solutionsRequest.onsuccess = (event) => {
 			const solutions = event.target.result;
 			console.log(solutions, sentences);
@@ -104,22 +124,21 @@ async function display(newIds = []) {
 }
 
 function displayCards(sen, sol, newIds) {
-	let displayMax = 10;
 	let totalCards = document.querySelectorAll(".myCard").length;
 	let i = 0;
 	let solIndex = 0;
 
-	while (i < sen.length && totalCards < displayMax) {
+	while (i < sen.length && totalCards < count.displayMax) {
 		const cardId = `card-${sen[i].id}`;
 		// 	 `card-${Math.floor(i / 2)}`;
-		if (!displayedCardIds.has(cardId) || newIds.includes(sen[i].id)) {
+		if (!count.displayedCardIds.has(cardId) || newIds.includes(sen[i].id)) {
 			let sentences = [sen[i]];
 			if (i + 1 < sen.length) {
 				sentences.push(sen[i + 1]);
 			}
 			const card = createCard(sentences, sol[solIndex], cardId);
 			cardHolder.appendChild(card);
-			displayedCardIds.add(cardId);
+			count.displayedCardIds.add(cardId);
 			totalCards++;
 			solIndex++;
 			i += 2;
@@ -139,7 +158,7 @@ function createCard(sentences, solution, cardId) {
 	deleteButton.onclick = (e) => {
 		e.stopPropagation();
 		card.remove();
-		displayedCardIds.delete(cardId);
+		count.displayedCardIds.delete(cardId);
 		deleteFromDatabase(cardId.split("-")[1]);
 		console.log("Card deleted");
 	};
@@ -217,7 +236,7 @@ async function toggleCardContentdb(card, solution) {
 	// }
 }
 async function ensureDatabaseConnection() {
-	if (!db || db.closed) {
+	if (!count.db || count.db.closed) {
 		await openDatabase();
 		display();
 	}
@@ -225,7 +244,7 @@ async function ensureDatabaseConnection() {
 async function deleteFromDatabase(id) {
 	try {
 		await ensureDatabaseConnection();
-		const transaction = db.transaction(["sentences", "solutions"], "readwrite");
+		const transaction = count.db.transaction(["sentences", "solutions"], "readwrite");
 		const sentencesStore = transaction.objectStore("sentences");
 		const solutionsStore = transaction.objectStore("solutions");
 
@@ -264,7 +283,18 @@ async function deleteFromDatabase(id) {
 		transaction.onerror = (event) => {
 			console.error(`Error deleting data with ID ${idAsInt}:`, event.target.error);
 		};
-		window.location.reload();
+		if (count.displayMax > 10) {
+			count.displayMax--;
+		}
+		// if (!reload) {
+		const plzreloadpage = document.createElement("button");
+		plzreloadpage.textContent = "indexDB Issue?! ->Plz Reload Page";
+		plzreloadpage.id = "reload";
+		plzreloadpage.onclick = (e) => {
+			window.location.reload();
+		};
+		document.getElementById("buttons").appendChild(plzreloadpage);
+		// }
 	} catch (error) {
 		console.error("Error deleting from database:", error);
 	}
@@ -272,7 +302,7 @@ async function deleteFromDatabase(id) {
 // called via button onclick="wipeData()"
 function wipeData() {
 	const removeDataFromStore = (storeName) => {
-		const transaction = db.transaction([storeName], "readwrite");
+		const transaction = count.db.transaction([storeName], "readwrite");
 		const store = transaction.objectStore(storeName);
 
 		const clearRequest = store.clear();
@@ -294,5 +324,6 @@ function wipeData() {
 		cards.forEach((card) => card.remove());
 		console.log(cards);
 	}
+	count.displayMax = 10;
 	window.location.reload();
 }
