@@ -12,7 +12,10 @@ class Count {
 		this.sentence = [];
 	}
 	increment() {
-		this.displayMax += 1;
+		this.displayMax++;
+	}
+	decrement() {
+		this.displayMax--;
 	}
 }
 
@@ -73,32 +76,30 @@ async function handleSubmit(event) {
 		// });
 		const addedIds = [];
 		for (const sentence of sentences) {
-			const request = sentencesStore.add({ sentence });
-			request.onsuccess = (event) => {
-				addedIds.push(event.target.result);
-			};
+			sentencesStore.add({ sentence });
+			addedIds.push(sentencesStore.result);
 		}
+		// for (const sentence of sentences) {
+		// 	const request = sentencesStore.add({ sentence });
+		// 	request.onsuccess = (event) => {
+		// 		addedIds.push(event.target.result);
+		// 	};
+		// }
 		for (const solution of solutions) {
 			await solutionsStore.add({ solution });
 		}
 
-		await transaction.complete;
-		console.log(`Data added to ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store successfully`);
+		await transaction.done;
+		// await transaction.complete;
+		console.log(`Data added to ${Array.from(transaction.objectStoreNames).join(", ")}`);
 		await display(addedIds);
 		// transaction.oncomplete = () => {
 
 		transaction.onerror = (event) => {
-			console.error(`Transaction error: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:`, event.target.error);
+			console.error(
+				`Transaction error: ${transaction.objectStoreNames[0]}, ${transaction.objectStoreNames[1]} store:${event.target.error} let me guess you inputed something which is already existing in your indexdb`,
+			);
 		};
-		// if (!reload) {
-		// 	const plzreloadpage = document.createElement("button");
-		// 	plzreloadpage.textContent = "indexDB Issue?! ->Plz Reload Page";
-		// 	plzreloadpage.id = "reload";
-		// 	plzreloadpage.onclick = (e) => {
-		// 		window.location.reload();
-		// 	};
-		// 	document.getElementById("buttons").appendChild(plzreloadpage);
-		// }
 		// window.location.reload();
 	} catch (error) {
 		console.error("Error handling submit:", error);
@@ -129,117 +130,122 @@ function displayCards(sen, sol, newIds) {
 	let i = 0;
 	let solIndex = sessionStorage.getItem("solIndex") || 0;
 
-	while (i < sen.length && totalCards < count.displayMax) {
+	while (i < sen.length && totalCards < count.displayMax + sol.length) {
 		const cardId = `card-${sen[i].id}`;
 		// 	 `card-${Math.floor(i / 2)}`;
 		if (!count.displayedCardIds.has(cardId) || newIds.includes(sen[i].id)) {
+			// const card = createCard(sentences.slice(i, i + 2), sol[solIndex], cardId);
 			let sentences = [sen[i]];
 			if (i + 1 < sen.length) {
 				sentences.push(sen[i + 1]);
 			}
 			const card = createCard(sentences, sol[solIndex], cardId);
+			// const card = createCard([sen[i]], sol[solIndex], cardId);
+
+			console.log("333333333333");
 			cardHolder.appendChild(card);
 			count.displayedCardIds.add(cardId);
 			totalCards++;
 			solIndex++;
-			count.increment();
 			i += 2;
 		} else {
 			i += 2; // Increment the index by 2 if the card is already displayed
 		}
 		sessionStorage.setItem("solIndex", solIndex);
 	}
+	// if (i < sen.length) {
+	// 	setTimeout(() => displayCards(sen, sol, newIds), 0);
+	// }
 }
 window.addEventListener("beforeunload", () => {
 	sessionStorage.setItem("solIndex", 0);
 });
+function createDeleteButton() {
+	const deleteButton = document.createElement("button");
+	deleteButton.textContent = "Delete";
+	deleteButton.classList.add("removebtn");
+	deleteButton.onclick = () => {
+		const cardId = deleteButton.closest(".myCard").id;
+		deleteFromDatabase(cardId.split("-")[1]);
+		deleteButton.closest(".myCard").remove();
+		count.displayedCardIds.delete(cardId);
+		console.log("Card deleted");
+	};
+	return deleteButton;
+}
 function createCard(sentences, solution, cardId) {
 	const card = document.createElement("div");
 	card.classList.add("myCard");
 	card.id = cardId;
-
-	const deleteButton = document.createElement("button");
-	deleteButton.textContent = "Delete";
-	deleteButton.classList.add("removebtn");
-	deleteButton.onclick = (e) => {
-		e.stopPropagation();
-		card.remove();
-		count.displayedCardIds.delete(cardId);
-		deleteFromDatabase(cardId.split("-")[1]);
-		console.log("Card deleted");
-	};
-
+	const cardsCreation = createInnerCard(sentences, solution);
 	const innerCard = document.createElement("div");
 	innerCard.classList.add("innerCard");
-	const frontSide = document.createElement("div");
-	frontSide.classList.add("frontSide");
-	const backSide = document.createElement("div");
-	backSide.classList.add("backSide");
-	const backHead = document.createElement("h2");
-	backHead.classList.add("backHead");
-
-	const sentence1 = document.createElement("h2");
-	sentence1.classList.add("title");
-	sentence1.textContent = sentences[0].sentence;
-	const sentence2 = document.createElement("p");
-	if (sentences[1]) {
-		sentence2.textContent = sentences[1].sentence;
-	} else {
-		sentence2.textContent = "";
-	}
-	frontSide.appendChild(sentence1);
-	frontSide.appendChild(sentence2);
+	const { frontSide, backSide } = cardsCreation;
+	// const sentence1 = document.createElement("h2");
+	// sentence1.classList.add("title");
+	// sentence1.textContent = sentences[0].sentence;
+	// const sentence2 = document.createElement("p");
+	// sentence2.textContent = sentences[1] ? sentences[1].sentence : "";
 	innerCard.appendChild(frontSide);
 	innerCard.appendChild(backSide);
-	backSide.appendChild(deleteButton);
-	backSide.appendChild(backHead);
 	card.appendChild(innerCard);
 	card.addEventListener("click", () => {
 		toggleCardContentdb(card, solution);
 	});
 	return card;
 }
+function createInnerCard(sentences, solution) {
+	const frontSide = createFrontSide(sentences);
+	const backSide = createBackSide(solution);
+	return { frontSide, backSide };
+}
 
+function createFrontSide(sentences) {
+	const frontSide = document.createElement("div");
+	frontSide.classList.add("frontSide");
+
+	const title = document.createElement("h2");
+	title.classList.add("title");
+	title.textContent = sentences[0].sentence;
+
+	const subtitle = document.createElement("p");
+	subtitle.textContent = sentences[1] ? sentences[1].sentence : "";
+
+	frontSide.appendChild(title);
+	frontSide.appendChild(subtitle);
+	return frontSide;
+}
+
+function createBackSide(solution) {
+	const backSide = document.createElement("div");
+	backSide.classList.add("backSide");
+
+	const head = document.createElement("h2");
+	head.classList.add("backHead");
+	// head.textContent = solution.solution ? solution.solution : "";
+
+	backSide.appendChild(head);
+	const deleteButton = createDeleteButton();
+	backSide.appendChild(deleteButton);
+	return backSide;
+}
 async function toggleCardContentdb(card, solution) {
 	const innerCard = card.querySelector(".innerCard");
 	const backHead = innerCard.querySelector(".backHead");
 
-	if (solution) {
-		backHead.textContent = solution.solution;
-		innerCard.classList.toggle("flipped");
-	} else {
-		console.warn(`No solution found for card ${card.id}`);
-	}
-	// try {
-	// 	await ensureDatabaseConnection();
-	// 	if (!db) {
-	// 		throw new Error("Database not available");
-	// 	}
-	// 	const frontSide = innerCard.querySelector(".frontSide");
-	// 	const cardIndex = parseInt(card.id.split("-")[1]);
-	// 	const dbTransaction = db.transaction("solutions", "readonly");
-	// 	const solutionsStore = dbTransaction.objectStore("solutions");
-	// 	// const solution = await new Promise((resolve, reject) => {
-	// 	// 	const request = solutionsStore.get(cardIndex + 1);
-	// 	// 	request.onsuccess = (event) => resolve(event.target.result);
-	// 	// 	request.onerror = (event) => reject(event.target.error);
-	// 	// });
-	// 	const allSolutions = await new Promise((resolve, reject) => {
-	// 		const request = solutionsStore.getAll();
-	// 		request.onsuccess = (event) => resolve(event.target.result);
-	// 		request.onerror = (event) => reject(event.target.error);
-	// 	});
-	// 	// Find the solution that matches the card index
-	// 	const solution = allSolutions[cardIndex];
-	// 	if (solution) {
-	// 		backSide.textContent = solution.solution;
-	// 		innerCard.classList.toggle("flipped");
-	// 	} else {
-	// 		console.warn(`No solution found for card index ${cardIndex}`);
-	// 	}
-	// } catch (error) {
-	// 	console.error("Error reading solution from database:", error);
+	// if (solution) {
+	// 	backHead.textContent = solution.solution;
+	// 	innerCard.classList.toggle("flipped");
+	// } else {
+	// 	console.warn(`No solution found for card ${card.id}`);
 	// }
+	if (!solution) {
+		console.warn(`No solution found for card ${card.id}`);
+		return;
+	}
+
+	backHead.textContent = solution.solution;
+	innerCard.classList.toggle("flipped");
 }
 async function ensureDatabaseConnection() {
 	if (!count.db || count.db.closed) {
@@ -260,17 +266,11 @@ async function deleteFromDatabase(id) {
 			return;
 		}
 		const deleteSentenceRequest = sentencesStore.delete(idAsInt);
-		deleteSentenceRequest.onsuccess = () => {
-			console.log("hello!!!!!!!!!"); // Log success message
-		};
 		deleteSentenceRequest.onerror = (event) => {
 			console.error(`Error deleting sentence with ID ${idAsInt}:`, event.target.error);
 		};
-
 		const deleteSentenceRequest2 = sentencesStore.delete(idAsInt + 1);
-		deleteSentenceRequest2.onsuccess = () => {
-			console.log("hello!!!!!!!!!"); // Log success message
-		};
+		// await Promise.all([deleteSentenceRequest, deleteSolutionRequest]);
 		deleteSentenceRequest2.onerror = (event) => {
 			console.error(`Error deleting sentence with ID ${idAsInt + 1}:`, event.target.error);
 		};
@@ -290,7 +290,7 @@ async function deleteFromDatabase(id) {
 			console.error(`Error deleting data with ID ${idAsInt}:`, event.target.error);
 		};
 		if (count.displayMax > 10) {
-			count.displayMax--;
+			count.decrement();
 		}
 
 		window.location.reload();
@@ -300,29 +300,25 @@ async function deleteFromDatabase(id) {
 }
 // called via button onclick="wipeData()"
 function wipeData() {
-	const removeDataFromStore = (storeName) => {
+	const removeDataFromStore = /*async*/ (storeName) => {
 		const transaction = count.db.transaction([storeName], "readwrite");
 		const store = transaction.objectStore(storeName);
 
 		const clearRequest = store.clear();
 
-		clearRequest.onsuccess = () => {
-			console.log(`Data removed from ${storeName} store successfully`);
-		};
-
 		clearRequest.onerror = (event) => {
 			console.error(`Error removing data from ${storeName} store:`, event.target.error);
+		};
+		// await clearRequest;
+		clearRequest.onsuccess = () => {
+			console.log(`Data removed from ${storeName} store successfully`);
 		};
 	};
 	removeDataFromStore("sentences");
 	removeDataFromStore("solutions");
 
 	const cards = document.querySelectorAll('[id^="card-"]');
-
-	if (cards.length >= 0) {
-		cards.forEach((card) => card.remove());
-		console.log(cards);
-	}
+	cards.forEach((card) => card.remove());
 	count.displayMax = 10;
 	window.location.reload();
 }
