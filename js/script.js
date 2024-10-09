@@ -91,16 +91,14 @@ colorOptions.forEach((option) => {
 		radioInput.checked = true;
 	});
 });
-//// ///////////////////////                    document.onload = ;
-// window.addEventListener("load", () => {
+
+// window.addEventListener("load", () => {document.onload = ;
 executeCodes();
 setTheme();
 
-// // upload png recreate png into folder
 // const formx = document.querySelector('form.xx');
 // formx.addEventListener('submit', (e) => {
 //   e.preventDefault(); ///
-//   // const name = document.getElementById("name");
 //   const files = document.getElementById("files");
 //   const formData = new FormData();
 //   // // formData.append("name", name.value);
@@ -137,9 +135,24 @@ function switchDatabase() {
 		showMoreButton.id = "showmorec";
 		showMoreButton.classList.add("btn-primary");
 		showMoreButton.textContent = "MaxCard Display +2|+3";
-		showMoreButton.onclick = showMoreCards;
+		showMoreButton.onclick = () => showMoreCards();
+		// showMoreButton.onclick = showMoreCards;  <-wrongway expects reference not a fn call cuz will send returnvalue to this btn
 		// showMoreButton.addEventListener("click", showMoreCards);
 		document.getElementById("buttons").appendChild(showMoreButton);
+		const txtplusButton = document.createElement("button");
+		txtplusButton.type = "button";
+		txtplusButton.id = "zplusbtn";
+		txtplusButton.classList.add("btn-primary");
+		txtplusButton.textContent = "z++";
+		txtplusButton.onclick = () => counter.incrementFileSwitch();
+		document.getElementById("buttons").appendChild(txtplusButton);
+		const txtminusButton = document.createElement("button");
+		txtminusButton.type = "button";
+		txtminusButton.id = "zminusbtn";
+		txtminusButton.classList.add("btn-primary");
+		txtminusButton.textContent = "z--";
+		txtminusButton.onclick = () => counter.decrementFileSwitch();
+		document.getElementById("buttons").appendChild(txtminusButton);
 		dboptionswitcher.style.display = "none";
 		dbbtn.style.display = "block";
 		displ();

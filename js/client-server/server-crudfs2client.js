@@ -3,8 +3,6 @@ const fs = require("fs");
 const cors = require("cors");
 const app = express();
 const port = 3000;
-// app.use(cors());
-const counter = { switchedFiles: 0 };
 // const port = process.env.PORT || 3000;
 
 app.use(
@@ -23,9 +21,9 @@ app.post("/:fileType", (req, res) => {
 
 	// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
 	// const switchedFiles = req.query.switchedFiles; 3000/${filePath}?switchedFiles=${counter.switchedFiles}`, true);
-	// counter.switchedFiles = switchedFiles;.counter.switchedFiles
 
-	if (!["sen", "sol", "sen1", "sol1"].includes(fileType)) {
+	if (![`sen${switchedFiles > 0 ? switchedFiles : ""}`, `sol${switchedFiles > 0 ? switchedFiles : ""}`].includes(fileType)) {
+		// if (!["sen", "sol", `sen$`, "sol1"].includes(fileType)) {
 		return res.status(400).send(`Invalid file type: ${fileType}`);
 	}
 	if (typeof req.body !== "object" || Object.keys(req.body).length === 0) {
@@ -35,13 +33,15 @@ app.post("/:fileType", (req, res) => {
 	let sentenceContent = "";
 	let solutionContent = "";
 	switch (fileType) {
-		case "sen":
-		case "sen1":
+		case `sen${switchedFiles > 0 ? switchedFiles : ""}`:
+			// case "sen":
+			// case "sen1":
 			sentenceContent = `${t1}\n${t2}\n`;
 			solutionContent = `${solution}\n`;
 			break;
-		case "sol":
-		case "sol1":
+		case `sol${switchedFiles > 0 ? switchedFiles : ""}`:
+			// case "sol":
+			// case "sol1":
 			solutionContent = `${solution}\n`;
 			break;
 	}
@@ -75,14 +75,6 @@ app.post("/:fileType", (req, res) => {
 			res.status(500).send(`Error writing to files: ${error}`);
 		});
 	// fs.writeFile
-	// fs.appendFile(filePath, content, "utf8", function (error) {
-	// 	if (error) {
-	// 		console.error(`Error writing to ${filePath}:`, error);
-	// 		res.status(500).send(`Error writing to ${filePath}:`);
-	// 	} else {
-	// 		res.send(`${fileType.toUpperCase()} data written to ${filePath} successfully`);
-	// 	}
-	// });
 });
 // app.get('/sol.txt', (req, res) => {
 // 	res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');

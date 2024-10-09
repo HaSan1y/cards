@@ -13,30 +13,35 @@ class Counter {
 		this.solution = [];
 	}
 	incrementFileSwitch() {
-		console.warn("here");
 		const y = document.querySelectorAll(".myCard");
 		if (y.length > 0) {
-			console.warn("attempting remove");
 			y.forEach((xy) => xy.remove());
 		} else {
-			console.warn("No elements with id 'card' found.");
+			console.warn("No elements to remove found.");
 		}
-		counter.maxCardsOverflow = 6;
-		counter.howoftenOverflowed = 0;
+		this.maxCardsOverflow = 6;
+		this.howoftenOverflowed = 0;
 		this.switchedFiles++;
+		console.log(counter.switchedFiles);
+		this.totalCards = 0;
+		this.sentences = [];
+		this.solution = [];
 		displ();
 	}
 	decrementFileSwitch() {
 		const y = document.querySelectorAll(".myCard");
 		if (y.length > 0) {
-			console.warn("attempting remove");
 			cards.forEach((xy) => xy.remove());
 		} else {
-			console.warn("No elements with id 'card' found.");
+			console.warn("No elements to remove found.");
 		}
-		counter.maxCardsOverflow = 6;
-		counter.howoftenOverflowed = 0;
+		this.maxCardsOverflow = 6;
+		this.howoftenOverflowed = 0;
 		this.switchedFiles--;
+		console.log(counter.switchedFiles);
+		this.totalCards = 0;
+		this.sentences = [];
+		this.solution = [];
 		displ();
 	}
 	incrementmax() {
@@ -148,7 +153,12 @@ async function toggleCardContent(card, sentences) {
 	heading.textContent = sentences[cardIndex];
 	if (cardIndex < sentences.length) {
 		try {
-			const response = await fetch("sol.txt");
+			if (counter.switchedFiles > 0) {
+				const response = await fetch(`sol${counter.switchedFiles}.txt`);
+			} else {
+				const response = await fetch("sol.txt");
+			}
+
 			const data = await response.text();
 			const solution = data.trim().split("\n");
 			if (cardIndex > 0) {
@@ -170,7 +180,6 @@ async function showMoreCards() {
 	const result = await getsensolData();
 	if (result) {
 		const { sentences, solution } = result;
-		console.log(sentences, solution);
 		counter.totalCards = document.querySelectorAll(".myCard").length;
 		counter.howoftenOverflowed += 1;
 		counter.incrementmax() * counter.howoftenOverflowed;
@@ -185,10 +194,18 @@ async function showMoreCards() {
 
 function remove() {
 	// remove all cards except first 6
+	const cards = document.querySelectorAll(".myCard");
 	for (let i = cards.length - 1; i >= cards.length - counter.maxCardsOverflow + 6 && i >= 0 && counter.maxCardsOverflow > i; i--) {
 		cards[i].remove();
 		counter.maxCardsOverflow--;
 		counter.howoftenOverflowed = 0;
+		counter.totalCards--;
+	}
+	const y = document.querySelectorAll(".myCard");
+	if (y.length > 0) {
+		cards.forEach((xy) => xy.remove());
+	} else {
+		console.warn("No elements with to remove found.");
 	}
 }
 
@@ -257,4 +274,3 @@ async function postsensolData(event) {
 	// 	console.error("Error writing to files:", error);
 	// }
 }
-// document.getElementById("dbbtn").addEventListener("submit", postsensolData);
