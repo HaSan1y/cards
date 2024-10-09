@@ -2,46 +2,110 @@ const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
 const app = express();
-app.use(cors());
 const port = 3000;
+// app.use(cors());
+const counter = { switchedFiles: 0 };
 // const port = process.env.PORT || 3000;
+
+app.use(
+	cors({
+		origin: "http://127.0.0.1:5500", // allow requests from this origin
+		methods: ["GET", "POST", "PUT", "DELETE"], // allow these methods
+		allowedHeaders: ["Content-Type", "Authorization"], // allow these headers
+		// maxAge: 3600, // cache CORS configuration for 1 hour
+	}),
+);
 app.use(express.json());
+app.post("/:fileType", (req, res) => {
+	const fileType = req.params.fileType.split(".")[0];
+	const { switchedFiles, t1, t2, solution } = req.body;
+	// const [t1, t2, solution, switchedFiles] = req.body;
 
-app.post("/sen", (req, res) => {
-	if (!Array.isArray(req.body) || req.body.length === 0) {
-		return res.status(400).send("Invalid input: Expected non-empty array");
+	// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
+	// const switchedFiles = req.query.switchedFiles; 3000/${filePath}?switchedFiles=${counter.switchedFiles}`, true);
+	// counter.switchedFiles = switchedFiles;.counter.switchedFiles
+
+	if (!["sen", "sol", "sen1", "sol1"].includes(fileType)) {
+		return res.status(400).send(`Invalid file type: ${fileType}`);
 	}
-	let sentenceText = "";
-	for (let i = 0; i < req.body.length; i++) {
-		sentenceText += req.body[i] + "\n";
+	if (typeof req.body !== "object" || Object.keys(req.body).length === 0) {
+		// if (!Array.isArray(req.body) || req.body.length === 0) {
+		return res.status(400).send("Invalid input: Expected non-empty object");
 	}
+	let sentenceContent = "";
+	let solutionContent = "";
+	switch (fileType) {
+		case "sen":
+		case "sen1":
+			sentenceContent = `${t1}\n${t2}\n`;
+			solutionContent = `${solution}\n`;
+			break;
+		case "sol":
+		case "sol1":
+			solutionContent = `${solution}\n`;
+			break;
+	}
+	// for (let i = 0; i < req.body.length; i++) {
+	// 	content += req.body[i] + "\n";
+	// }
+	// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
+	const sentenceFilePath = `${fileType}.txt`;
+	const solutionFilePath = `sol${fileType === "sen1" ? "1" : ""}.txt`;
+
+	const writeToFile = (filePath, content) => {
+		return new Promise((resolve, reject) => {
+			fs.appendFile(filePath, content, "utf8", (error) => {
+				if (error) {
+					console.error(`Error writing to ${filePath}:`, error);
+					reject(error);
+				} else {
+					console.log(`Data written to ${filePath} successfully`);
+					resolve();
+				}
+			});
+		});
+	};
+
+	// Write to files
+	Promise.all([sentenceContent && writeToFile(sentenceFilePath, sentenceContent), solutionContent && writeToFile(solutionFilePath, solutionContent)])
+		.then(() => {
+			res.send(`Data written to files successfully`);
+		})
+		.catch((error) => {
+			res.status(500).send(`Error writing to files: ${error}`);
+		});
 	// fs.writeFile
-	fs.appendFile("sen.txt", sentenceText, "utf8", function (error) {
-		if (error) {
-			console.error("Error writing to sen.txt:", error);
-			res.status(500).send("Error writing to sen.txt");
-		} else {
-			res.send("Sentences data written to sen.txt successfully");
-		}
-	});
+	// fs.appendFile(filePath, content, "utf8", function (error) {
+	// 	if (error) {
+	// 		console.error(`Error writing to ${filePath}:`, error);
+	// 		res.status(500).send(`Error writing to ${filePath}:`);
+	// 	} else {
+	// 		res.send(`${fileType.toUpperCase()} data written to ${filePath} successfully`);
+	// 	}
+	// });
 });
-
-app.post("/sol", (req, res) => {
-	let solutionText = "";
-	for (let i = 0; i < req.body.length; i++) {
-		solutionText += req.body[i] + "\n";
-	}
-	fs.appendFile("sol.txt", solutionText, "utf8", function (error) {
-		if (error) {
-			console.error("Error writing to sol.txt:", error);
-			res.status(500).send("Error writing to sol.txt");
-		} else {
-			res.send("Solution data written to sol.txt successfully");
-		}
-	});
-});
-
+// app.get('/sol.txt', (req, res) => {
+// 	res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+// 	res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+// 	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+// 	res.send('Inhalt von sol.txt');
+//  });
 app.listen(port, () => console.log(`Server listening at ${port}`));
+// app.post("/sol", (req, res) => {
+// 	let solutionText = "";
+// 	for (let i = 0; i < req.body.length; i++) {
+// 		solutionText += req.body[i] + "\n";
+// 	}
+// 	fs.appendFile("sol.txt", solutionText, "utf8", function (error) {
+// 		if (error) {
+// 			console.error("Error writing to sol.txt:", error);
+// 			res.status(500).send("Error writing to sol.txt");
+// 		} else {
+// 			res.send("Solution data written to sol.txt successfully");
+// 		}
+// 	});
+// });
+
 // del lines
 // function deleteLines(filePath, linesToDelete) {
 //    const fileContents = fs.readFileSync(filePath, 'utf8');

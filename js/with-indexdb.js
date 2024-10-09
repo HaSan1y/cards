@@ -114,7 +114,6 @@ async function display(newIds = []) {
 		solutionsRequest = count.db.transaction("solutions", "readonly").objectStore("solutions").getAll();
 		solutionsRequest.onsuccess = (event) => {
 			const solutions = event.target.result;
-			console.log(solutions, sentences);
 			displayCards(sentences, solutions, newIds);
 		};
 		solutionsRequest.onerror = (event) => {
@@ -137,14 +136,15 @@ function displayCards(sen, sol, newIds) {
 			// const card = createCard(sentences.slice(i, i + 2), sol[solIndex], cardId);
 			let sentences = [sen[i]];
 			if (i + 1 < sen.length) {
+				// not sure what is happening here excactly but it works.. right?!
 				sentences.push(sen[i + 1]);
 			}
 			const card = createCard(sentences, sol[solIndex], cardId);
 			// const card = createCard([sen[i]], sol[solIndex], cardId);
 
-			console.log("333333333333");
 			cardHolder.appendChild(card);
 			count.displayedCardIds.add(cardId);
+			// count.ıncrement();
 			totalCards++;
 			solIndex++;
 			i += 2;
@@ -181,11 +181,6 @@ function createCard(sentences, solution, cardId) {
 	const innerCard = document.createElement("div");
 	innerCard.classList.add("innerCard");
 	const { frontSide, backSide } = cardsCreation;
-	// const sentence1 = document.createElement("h2");
-	// sentence1.classList.add("title");
-	// sentence1.textContent = sentences[0].sentence;
-	// const sentence2 = document.createElement("p");
-	// sentence2.textContent = sentences[1] ? sentences[1].sentence : "";
 	innerCard.appendChild(frontSide);
 	innerCard.appendChild(backSide);
 	card.appendChild(innerCard);

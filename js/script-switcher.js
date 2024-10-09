@@ -1,3 +1,4 @@
+/// deactivated: scripts interfering, unable to block a running js script, but a  nice loader addon script purpose
 let activeScript = null;
 
 let isIDB;

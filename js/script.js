@@ -82,7 +82,7 @@ colorThemes.forEach((themeOption) => {
 	});
 });
 
-/// on hover theme switch////////////////////////////////////////////////////////////////////////////////////////
+/// on hover theme switch////////////////////////////////////////////////////////////////////////////////
 const colorOptions = document.querySelectorAll(".color-option");
 
 colorOptions.forEach((option) => {
@@ -95,13 +95,11 @@ colorOptions.forEach((option) => {
 // window.addEventListener("load", () => {
 executeCodes();
 setTheme();
-// displ();
-// todo when upload file, cant see err, wrong filetype, nor console.log, ?submit?e.preventdefault?
+
 // // upload png recreate png into folder
 // const formx = document.querySelector('form.xx');
 // formx.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   console.log('Default form submission prevented');
+//   e.preventDefault(); ///
 //   // const name = document.getElementById("name");
 //   const files = document.getElementById("files");
 //   const formData = new FormData();

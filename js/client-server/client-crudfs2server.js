@@ -1,6 +1,8 @@
+// import fetch from "node-fetch";  this file becomes independent if implemented
+
 const cards = document.querySelectorAll("#card");
 // if (typeof cards === "undefined") {}
-// improvements: global, errorreports, postgresql/expressjs/koa.js, separate codeblocks, comments,react,tests
+// improvements: css, global, errorreports, postgresql/expressjs/koa.js, separate codeblocks, comments, react, tests, nosql.. client login+CRUD,
 class Counter {
 	constructor() {
 		this.switchedFiles = 0;
@@ -10,12 +12,35 @@ class Counter {
 		this.sentences = [];
 		this.solution = [];
 	}
-	increment() {
+	incrementFileSwitch() {
+		console.warn("here");
+		const y = document.querySelectorAll(".myCard");
+		if (y.length > 0) {
+			console.warn("attempting remove");
+			y.forEach((xy) => xy.remove());
+		} else {
+			console.warn("No elements with id 'card' found.");
+		}
+		counter.maxCardsOverflow = 6;
+		counter.howoftenOverflowed = 0;
 		this.switchedFiles++;
+		displ();
+	}
+	decrementFileSwitch() {
+		const y = document.querySelectorAll(".myCard");
+		if (y.length > 0) {
+			console.warn("attempting remove");
+			cards.forEach((xy) => xy.remove());
+		} else {
+			console.warn("No elements with id 'card' found.");
+		}
+		counter.maxCardsOverflow = 6;
+		counter.howoftenOverflowed = 0;
+		this.switchedFiles--;
+		displ();
 	}
 	incrementmax() {
 		this.maxCardsOverflow += 3;
-		// todo apparently i dont know math
 	}
 }
 const counter = new Counter();
@@ -34,9 +59,11 @@ async function fetchFile(filePath) {
 }
 async function getsensolData() {
 	try {
-		// const filePath = counter.switchedFiles === 0 ? "sen.txt" : counter.switchedFiles === 1 ? `sen${counter.switchedFiles}.txt` : "sen.txt";
-		const filePath = "sen.txt";
-		const solFilePath = "sol.txt";
+		const filePath = counter.switchedFiles === 0 ? "sen.txt" : counter.switchedFiles === 1 ? `sen${counter.switchedFiles}.txt` : "sen.txt";
+		const solFilePath = counter.switchedFiles === 0 ? "sol.txt" : counter.switchedFiles === 1 ? `sol${counter.switchedFiles}.txt` : "sol.txt";
+		console.log(filePath, solFilePath);
+		// const filePath = "sen.txt";
+		// const solFilePath = "sol.txt";
 		const [data, solData] = await Promise.all([fetchFile(filePath), fetchFile(solFilePath)]);
 		if (!data || !solData) {
 			return null;
@@ -172,28 +199,62 @@ async function postsensolData(event) {
 	const solution = document.getElementById("t3").value;
 
 	// const senResponse = await postData("http://127.0.0.1:3000/sen", [{ t1, t2 }]);
-	// const solResponse = await postData("http://127.0.0.1:3000/sol", [solution]);
-	// const data = {
-	// 	sentences: [t1, t2],
-	// 	solution: solution,
-	// };if json
+	const filePath = counter.switchedFiles === 0 ? "sen.txt" : counter.switchedFiles === 1 ? `sen${counter.switchedFiles}.txt` : "sen.txt";
+	// const solFilePath = counter.switchedFiles === 0 ? "sol.txt" : counter.switchedFiles === 1 ? `sol${counter.switchedFiles}.txt` : "sol.txt";
 
-	fetch("http://127.0.0.1:3000/sen", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		// body: JSON.stringify(sentences),
-		body: JSON.stringify([t1, t2]), // Send an array of strings
-	})
-		.then((response) => response.text())
-		.then((data) => console.log(data))
-		.catch((error) => console.error("Error writing to sen.txt:", error));
-	fetch("http://127.0.0.1:3000/sol", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify([solution]),
-		// { solution: solution }
-	})
-		.then((response) => response.text())
-		.then((data) => console.log(data))
-		.catch((error) => console.error("Error writing to sol.txt:", error));
+	const xhrSen = new XMLHttpRequest();
+	xhrSen.open("POST", `http://127.0.0.1:3000/${filePath}`, true);
+	xhrSen.setRequestHeader("Content-Type", "application/json");
+	const data = {
+		t1: t1,
+		t2: t2,
+		solution,
+		switchedFiles: counter.switchedFiles,
+	};
+	// const data = [t1, t2, solution, counter.switchedFiles];
+	xhrSen.send(JSON.stringify(data));
+
+	xhrSen.onload = function () {
+		console.log(`Sentences data written to ${filePath} successfully`);
+	};
+
+	xhrSen.onerror = function () {
+		console.error(`Error writing to ${filePath}:`, xhrSen.status);
+	};
+
+	// Fetch sol.txt
+	// const xhrSol = new XMLHttpRequest();
+	// xhrSol.open("POST", `http://127.0.0.1:3000/${solFilePath}`, true);
+	// xhrSol.setRequestHeader("Content-Type", "application/json");
+	// xhrSol.send(JSON.stringify(solution));
+
+	// xhrSol.onload = function () {
+	// 	console.log(`Solution data written to ${solFilePath} successfully`);
+	// };
+
+	// xhrSol.onerror = function () {
+	// 	console.error(`Error writing to ${solFilePath}:`, xhrSol.status);
+	// };
+	// try {
+	// 	const response = await fetch(`http://127.0.0.1:3000/${filePath}`, {
+	// 		method: "POST",
+	// 		headers: { "Content-Type": "application/json" },
+	// 		// body: JSON.stringify(sentences),
+	// 		body: JSON.stringify([t1, t2]), // Send an array of strings
+	// 	});
+	// 	const data = await response.text();
+	// 	console.log(data);
+
+	// 	const solResponse = await fetch(`http://127.0.0.1:3000/${solFilePath}`, {
+	// 		method: "POST",
+	// 		headers: { "Content-Type": "application/json" },
+	// 		body: JSON.stringify(solution),
+	// 		// { solution: solution }
+	// 	});
+	// 	const solData = await solResponse.text();
+	// 	console.log(solData);
+	// } catch (error) {
+	// 	console.error("Error writing to files:", error);
+	// }
 }
+// document.getElementById("dbbtn").addEventListener("submit", postsensolData);

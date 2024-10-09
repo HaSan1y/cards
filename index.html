@@ -11,17 +11,22 @@
 		<!-- <meta http-equiv="Content-Security-Policy" content="Access-Control-Allow-Origin='https://github.com/HaSan1y/res'; Vary='Origin'"> -->
 		<!-- <meta http-equiv="Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" />
 		<meta http-equiv="X-Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" /> -->
-		<meta Access-Control-Allow-Origin="no-cors" />
+		<!-- <meta Access-Control-Allow-Origin="no-cors" /> -->
 		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com" /> -->
+
 		<title>cards</title>
 
 		<!-- Load the Twitch embed script -->
-		<script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script>
+		<!-- <script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
 		<!-- Create a Twitch.Player object. This will render within the placeholder div -->
-		<script type="text/javascript" src="js/twitch.js"></script>
+		<!-- <script type="text/javascript" src="js/twitch.js"></script> -->
 
 		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
+
+		<link rel="preload" href="js/script.js" as="script" />
+		<!-- as image, style,.... -->
 		<script type="text/javascript" src="js/script.js" defer></script>
+
 		<!-- <script type="text/javascript" src="./js/script-switcher.js" defer></script> -->
 		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
 		<script type="text/javascript" src="./js/client-server/client-crudfs2server.js" defer></script>
@@ -33,7 +38,7 @@
 
 		<link rel="stylesheet" href="css/style.css" />
 		<link rel="stylesheet" href="css/animate/animate.min.css" />
-		<link rel="stylesheet" href="css/candle.css" />
+		<!-- <link rel="stylesheet" href="css/candle.css" /> -->
 		<link rel="stylesheet" href="css/cardstyle.css" />
 		<link rel="stylesheet" href="css/radio-form.css" />
 	</head>
@@ -183,15 +188,17 @@
 						<!-- <p contenteditable="true">I Hasan Yildirim constructed this Website &rBarr;</p> -->
 						<!-- <p>made of course, with a little (sometimes confusing) help of chatgpd. Beware, Site is still under Construction.</p> -->
 						<br />
-						<p hidden>Site-logic:</p>
-						<p hidden>Client can Store/retrieve/translate Text 2x Front-side(question), 1x Backside(Solution).</p>
-						<p hidden>Click on any indexdbCard to view its (Backside) Solution (pre-written by you)Text.</p>
-						works as long as you input <i><b>always</b></i> unique inputs..
 					</p>
-					<p hidden>restart browser after deleting a indexdbcard and then creating a new one. indexdb(solid)  wont reset to 0 or -1 or -2 because im clueless and h8 math-.-..</p>
+
+					<p hidden>Site-logic:</p>
+					<p hidden>Client can Store/retrieve/translate Text 2x Front-side(question), 1x Backside(Solution).</p>
+					<p hidden>
+						Click on any indexdbCard to view its (Backside) Solution (pre-written by you)Text. works as long as you input <i><b>always</b></i> unique inputs..
+					</p>
+					<p hidden>restart browser after deleting a indexdbcard and then creating a new one. indexdb(solid) wont reset to 0 or -1 or -2 because im clueless and h8 math-.-..</p>
 					<p hidden>dont forget to deploy the server-provider which allows crud</p>
 					<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
-					
+
 					<p><b>1.st</b> decide on which DB</p>
 					<div id="dboptionswitcher">
 						<select id="selectswitchdb">
@@ -235,11 +242,14 @@
 
 			<div id="buttons">
 				<div class="" id="google_translate_element"></div>
-				<!-- <button type="button" id="z-" class="btn-primary" onclick="counter.decrement();">
-				 <button type="button" id="z+" class="btn-primary" onclick="counter.increment();">
-					<b> z++ </b></button> -->
+				<button type="button" id="z-" class="btn-primary" onclick="counter.decrementFileSwitch();">
+					<b> z-- </b>
+				</button>
+				<button type="button" id="z+" class="btn-primary" onclick="counter.incrementFileSwitch();">
+					<b> z++ </b>
+				</button>
 				<!--button type="button" class="btn-primary" onclick="remove()">
-					<b> rem </b>
+					<b> remove all cards back to 6 </b>
 				</button> &ndash;- &nbsp; &amp;&-->
 			</div>
 			<div class="links">
