@@ -184,6 +184,7 @@ async function showMoreCards() {
 		counter.howoftenOverflowed += 1;
 		counter.incrementmax() * counter.howoftenOverflowed;
 		let cardsToShow = counter.totalCards + counter.maxCardsOverflow;
+		document.getElementById("showmorec").setAttribute("data-content", solution.length.toString() + " CardsOnServer|displayingCards " + " (" + counter.totalCards.toString() + ")");
 		if (cardsToShow >= sentences.length) {
 			document.getElementById("showmorec").style.display = "none";
 			return;

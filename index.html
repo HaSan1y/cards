@@ -31,12 +31,13 @@
 		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
 		<script type="text/javascript" src="./js/client-server/client-crudfs2server.js" defer></script>
 
-		<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous" />
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" /> -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous" />
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
 		<!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
 		<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> -->
 
-		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/output.css" />
+		<!-- <link rel="stylesheet" href="css/style.css" /> -->
 		<link rel="stylesheet" href="css/animate/animate.min.css" />
 		<!-- <link rel="stylesheet" href="css/candle.css" /> -->
 		<link rel="stylesheet" href="css/cardstyle.css" />
@@ -58,42 +59,45 @@
 					<path d="M6.45455 12.1818H16.1364L35.5 44.7727H36.3182L55.6818 12.1818H65.3636L40.1364 53.2273V82H31.6818V53.2273L6.45455 12.1818Z" fill="#97CFEE" />
 				</svg>
 
-				<div class="collapse navbar-collapse" id="navbarCollapse">
-					<div class="navbar-nav ms-auto">
-						<a href="index.html" class="nav-item nav-link">Home</a>
-						<a href="#cardHolder" class="nav-item nav-link">About</a>
-						<div class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle">Projects</a>
-							<div class="dropdown-menu rounded-0 m-0">
-								<ul>
-									<li>
-										<a href="https://h4-html-css.vercel.app" class="dropdown-item">Portf 1</a>
-									</li>
-									<li>
-										<a href="https://portf2-zeta.vercel.app" class="dropdown-item">Portf 2</a>
-									</li>
-									<li>
-										<a href="https://soloist.ai/script4sale" class="dropdown-item">script4u</a>
-									</li>
-								</ul>
-							</div>
+				<!-- <div class="collapse navbar-collapse" id="navbarCollapse"> -->
+				<div class="navbar-nav ms-auto">
+					<a href="index.html" class="nav-item nav-link">Home</a>
+					<a href="#cardHolder" class="nav-item nav-link">About</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle">Projects</a>
+						<div class="dropdown-menu rounded-0 m-0">
+							<ul>
+								<li>
+									<a href="https://h4-html-css.vercel.app" class="dropdown-item">Portf 1</a>
+								</li>
+								<li>
+									<a href="https://portf2-zeta.vercel.app" class="dropdown-item">Portf 2</a>
+								</li>
+								<li>
+									<a href="https://soloist.ai/script4sale" class="dropdown-item">script4u</a>
+								</li>
+								<li>
+									<a href="jslogin.html" class="dropdown-item">login/register</a>
+								</li>
+							</ul>
 						</div>
-						<div class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle active">Pages</a>
-							<div class="dropdown-menu">
-								<ul>
-									<li>
-										<a href="https://github.com/HaSan1y" class="dropdown-item">Github</a>
-									</li>
-									<li>
-										<a href="#" class="dropdown-item active">404 Error</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link">Contact</a>
 					</div>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle active">Pages</a>
+						<div class="dropdown-menu">
+							<ul>
+								<li>
+									<a href="https://github.com/HaSan1y" class="dropdown-item">Github</a>
+								</li>
+								<li>
+									<a href="#" class="dropdown-item active">404 Error</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link">Contact</a>
 				</div>
+				<!-- </div> -->
 			</nav>
 		</div>
 
@@ -205,7 +209,7 @@
 							<option value="server">server</option>
 							<option value="indexdb">indexdb</option>
 						</select>
-						<button onclick="switchDatabase()">Switch Database</button>
+						<button type="button" class="btn btn-primary" onclick="switchDatabase()">Switch Database</button>
 					</div>
 					<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
 					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
@@ -313,7 +317,14 @@
 				referrerpolicy="strict-origin-when-cross-origin"
 				allowfullscreen
 			></iframe> -->
-
+			<div>
+				<!-- advice api -->
+				<div id="err"></div>
+				<span id="span"></span>
+				<button class="btn btn-primary" id="buon">give me advice</button>
+				<div id="advice"></div>
+				<div id="id"></div>
+			</div>
 			<!-- candle -->
 			<div class="holder">
 				<div class="candle">
@@ -339,78 +350,87 @@
 			<img src="image/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
 			<img src="image/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
 		</section> -->
-			<div class="footer wow fadeIn" data-wow-delay="0.1s">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg">
-							<h5>Get In Touch</h5>
-							<p><i class="fa fa-map-marker-alt"></i>123 Street, New York, USA</p>
-							<p><i class="fa fa-phone-alt"></i>+012 345 67890</p>
-							<p><i class="fa fa-envelope"></i>info@example.com</p>
-							<div class="d-flex pt-2">
-								<a class="btn btn-social" href="#"><i class="fab fa-twitter"></i></a>
+			<footer class="text-gray-300 py-12 footer wow fadeIn" data-wow-delay="0.1s">
+				<div class="container mx-auto px-4">
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+						<div class="space-y-2">
+							<h5 class="text-white text-lg font-semibold mb-4">Get In Touch</h5>
+							<div class="">
+								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
+								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
+								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
+							</div>
+
+							<div class="flex space-x-4 mt-4 d-flex pt-2">
+								<a class="text-gray-400 hover:text-white transition-colors btn btn-social" href="#"><i class="h-6 w-6 fab fa-twitter"></i></a>
 								<a class="btn btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
 								<a class="btn btn-social" href="#"><i class="fab fa-youtube"></i></a>
 								<a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
 							</div>
 						</div>
 						<div class="col-lg">
-							<h5>Quick Links</h5>
-							<a class="btn btn-link" href="#">About Us</a>
-							<a class="btn btn-link" href="#">Contact Us</a>
-							<a class="btn btn-link" href="#">Our Services</a>
-							<a class="btn btn-link" href="#">Privacy Policy</a>
-							<a class="btn btn-link" href="#">Terms & Condition</a>
+							<h5 class="text-white text-lg font-semibold mb-4">Quick Links</h5>
+							<div class="space-y-2">
+								<a class="block hover:text-white transition-colors btn btn-link" href="#">About Us</a>
+								<a class="btn btn-link" href="#">Contact Us</a>
+								<a class="btn btn-link" href="#">Our Services</a>
+								<a class="btn btn-link" href="#">Privacy Policy</a>
+								<a class="btn btn-link" href="#">Terms & Condition</a>
+							</div>
 						</div>
 						<div class="col-lg">
-							<h5>Photo Gallery</h5>
-							<div class="pt-2">
-								<div class="">
-									<div class="col-4">
-										<img class="img-fluid rounded p-1" src="#" alt="" />
-									</div>
-									<div class="col-4">
-										<img class="img-fluid rounded p-1" src="#" alt="" />
-									</div>
-									<div class="col-4">
-										<img class="img-fluid rounded p-1" src="#" alt="" />
-									</div>
+							<h5 class="text-white text-lg font-semibold mb-4">Photo Gallery</h5>
+							<div class="grid grid-cols-3 gap-2 pt-2">
+								<div class="col-4">
+									<img class="rounded img-fluid p-1" src="#" alt="" />
 								</div>
-								<div class="">
-									<div class="col-4">
-										<img class="img-fluid rounded p-1" src="#" alt="" />
-									</div>
-									<div class="col-4">
-										<img class="img-fluid rounded p-1" src="#" alt="" />
-									</div>
-									<div class="col-4">
-										<img class="img-fluid rounded p-1" src="#" alt="" />
-									</div>
+								<div class="col-4">
+									<img class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+								<div class="col-4">
+									<img class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+
+								<div class="col-4">
+									<img class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+								<div class="col-4">
+									<img class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+								<div class="col-4">
+									<img class="img-fluid rounded p-1" src="#" alt="" />
 								</div>
 							</div>
 						</div>
 						<div class="col-lg">
-							<h5>Newsletter</h5>
-							<p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-
-							<form class="position-relative mx-auto" style="max-width: 400px">
+							<h5 class="text-white text-lg font-semibold mb-4">Newsletter</h5>
+							<p class="mb-4">Dolor amet sit justo.</p>
+							<form class="relative mx-auto" style="max-width: 400px">
 								<label for="email">email</label>
-								<input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email" autocomplete="off" name="newsletter" id="email" />
-								<button class="btn btn-primary py-2 position-absolute end-0" name="signupBtn">SignUp</button>
+								<input
+									class="w-full bg-gray-800 rounded-md py-4 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 form-control bg-transparent w-100 ps-4 pe-5"
+									type="email"
+									placeholder="Your email"
+									autocomplete="off"
+									name="newsletter"
+									id="email"
+									required
+								/>
+								<button type="submit" class="absolute right-1 bottom-1 rounded-l-md rounded-r-md hover:bg-blue-600 transition-colors btn btn-primary mt-end-0" name="signupBtn">SignUp</button>
 							</form>
 						</div>
 					</div>
 				</div>
-				<div class="container">
-					<div class="copyright row">
-						<div class="text-center text-md-start mb-md-0">
-							&copy;
+				<div class="mt-8 pt-8 border-t border-gray-700 container">
+					<div class="flex flex-col md:flex-row justify-between items-center copyright row">
+						<div class="text-center md:text-left mb-4 md:mb-0 text-md-start mb-md-0">
+							&copy; 2023
 							<!--a class="" href="#">Your Site Name</a>, All Rights ?.-->
-							<span> <a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+							<span> <a id="blink" class="hover:text-white transition-colors" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
 						</div>
 						<div class="text-center text-md-end">
-							<div class="footer-menu">
-								<a class="btn-link" href="#">Home</a>
+							<div class="flex space-x-4 footer-menu">
+								<a class="hover:text-white transition-colors btn-link" href="#">Home</a>
 								<a class="btn-link" href="#">Cookies</a>
 								<a class="btn-link" href="#">Help</a>
 								<a class="btn-link" href="#">Terms</a>
@@ -418,7 +438,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</footer>
 			<!-- Footer End -->
 		</main>
 		<!-- Footer -->

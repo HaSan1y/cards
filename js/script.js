@@ -114,6 +114,7 @@ setTheme();
 // })
 // });
 
+// database switcher
 const cardHolder = document.getElementById("cardHolder");
 function switchDatabase() {
 	var select = document.getElementById("selectswitchdb");
@@ -180,3 +181,18 @@ function switchDatabase() {
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
 	}
 }
+
+// advise api
+document.querySelector('button[id="buon"]').addEventListener("click", async () => {
+	const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10));
+	if (response.status != 200) {
+		document.getElementById("err").style.display = "block";
+		document.getElementById("span").innerHTML = `${response.status}`;
+	} else {
+		var data = await response.json();
+		document.querySelector("#err").style.display = "none";
+		document.getElementById("advice").innerHTML = `${data.slip.advice}`;
+		document.getElementById("id").innerHTML = `${data.slip.id}`;
+	}
+});
+const apiUrl = "https://api.adviceslip.com/advice";
