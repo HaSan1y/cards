@@ -146,14 +146,14 @@ function switchDatabase() {
 		txtplusButton.classList.add("btn-primary");
 		txtplusButton.textContent = "z++";
 		txtplusButton.onclick = () => counter.incrementFileSwitch();
-		document.getElementById("buttons").appendChild(txtplusButton);
+		document.getElementById("zbtns").appendChild(txtplusButton);
 		const txtminusButton = document.createElement("button");
 		txtminusButton.type = "button";
 		txtminusButton.id = "zminusbtn";
 		txtminusButton.classList.add("btn-primary");
 		txtminusButton.textContent = "z--";
 		txtminusButton.onclick = () => counter.decrementFileSwitch();
-		document.getElementById("buttons").appendChild(txtminusButton);
+		document.getElementById("zbtns").appendChild(txtminusButton);
 		dboptionswitcher.style.display = "none";
 		dbbtn.style.display = "block";
 		displ();

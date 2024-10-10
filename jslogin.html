@@ -21,7 +21,7 @@
 						</div>
 						<div class="form-group" id="emailGroup" style="display: none">
 							<label for="email">Email</label>
-							<input type="email" id="email" name="email" />
+							<input data-email type="email" id="email" name="email" />
 						</div>
 						<div class="form-group">
 							<label for="password">Password</label>
@@ -29,19 +29,27 @@
 						</div>
 						<div id="errorMessage" class="error-message" role="alert"></div>
 						<div id="successMessage" class="success-message" role="alert"></div>
-						<button type="submit" id="submitButton">Login</button>
+						<button type="submit" data-signup id="submitButton">Signup</button>
+						<button type="submit" data-login id="submitButton">Login</button>
 					</form>
 				</div>
 				<div class="card-footer">
 					<label for="toggleMode" id="toggleLabel">Need an account?</label>
 					<div class="toggle-switch">
 						<input type="checkbox" id="toggleMode" />
-						<label for="toggleMode" class="slider"></label>
+						<label for="toggleMode" class="slider" style="background-color: grey"></label>
 					</div>
 				</div>
+				<dialog data-modal style="font-size: 3rem">
+					<button data-close style="font-size: 2rem; position: absolute; top: 0; right: 0">&times;#######</button>
+					<div data-content></div>
+				</dialog>
+				<li>
+					<a href="index.html">back</a>
+				</li>
 			</div>
 		</div>
-		<script src="s.js"></script>
+		<!-- <script src="s.js" defer></script> -->
+		<script src="./js/client-server/wds/wds.js" crossorigin="anonymous" type="module"></script>
 	</body>
 </html>
-<style></style>

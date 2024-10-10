@@ -42,7 +42,6 @@
    background-color: var(--clr-card-bg);
    border-block-start: 0.4rem solid;
    border-radius: 0.5rem;
-   opacity: 0.6;
    box-shadow: 3px 3px 2px 2px var(--clr-heading);
 }
 
@@ -91,7 +90,7 @@
 .frontSide,
 .frontSide::before {
    background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(200, 80, 192) 46%, rgb(255, 204, 112) 100%);
-   /* animation: animatez 2s linear infinite; */
+   animation: animatez 5s linear infinite;
    /* too flashy/ramy? */
 }
 
@@ -115,7 +114,6 @@
    position: absolute;
    z-index: -1;
    border-radius: 1em;
-   filter: blur(20px);
    animation: animate 5s linear infinite;
 }
 

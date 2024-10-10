@@ -111,3 +111,12 @@ export default function Component() {
       </div>
    )
 }
+const [email, setEmail] = useState('')
+
+const handleSubmit = (e: React.FormEvent) => {
+   e.preventDefault()
+   // Handle form submission logic here
+   console.log('Submitted email:', email)
+}
+< !--onSubmit={ handleSubmit } value = { email }
+onChange = {(e) => setEmail(e.target.value)} -->
