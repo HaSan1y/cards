@@ -47,62 +47,55 @@
 
 	<body id="body">
 		<!-- nav-header -->
+		<!-- <input type="checkbox" class="navbar-toggler" /><span class="navbar-toggler-icon"></span> -->
+		<nav class="container bg-transparent navbar py-0 px-4">
+			<svg id="hy" viewBox="0 0 73 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<rect width="70" height="70" fill="#1E1E1E" />
+				<path d="M0.272728 94V0.909088H11.5455V42.3636H61.1818V0.909088H72.4546V94H61.1818V52.3636H11.5455V94H0.272728Z" fill="#F96B6B" />
+				<path d="M6.45455 12.1818H16.1364L35.5 44.7727H36.3182L55.6818 12.1818H65.3636L40.1364 53.2273V82H31.6818V53.2273L6.45455 12.1818Z" fill="#97CFEE" />
+			</svg>
 
-		<div class="container nav-bar bg-transparent">
-			<nav class="navbar navbar-expand-lg navbar-light py-0 px-4">
-				<!-- <button type="button" class="navbar-toggler" name="headerNavToggler">
-					<span class="navbar-toggler-icon"></span>
-				</button> -->
-				<svg id="hy" viewBox="0 0 73 94" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<rect width="73" height="94" fill="#1E1E1E" />
-					<path d="M0.272728 94V0.909088H11.5455V42.3636H61.1818V0.909088H72.4546V94H61.1818V52.3636H11.5455V94H0.272728Z" fill="#F96B6B" />
-					<path d="M6.45455 12.1818H16.1364L35.5 44.7727H36.3182L55.6818 12.1818H65.3636L40.1364 53.2273V82H31.6818V53.2273L6.45455 12.1818Z" fill="#97CFEE" />
-				</svg>
-
-				<!-- <div class="collapse navbar-collapse" id="navbarCollapse"> -->
-				<div class="navbar-nav ms-auto">
-					<a href="index.html" class="nav-item nav-link">Home</a>
-					<a href="#cardHolder" class="nav-item nav-link">About</a>
-					<div class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle">Projects</a>
-						<div class="dropdown-menu rounded-0 m-0">
-							<ul>
-								<li>
-									<a href="https://h4-html-css.vercel.app" class="dropdown-item">Portf 1</a>
-								</li>
-								<li>
-									<a href="https://portf2-zeta.vercel.app" class="dropdown-item">Portf 2</a>
-								</li>
-								<li>
-									<a href="https://soloist.ai/script4sale" class="dropdown-item">script4u</a>
-								</li>
-								<li>
-									<a href="#" class="dropdown-item active">404 Error</a>
-								</li>
-							</ul>
-						</div>
+			<div class="ms-auto">
+				<a href="index.html" class="nav-item nav-link">Home</a>
+				<a href="#cardHolder" class="nav-item nav-link">About</a>
+				<div class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle">Projects</a>
+					<div class="dropdown-menu rounded-0 m-0">
+						<ul>
+							<li>
+								<a href="https://h4-html-css.vercel.app" class="dropdown-item">Portf 1</a>
+							</li>
+							<li>
+								<a href="https://portf2-zeta.vercel.app" class="dropdown-item">Portf 2</a>
+							</li>
+							<li>
+								<a href="https://soloist.ai/script4sale" class="dropdown-item">script4u</a>
+							</li>
+							<li>
+								<a href="#" class="dropdown-item active">404 Error</a>
+							</li>
+						</ul>
 					</div>
-					<div class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle active">Pages</a>
-						<div class="dropdown-menu">
-							<ul>
-								<li>
-									<a href="https://github.com/HaSan1y" class="dropdown-item">Github</a>
-								</li>
-								<li>
-									<a href="jslogin.html" class="dropdown-item">login/register</a>
-								</li>
-								<li>
-									<a href="#" class="dropdown-item active">404 Error</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link">Contact</a>
 				</div>
-			</nav>
-		</div>
-
+				<div class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle active">Pages</a>
+					<div class="dropdown-menu">
+						<ul>
+							<li>
+								<a href="https://github.com/HaSan1y" class="dropdown-item">Github</a>
+							</li>
+							<li>
+								<a href="jslogin.html" class="dropdown-item">login/register</a>
+							</li>
+							<li>
+								<a href="#" class="dropdown-item active">404 Error</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link">Contact</a>
+			</div>
+		</nav>
 		<!-- switch3 -->
 		<!-- <div class="swhol">
 			<label class="switche">
@@ -158,7 +151,7 @@
 		<!-- banner -->
 		<div class="yourbanner">
 			<div class="x">your banner</div>
-			<img src="#" alt=" " />
+			<img src="#" alt=" " load="lazy" />
 		</div>
 
 		<!-- themeswitch -->
@@ -188,7 +181,7 @@
 
 		<main>
 			<!-- submit form -->
-			<fieldset>
+			<fieldset class="container">
 				<div class="bugs msg">
 					<p>
 						<!-- <p contenteditable="true">I Hasan Yildirim constructed this Website &rBarr;</p> -->
@@ -211,7 +204,7 @@
 							<option value="server">server</option>
 							<option value="indexdb">indexdb</option>
 						</select>
-						<button type="button" class="btn btn-primary" onclick="switchDatabase()">Switch Database</button>
+						<button type="button" class="btn-primary text-white" onclick="switchDatabase()">Switch Database</button>
 					</div>
 					<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
 					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
@@ -246,7 +239,7 @@
 			</div>
 			<br />
 
-			<div id="buttons">
+			<div id="buttons" class="container">
 				<div class="" id="google_translate_element"></div>
 				<div id="zbtns"></div>
 				<!-- <button type="button" id="tofile" onclick="addTextToFile()">clientside js save 'title' into .txt-file</button> -->
@@ -315,11 +308,11 @@
 				referrerpolicy="strict-origin-when-cross-origin"
 				allowfullscreen
 			></iframe> -->
-			<div>
+			<div class="advice container">
 				<!-- advice api -->
 				<div id="err"></div>
 				<span id="span"></span>
-				<button class="btn btn-primary" id="buon">give me advice</button>
+				<button class="btn-primary" type="button" id="buon">give me advice</button>
 				<div id="advice"></div>
 				<div id="id"></div>
 			</div>
@@ -348,49 +341,49 @@
 			<img src="image/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
 			<img src="image/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
 		</section> -->
-			<footer class="text-gray-300 py-12 footer wow fadeIn" data-wow-delay="0.1s">
+			<footer class="text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
 				<div class="container mx-auto px-4">
-					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+					<div class="pt-8 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 						<div class="space-y-2">
 							<h5 class="text-white text-lg font-semibold mb-4">Get In Touch</h5>
-							<div class="">
+							<div class="col-lg">
 								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
 								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
 								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
 							</div>
 
-							<div class="flex space-x-4 mt-4 d-flex pt-2">
-								<a class="text-gray-400 hover:text-white transition-colors btn btn-social" href="#"><i class="h-6 w-6 fab fa-twitter"></i></a>
-								<a class="text-gray-400 hover:text-white transition-colors btn btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
-								<a class="btn btn-social" href="#"><i class="fab fa-youtube"></i></a>
-								<a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+							<div class="flex space-x-4 d-flex pt-2">
+								<a class="text-gray-400 hover:text-white transition-colors btn-social" href="#"><i class="h-6 w-6 fab fa-twitter"></i></a>
+								<a class="text-gray-400 hover:text-white transition-colors btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+								<a class="btn-social" href="#"><i class="fab fa-youtube"></i></a>
+								<a class="btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
 							</div>
 						</div>
 						<div class="col-lg">
 							<h5 class="text-white text-lg font-semibold mb-4">Quick Links</h5>
 							<div class="space-y-2">
-								<a class="block hover:text-white transition-colors btn btn-link" href="#">About Us</a>
-								<a class="block hover:text-white transition-colors btn btn-link" href="#">Contact Us</a>
-								<a class="block hover:text-white transition-colors btn btn-link" href="#">Our Services</a>
-								<a class="block hover:text-white transition-colors btn btn-link" href="#">Privacy Policy</a>
-								<a class="block hover:text-white transition-colors btn btn-link" href="#">Terms & Condition</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">About Us</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Contact Us</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Our Services</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Privacy Policy</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Terms & Condition</a>
 							</div>
 						</div>
 						<div class="col-lg">
 							<h5 class="text-white text-lg font-semibold mb-4">Photo Gallery</h5>
 							<div class="grid grid-cols-3 gap-2 pt-2">
 								<div class="col-4">
-									<img class="rounded img-fluid p-1" src="#" alt="" />
+									<img load="lazy" class="rounded img-fluid p-1" src="#" alt="" />
 								</div>
 								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
+									<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
 								</div>
 								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
+									<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
 								</div>
 
 								<div class="col-4">
-									<img class="img-fluid rounded p-1" src="#" alt="" />
+									<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
 								</div>
 							</div>
 						</div>
@@ -401,7 +394,7 @@
 								<label class="block text-sm font-medium text-gray-300 mb-2" for="email">Email</label>
 								<div class="relative max-w-md mx-auto">
 									<input
-										class="w-full rounded-md py-2 pl-4 pr-16 focus:outline-none focus:ring-2"
+										class="w-full rounded-md py-2 pl-4 pr-3 focus:outline-none focus:ring-2"
 										type="email"
 										placeholder="Your email"
 										autocomplete="off"
@@ -409,13 +402,13 @@
 										id="email"
 										required
 									/>
-									<button type="button" class="z-0 absolute right-0 top-0 h-full text-white rounded-r-md px-4 transition-colors btn btn-primary">SignUp</button>
+									<button type="button" class="z-0 absolute right-0 top-0 h-3/4 text-white rounded-r-md px-4 btn-primary">SignUp</button>
 								</div>
 							</form>
 						</div>
 					</div>
 				</div>
-				<div class="mt-8 pt-8 border-t border-gray-700 container">
+				<div class="border-t border-gray-700 container">
 					<div class="flex flex-col md:flex-row justify-between items-center copyright row">
 						<div class="text-center md:text-left mb-4 md:mb-0 text-md-start mb-md-0">
 							&copy; 2023
@@ -438,7 +431,7 @@
 		<!-- Footer -->
 
 		<!-- Back to Top -->
-		<a href="#" class="btn btn-primary back-to-top"><i>^</i></a>
+		<a href="#" class="btn-primary back-to-top"><i>^</i></a>
 
 		<script type="text/javascript">
 			function googleTranslateElementImit() {
