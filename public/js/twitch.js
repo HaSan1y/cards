@@ -61,7 +61,6 @@ loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
 			case "b":
 				buttonx.value = "plush";
 				break;
-
 			case "tb":
 				buttonx.value = "thinkerbella";
 				break;

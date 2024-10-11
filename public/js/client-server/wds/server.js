@@ -7,27 +7,26 @@ const cookieParser = require("cookie-parser");
 // http://localhost:5500/jslogin.html
 
 const app = express();
+app.use(express.json());
+app.use(cookieParser());
+const CLIENT_URL = "http://localhost:5500"; //localhost|127.0.0.1?
+const RP_ID = "localhost";
+const USERS = [];
 
 app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "http://localhost:5500");
 	res.header("Access-Control-Allow-Credentials", true);
 	next();
 });
+
 app.use(
 	cors({
-		origin: "*", // 		origin: "http://localhost:5500",
+		origin: "*", // 		origin: "http://localhost:5500",//localhost|127.0.0.1?
 		credentials: true,
 	}),
 );
-app.use(express.json());
-app.use(cookieParser());
-
-const CLIENT_URL = "http://localhost:5500"; //localhost|127.0.0.1?
-const RP_ID = "localhost";
 
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
-
-const USERS = [];
 
 function getUserByEmail(email) {
 	return USERS.find((user) => user.email === email);

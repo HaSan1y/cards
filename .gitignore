@@ -2,10 +2,8 @@ git config core.ignorecase false
 
 node_modules
 
-js/how
-js/client-server/expresstest
-js/script-switcher
-
-image/blog1.webp
-
-css/style.scss
+public/js/how
+public/js/client-server/expresstest
+public/js/script-switcher
+public/image/blog1.webp
+public/css/style.scss

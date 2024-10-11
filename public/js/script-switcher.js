@@ -4,7 +4,7 @@ let activeScript = null;
 let isIDB;
 
 async function switchScript() {
-	const modules = ["./js/with-indexdb.js", "./js/client-server/client-crudfs2server.js"];
+	const modules = ["./public/js/with-indexdb.js", "./public/js/client-server/client-crudfs2server.js"];
 
 	const nextIndex = activeScript ? (scripts.indexOf(activeScript) + 1) % scripts.length : 0;
 
