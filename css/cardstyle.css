@@ -43,8 +43,8 @@
    border-block-start: 0.4rem solid;
    border-radius: 0.5rem;
    box-shadow: 3px 3px 2px 2px var(--clr-heading);
-   resize: both !important;
-   overflow: auto;
+   /* resize: both !important;
+   overflow: auto; */
 }
 
 .title {

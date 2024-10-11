@@ -31,10 +31,10 @@
 }
 
 :root:has(#dark:checked) {
-  --clr-body-bg: hsl(0, 0%, 10%);
+  --clr-body-bg: hsl(0, 0%, 0%);
   --clr-card-bg: hsl(0, 0%, 39%);
   --clr-text: hsl(0, 0%, 100%);
-  --clr-heading: hsl(195, 6%, 13%);
+  --clr-heading: hsl(195, 5%, 16%);
 }
 
 * {
@@ -171,6 +171,10 @@ h3 {
   padding: 10px 10px 0 10px;
 }
 
+.block {
+  display: block !important;
+}
+
 /* cardbtncontainer */
 #buttons {
   display: flex;
@@ -181,9 +185,11 @@ h3 {
 /* ^ */
 .back-to-top {
   position: fixed;
-  right: 20px;
-  top: 20px;
+  right: 40px;
+  top: 40px;
   font-size: 10px;
+  width: 30px;
+  height: 10px;
 }
 
 /* switch3er */
@@ -246,22 +252,6 @@ fieldset {
 
 .color-picker input[type=radio]#dark {
   --radio-color: #1f0505;
-}
-
-.msg {
-  padding: 40px;
-  border-radius: 50px;
-  line-height: 1.3;
-  font-size: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-}
-
-.msg:hover {
-  display: grid;
 }
 
 /*** Footer ***/
@@ -707,12 +697,13 @@ input:checked + .slider:before {
 }
 .yourbanner img {
   width: 100%;
-  height: auto;
+  height: 100%;
   outline: rgba(94, 255, 0, 0.1) 1px dotted;
   cursor: not-allowed;
 }
 
-.bugs {
+.msg {
+  display: grid;
   line-height: 1;
   margin: 0;
   font-size: 12px;
@@ -778,8 +769,7 @@ button {
 }
 
 .grid-cols-3,
-.img-fluid,
-.col-4.img-fluid {
+.img-fluid {
   height: 100% !important;
   width: 100% !important;
   -o-object-fit: cover !important;
@@ -812,8 +802,8 @@ fieldset {
 }
 
 #dbbtn {
-  padding: 20px !important;
-  display: flex;
+  padding: 20px;
+  display: grid;
 }
 
 .fab {
