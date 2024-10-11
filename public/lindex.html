@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Login/Register Page</title>
+		<link rel="stylesheet" href="./css/login.css" type="text/css" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="card">
+				<div class="card-header">
+					<h2 id="formTitle">Login</h2>
+					<p id="formDescription">Welcome back! Please login to your account.</p>
+				</div>
+				<div class="card-content">
+					<form id="authForm">
+						<div class="form-group">
+							<label for="username">Username</label>
+							<input type="text" id="username" name="username" required />
+						</div>
+						<div class="form-group" id="emailGroup" style="display: none">
+							<label for="email">Email</label>
+							<input data-email type="email" id="email" name="email" />
+						</div>
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" id="password" name="password" required />
+						</div>
+						<div id="errorMessage" class="error-message" role="alert"></div>
+						<div id="successMessage" class="success-message" role="alert"></div>
+						<button type="button" id="submitButton" data-login>Login</button>
+						<button type="button" id="submitButton" data-signup>x</button>
+						<!-- todo get rid of 1 btn, adjust js accordingly -->
+					</form>
+				</div>
+				<div class="card-footer">
+					<label for="toggleMode" id="toggleLabel">Need an account?</label>
+					<div class="toggle-switch">
+						<input type="checkbox" id="toggleMode" />
+						<label for="toggleMode" class="slider" style="background-color: grey"></label>
+					</div>
+				</div>
+				<dialog data-modal style="font-size: 3rem">
+					<button data-close style="font-size: 2rem; position: absolute; top: 0; right: 0">&times;#######</button>
+					<div data-content></div>
+				</dialog>
+				<li>
+					<a href="./index.html">back</a>
+				</li>
+			</div>
+		</div>
+		<!-- https://www.jsdelivr.com/package/npm/@simplewebauthn/browser -->
+		<script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js"></script>
+
+		<!-- webpack -->
+		<script src="../dist/main.js" crossorigin="anonymous"></script>
+		<!-- dom elements -->
+		<script src="./js/login.js" crossorigin="anonymous"></script>
+	</body>
+</html>

@@ -3,56 +3,448 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Login/Register Page</title>
-		<link rel="stylesheet" href="./css/login.css" type="text/css" />
+		<!-- <meta'https://127.0.0.1:5500';/> -->
+		<link rel="apple-touch-icon" sizes="180x180" href="./image/apple-touch-icon.png" />
+		<link rel="icon" type="image" sizes="32x32" href="./image/favicon-32x32.png" />
+		<link rel="icon" type="image" sizes="16x16" href="./image/favicon-16x16.png" />
+		<link rel="manifest" href="./image/site.webmanifest" />
+		<!-- <meta http-equiv="Content-Security-Policy" content="Access-Control-Allow-Origin='https://github.com/HaSan1y/res'; Vary='Origin'"> -->
+		<!-- <meta http-equiv="Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" / -->
+		<!-- <meta http-equiv="X-Content-Security-Policy" content="default-src *; img-src *; child-src *; media-src *; script-src *;" /> -->
+		<!-- <meta Access-Control-Allow-Origin="no-cors" /> -->
+		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com" /> -->
+		<!-- <base href="./" -->
+		<title>cards</title>
+
+		<!-- Load the Twitch embed script -->
+		<!-- <script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
+		<!-- Create a Twitch.Player object. This will render within the placeholder div -->
+		<!-- <script type="text/javascript" src="./js/twitch.js"></script> -->
+
+		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
+
+		<link rel="preload" href="./js/script.js" as="script" />
+		<!-- as image, style,.... -->
+		<script type="text/javascript" src="./js/script.js" defer></script>
+
+		<!-- <script type="text/javascript" src="./js/script-switcher.js" defer></script> -->
+		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
+		<script type="text/javascript" src="./js/client-server/client-crudfs2server.js" defer></script>
+
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous" type="text/css" />
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" type="text/css" />
+		<!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
+		<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> -->
+
+		<link rel="stylesheet" href="./css/output.css" type="text/css" />
+		<link rel="stylesheet" href="./css/style.css" type="text/css" />
+		<link rel="stylesheet" href="./css/animate/animate.min.css" type="text/css" />
+		<!-- <link rel="stylesheet" href="./css/candle.css" type="text/css"/> -->
+		<link rel="stylesheet" href="./css/cardstyle.css" type="text/css" />
+		<link rel="stylesheet" href="./css/radio-form.css" type="text/css" />
 	</head>
-	<body>
-		<div class="container">
-			<div class="card">
-				<div class="card-header">
-					<h2 id="formTitle">Login</h2>
-					<p id="formDescription">Welcome back! Please login to your account.</p>
-				</div>
-				<div class="card-content">
-					<form id="authForm">
-						<div class="form-group">
-							<label for="username">Username</label>
-							<input type="text" id="username" name="username" required />
-						</div>
-						<div class="form-group" id="emailGroup" style="display: none">
-							<label for="email">Email</label>
-							<input data-email type="email" id="email" name="email" />
-						</div>
-						<div class="form-group">
-							<label for="password">Password</label>
-							<input type="password" id="password" name="password" required />
-						</div>
-						<div id="errorMessage" class="error-message" role="alert"></div>
-						<div id="successMessage" class="success-message" role="alert"></div>
-						<button type="button" id="submitButton" data-login>Login</button>
-						<button type="button" id="submitButton" data-signup>x</button>
-						<!-- todo get rid of 1 btn, adjust js accordingly -->
-					</form>
-				</div>
-				<div class="card-footer">
-					<label for="toggleMode" id="toggleLabel">Need an account?</label>
-					<div class="toggle-switch">
-						<input type="checkbox" id="toggleMode" />
-						<label for="toggleMode" class="slider" style="background-color: grey"></label>
+	<noscript> this website needs javascript </noscript>
+
+	<body id="body">
+		<!-- nav-header -->
+		<!-- <input type="checkbox" class="navbar-toggler" /><span class="navbar-toggler-icon"></span> -->
+		<nav class="container bg-transparent navbar py-0 px-4">
+			<svg id="hy" viewBox="0 0 73 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<rect width="70" height="70" fill="#1E1E1E" />
+				<path d="M0.272728 94V0.909088H11.5455V42.3636H61.1818V0.909088H72.4546V94H61.1818V52.3636H11.5455V94H0.272728Z" fill="#F96B6B" />
+				<path d="M6.45455 12.1818H16.1364L35.5 44.7727H36.3182L55.6818 12.1818H65.3636L40.1364 53.2273V82H31.6818V53.2273L6.45455 12.1818Z" fill="#97CFEE" />
+			</svg>
+
+			<div class="ms-auto">
+				<a href="./index.html" class="nav-item nav-link">Home</a>
+				<a href="#cardHolder" class="nav-item nav-link">About</a>
+				<div class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle">Projects</a>
+					<div class="dropdown-menu rounded-0 m-0">
+						<ul>
+							<li>
+								<a href="https://h4-html-css.vercel.app" class="dropdown-item">Portf 1</a>
+							</li>
+							<li>
+								<a href="https://portf2-zeta.vercel.app" class="dropdown-item">Portf 2</a>
+							</li>
+							<li>
+								<a href="https://soloist.ai/script4sale" class="dropdown-item">script4u</a>
+							</li>
+							<li>
+								<a href="#" class="dropdown-item active">404 Error</a>
+							</li>
+						</ul>
 					</div>
 				</div>
-				<dialog data-modal style="font-size: 3rem">
-					<button data-close style="font-size: 2rem; position: absolute; top: 0; right: 0">&times;#######</button>
-					<div data-content></div>
-				</dialog>
-				<li>
-					<a href="../index.html">back</a>
-				</li>
+				<div class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle active">Pages</a>
+					<div class="dropdown-menu">
+						<ul>
+							<li>
+								<a href="https://github.com/HaSan1y" class="dropdown-item">Github</a>
+							</li>
+							<li>
+								<a href="./lindex.html" class="dropdown-item">login/register</a>
+							</li>
+							<li>
+								<a href="#" class="dropdown-item active">404 Error</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link">Contact</a>
+			</div>
+		</nav>
+		<!-- switch3 -->
+		<!-- <div class="swhol">
+			<label class="switche">
+				<input type="range" name="points" onchange="filterme(this.value);" min="1" step="1" id="custom-toggle" class="tgl-def" max="3" value="2" />
+			</label>
+			<span>All</span> -->
+
+		<!-- <label class="switch">
+				<input type="checkbox" />
+				<span class="slider round"></span>
+			</label> </div>-->
+
+		<!-- cookie -->
+
+		<header class="wrapper">
+			<box-icon class="cookiei" name="cookie" type="solid"></box-icon>
+			<h2>Cookie Consent</h2>
+
+			<div class="data">
+				<p>This website uses cookies, to help you have a superior and more admissible browsing experience<br /><a href="https://www.datenschutz.org/cookie-consent/">Read more...</a></p>
+			</div>
+			<div class="buttons">
+				<button type="button" class="button" id="acceptBtn" name="acceptBtn">Accept</button>
+				<button type="button" class="button" name="declineBtn">Decline</button>
+			</div>
+		</header>
+
+		<!-- terms -->
+		<div id="disclaimerModal" class="hidden">
+			<div class="modal-content">
+				<h2>Disclaimer and Liability Notice</h2>
+				<p>
+					This website contains information about job rejections, including reasons for rejection and feedback. The information is shared for informational purposes only and does not constitute
+					legal advice.
+				</p>
+				<p>
+					<strong>Liability Disclaimer:</strong> The owner of this website is not liable for any defamation, privacy violations, or any other legal issues arising from the content shared on this
+					website. The information is provided without any warranties or guarantees.
+				</p>
+				<p>By proceeding, you acknowledge that you understand and agree to the terms of this disclaimer.</p>
+				<label>
+					<input type="checkbox" id="acknowledgeDisclaimer" required name="checkbox" />
+					I understand and agree to the terms of this disclaimer.
+				</label>
+				<p>If you have any questions or concerns, please contact us at [Your Contact Information].</p>
+				<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+				<div class="modal-footer">
+					<button type="button" id="closeDisclaimerModal" name="termsCloseBtn">Close</button>
+				</div>
 			</div>
 		</div>
-		<!-- https://www.jsdelivr.com/package/npm/@simplewebauthn/browser -->
-		<script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js"></script>
-		<script src="../dist/main.js" crossorigin="anonymous"></script>
-		<script src="./js/login.js" crossorigin="anonymous"></script>
+
+		<!-- banner -->
+		<div class="yourbanner">
+			<div class="x">your banner</div>
+			<img src="#" alt=" " load="lazy" />
+		</div>
+
+		<!-- themeswitch -->
+		<form class="color-picker">
+			<fieldset>
+				<label for="light" class="color-option light">
+					<input type="radio" name="theme" id="light" />
+				</label>
+
+				<label for="pink" class="color-option pink">
+					<input type="radio" id="pink" name="theme" />
+				</label>
+
+				<label for="blue" class="color-option blue">
+					<input type="radio" id="blue" name="theme" />
+				</label>
+
+				<label for="green" class="color-option green">
+					<input type="radio" id="green" name="theme" />
+				</label>
+
+				<label for="dark" class="color-option dark">
+					<input type="radio" id="dark" name="theme" checked />
+				</label>
+			</fieldset>
+		</form>
+
+		<main>
+			<!-- submit form -->
+			<fieldset class="container">
+				<div class="msg">
+					<p>
+						<!-- <p contenteditable="true">I Hasan Yildirim constructed this Website &rBarr;</p> -->
+						<!-- <p>made of course, with a little (sometimes confusing) help of chatgpd. Beware, Site is still under Construction.</p> -->
+						<br />
+					</p>
+
+					<p hidden>Site-logic:</p>
+					<p hidden>Client can Store/retrieve/translate Text 2x Front-side(question), 1x Backside(Solution).</p>
+					<p hidden>
+						Click on any indexdbCard to view its (Backside) Solution (pre-written by you)Text. works as long as you input <i><b>always</b></i> unique inputs..
+					</p>
+					<p hidden>restart browser after deleting a indexdbcard and then creating a new one. indexdb(solid) wont reset to 0 or -1 or -2 because im clueless and h8 math-.-..</p>
+					<p hidden>dont forget to deploy the server-provider which allows crud</p>
+					<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+
+					<p><b>1.st</b> decide on which DB</p>
+					<div id="dboptionswitcher">
+						<select id="selectswitchdb">
+							<option value="server">server</option>
+							<option value="indexdb">indexdb</option>
+						</select>
+						<button type="button" class="btn-primary text-white" onclick="switchDatabase()">Switch DB</button>
+					</div>
+					<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
+					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
+					<!-- <div id="script-output"></div> -->
+					<p><b>2.nd </b> Submit Unempty+Unique Data</p>
+				</div>
+				<form id="dbbtn" style="display: none">
+					<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required autocomplete="off" /></label>
+					<label for="t2"> <input type="text" id="t2" name="t2" placeholder="question" maxlength="12" required autocomplete="off" /></label>
+					<label for="t3"> <input type="text" id="t3" name="t3" placeholder="solution" maxlength="12" required autocomplete="off" /></label>
+				</form>
+				<form id="txtbtn" style="display: none">
+					<label for="tt1"> <input type="text" id="tt1" name="t1" placeholder="title" maxlength="12" required autocomplete="off" /></label>
+					<label for="tt2"> <input type="text" id="tt2" name="t2" placeholder="question" maxlength="12" required autocomplete="off" /></label>
+					<label for="tt3"> <input type="text" id="tt3" name="t3" placeholder="solution" maxlength="12" required autocomplete="off" /></label>
+				</form>
+			</fieldset>
+			<div class="text-center" id="cardHolder">
+				<!-- test card structure-->
+				<!-- <div class="myCard">
+					<div class="innerCard">
+						<div class="frontSide">
+							<p class="title">FRONT SIDE</p>
+							<p>Hover Me</p>
+						</div>
+						<div class="backSide">
+							<p class="title">BACK SIDE</p>
+							<p>Leave Me</p>
+						</div>
+					</div>
+				</div> -->
+			</div>
+			<br />
+
+			<div id="buttons" class="container">
+				<div class="" id="google_translate_element"></div>
+				<div id="zbtns"></div>
+				<!-- <button type="button" id="tofile" onclick="addTextToFile()">clientside js save 'title' into .txt-file</button> -->
+				<!--button type="button" class="btn-primary" onclick="remove()">
+					<b> remove all cards back to 6 </b>
+				</button> &ndash;- &nbsp; &amp;&-->
+			</div>
+			<div class="links">
+				<p><a rel="nofollow" class="btn" href="https://humanbenchmark.com/" name="linkhumanbenchmark">humanbenchmark</a></p>
+				<p><a rel="nofollow" class="btn" href="https://www.duolingo.com" name="linkduolingo">duolingo</a></p>
+				<p><a rel="nofollow" class="btn" href="https://quillbot.com/">quillbot</a></p>
+				<p><a rel="nofollow" class="btn" href="https://www.grammarly.com/paraphrasing-tool">grammarly</a></p>
+				<p><a rel="nofollow" class="btn" href="https://www.feedough.com/">feedough</a></p>
+				<p><a rel="nofollow" class="btn" href="https://jenni.ai/">jenni.ai</a></p>
+
+				<p><a rel="nofollow" class="btn" href="https://www.getmagical.com/">getmagical</a></p>
+				<p><a rel="nofollow" class="btn" href="https://www.unriddle.ai/">unriddle.ai</a></p>
+				<p><a rel="nofollow" class="btn" href="https://mr-dialect.com/de-ch/deutsch-raetoromanisch-uebersetzer-2/">mr.dialect</a></p>
+				<p><a rel="nofollow" class="btn" href="http://openpsychometrics.org/">openpsychometrics</a></p>
+				<p><a rel="nofollow" class="btn" href="https://www.deepl.com/write#en/">deepl</a></p>
+				<p><a rel="nofollow" class="btn" href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a></p>
+			</div>
+			<div class="embedholder">
+				<form class="radio-form" id="f">
+					<input value="a" name="hopping" type="radio" id="a" />
+					<label for="a"><span></span>C</label>
+					<input value="b" name="hopping" type="radio" id="b" />
+					<label for="b"><span></span>P</label>
+					<input value="tb" name="hopping" type="radio" id="tb" />
+					<label for="tb"><span></span>tb</label>
+					<input value="w" name="hopping" type="radio" id="w" />
+					<label for="w"><span></span>w</label>
+					<input value="s" name="hopping" type="radio" id="s" />
+					<label for="s"><span></span>s</label>
+					<input value="c" name="hopping" type="radio" id="c" checked />
+					<label for="c"><span></span>T</label>
+					<div class="worm">
+						<div class="worm__segment"></div>
+					</div>
+				</form>
+
+				<input type="text" list="streamers" placeholder="" id="buttonx" />
+				<!-- Add a placeholder for the Twitch embed -->
+				<div id="twitch-embed"></div>
+				<datalist id="streamers">
+					<option value="cerbervt"></option>
+					<option value="plush"></option>
+					<option value="trumporkamala2024"></option>
+					<option value="thinkerbella"></option>
+					<option value="spwooqi"></option>
+					<option value="shonzo"></option>
+				</datalist>
+				<!--twitchchat embed doesnt work- ff embed not allowed: https issue? -->
+				<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
+				<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
+			</div>
+			<!-- youtube video -->
+			<!-- <iframe
+				id="asdf"
+				width="400"
+				height="200"
+				src="https://www.youtube-nocookie.com/embed/uhzi-ETgkYc"
+				title="YouTube video player"
+				frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				referrerpolicy="strict-origin-when-cross-origin"
+				allowfullscreen
+			></iframe> -->
+			<div class="advice container">
+				<!-- advice api -->
+				<div id="err"></div>
+				<span id="span"></span>
+				<button class="btn-primary" type="button" id="buon">give me advice</button>
+				<div id="advice"></div>
+				<div id="id"></div>
+			</div>
+			<!-- candle -->
+			<div class="holder">
+				<div class="candle">
+					<div class="blinking-glow"></div>
+					<div class="thread"></div>
+					<div class="glow"></div>
+					<div class="flame"></div>
+				</div>
+			</div>
+
+			<!-- <frm method="post" class="xx" enctype="multipart/form-data">//preventdefault???
+			<label for="files">
+				<input type="file" name="files" id="files" accept=".png" name="pic" multiple />
+				 accept='video/*' upload any video >
+			</label>
+			<button type="submit" id="uploadBtn">Upload PNG</button>
+		</form> -->
+			<!-- <section class="wowplayground">
+			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInLeft" data-wow-offset="5" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
+			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="1" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
+			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInDown" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
+			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
+			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
+			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
+		</section> -->
+			<footer class="text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
+				<div class="container mx-auto px-4">
+					<div class="pt-8 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+						<div class="space-y-2">
+							<h5 class="text-white text-lg font-semibold mb-4">Get In Touch</h5>
+							<div class="col-lg">
+								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
+								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
+								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
+							</div>
+
+							<div class="flex space-x-4 d-flex pt-2">
+								<a class="text-gray-400 hover:text-white transition-colors btn-social" href="#"><i class="h-6 w-6 fab fa-twitter"></i></a>
+								<a class="text-gray-400 hover:text-white transition-colors btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+								<a class="text-gray-400 hover:text-white transition-colors btn-social" href="#"><i class="fab fa-youtube"></i></a>
+								<a class="text-gray-400 hover:text-white transition-colors btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+							</div>
+						</div>
+						<div class="col-lg">
+							<h5 class="text-white text-lg font-semibold mb-4">Quick Links</h5>
+							<div class="space-y-2">
+								<a class="block hover:text-white transition-colors btn-link" href="#">About Us</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Contact Us</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Our Services</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Privacy Policy</a>
+								<a class="block hover:text-white transition-colors btn-link" href="#">Terms & Condition</a>
+							</div>
+						</div>
+						<div class="col-lg">
+							<h5 class="text-white text-lg font-semibold mb-4">Photo Gallery</h5>
+							<div class="grid grid-cols-4 gap-2 pt-2">
+								<div class="">
+									<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+								<div class="">
+									<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+								<div class="">
+									<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+
+								<div class="">
+									<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								</div>
+							</div>
+						</div>
+						<div>
+							<h5 class="text-white text-lg font-semibold mb-4">Newsletter</h5>
+							<!-- <p class="mb-4">Dolor amet sit justo.</p> -->
+							<form class="max-w-md mx-auto">
+								<label class="block text-sm font-medium text-gray-300 mb-2" for="email">Email</label>
+								<div class="relative max-w-md mx-auto">
+									<input
+										class="w-full rounded-md py-2 pl-4 pr-3 focus:outline-none focus:ring-2"
+										type="email"
+										placeholder="Your email"
+										autocomplete="off"
+										name="newsletter"
+										id="email"
+										required
+									/>
+									<button type="button" class="z-0 absolute right-0 top-0 h-3/4 text-white rounded-r-md px-4 btn-primary">SignUp</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="border-t border-gray-700 container">
+					<div class="flex flex-col md:flex-row justify-between items-center copyright row">
+						<div class="text-center md:text-left mb-4 md:mb-0 text-md-start mb-md-0">
+							&copy; 2023
+							<!--a class="" href="#">Your Site Name</a>, All Rights Reserved.-->
+							<span> <a id="blink" class="hover:text-white transition-colors" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+						</div>
+						<div class="text-center text-md-end">
+							<div class="flex space-x-4 footer-menu">
+								<a class="hover:text-white transition-colors btn-link" href="#">Home</a>
+								<a class="hover:text-white transition-colors btn-link" href="#">Cookies</a>
+								<a class="hover:text-white transition-colors btn-link" href="#">Help</a>
+								<a class="hover:text-white transition-colors btn-link" href="#">Terms</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</footer>
+			<!-- Footer End -->
+		</main>
+		<!-- Footer -->
+
+		<!-- Back to Top -->
+		<a href="#" class="btn-primary back-to-top">^</a>
+
+		<script type="text/javascript">
+			function googleTranslateElementImit() {
+				new google.translate.TranslateElement({ pageLanguage: "en" }, "google_translate_element");
+			}
+		</script>
+		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementImit"></script>
+
+		<!-- npm i wowjs //animate.css-->
+		<script src="./js/wow/wow.min.js"></script>
+		<!-- v has to be lastly initiated new WOW().init()-->
+		<script>
+			new WOW().init();
+		</script>
 	</body>
 </html>
