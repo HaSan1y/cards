@@ -103,7 +103,9 @@ h3 {
 
 .wrapper {
   position: fixed;
-  bottom: 50px;
+  top: 75px;
+  height: 250px;
+  bottom: 0;
   right: -370px;
   max-width: 345px;
   width: 100%;

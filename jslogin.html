@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Login/Register Page</title>
-		<link rel="stylesheet" href="s.css" />
+		<link rel="stylesheet" href="./s.css" type="text/css" />
 	</head>
 	<body>
 		<div class="container">
@@ -29,8 +29,9 @@
 						</div>
 						<div id="errorMessage" class="error-message" role="alert"></div>
 						<div id="successMessage" class="success-message" role="alert"></div>
-						<button type="submit" data-signup id="submitButton">Signup</button>
-						<button type="submit" data-login id="submitButton">Login</button>
+						<button type="button" id="submitButton" data-login>Login</button>
+						<button type="button" id="submitButton" data-signup>x</button>
+						<!-- todo get rid of 1 btn, adjust js accordingly -->
 					</form>
 				</div>
 				<div class="card-footer">
@@ -45,11 +46,13 @@
 					<div data-content></div>
 				</dialog>
 				<li>
-					<a href="index.html">back</a>
+					<a href="./index.html">back</a>
 				</li>
 			</div>
 		</div>
-		<!-- <script src="s.js" defer></script> -->
-		<script src="./js/client-server/wds/wds.js" crossorigin="anonymous" type="module"></script>
+		<!-- https://www.jsdelivr.com/package/npm/@simplewebauthn/browser -->
+		<script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js"></script>
+		<script src="./dist/main.js" crossorigin="anonymous"></script>
+		<script src="./s.js" crossorigin="anonymous"></script>
 	</body>
 </html>

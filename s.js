@@ -22,12 +22,16 @@ document.addEventListener("DOMContentLoaded", function () {
 			formDescription.textContent = "Welcome back! Please login to your account.";
 			emailGroup.style.display = "none";
 			submitButton.textContent = "Login";
+			submitButton.removeAttribute("data-signup");
+			submitButton.setAttribute("data-login", "");
 			toggleLabel.textContent = "Need an account?";
 		} else {
 			formTitle.textContent = "Register";
 			formDescription.textContent = "Create a new account to get started.";
 			emailGroup.style.display = "block";
 			submitButton.textContent = "Register";
+			submitButton.removeAttribute("data-login");
+			submitButton.setAttribute("data-signup", "");
 			toggleLabel.textContent = "Already have an account?";
 		}
 		errorMessage.textContent = "";

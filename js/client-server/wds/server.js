@@ -3,16 +3,48 @@ const { generateRegistrationOptions, verifyRegistrationResponse, generateAuthent
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const { getUserByEmail, createUser, updateUserCounter, getUserById } = require("./db");
+// const { getUserByEmail, createUser, updateUserCounter, getUserById } = require("./db.js");
+// http://localhost:5500/jslogin.html
 
 const app = express();
+
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "http://localhost:5500");
+	res.header("Access-Control-Allow-Credentials", true);
+	next();
+});
+app.use(
+	cors({
+		origin: "*", // 		origin: "http://localhost:5500",
+		credentials: true,
+	}),
+);
 app.use(express.json());
 app.use(cookieParser());
 
-const CLIENT_URL = "127.0.0.1:5500";
+const CLIENT_URL = "http://localhost:5500"; //localhost|127.0.0.1?
 const RP_ID = "localhost";
 
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
+
+const USERS = [];
+
+function getUserByEmail(email) {
+	return USERS.find((user) => user.email === email);
+}
+
+function getUserById(id) {
+	return USERS.find((user) => user.id === id);
+}
+
+function createUser(id, email, passKey) {
+	USERS.push({ id, email, passKey });
+}
+
+function updateUserCounter(id, counter) {
+	const user = USERS.find((user) => user.id === id);
+	user.passKey.counter = counter;
+}
 
 app.get("/init-register", async (req, res) => {
 	const email = req.query.email;

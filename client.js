@@ -1,4 +1,6 @@
-import { startAuthentication, startRegistration } from "./@simplewebauthn/browser";
+// import { startAuthentication, startRegistration } from "@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js";
+import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
+// import { startAuthentication, startRegistration } from "https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js";
 
 const signupButton = document.querySelector("[data-signup]");
 const loginButton = document.querySelector("[data-login]");
@@ -6,8 +8,20 @@ const emailInput = document.querySelector("[data-email]");
 const modal = document.querySelector("[data-modal]");
 const closeButton = document.querySelector("[data-close]");
 
-signupButton.addEventListener("click", signup);
-loginButton.addEventListener("click", login);
+document.getElementById("authForm").addEventListener("submit", (e) => {
+	e.preventDefault();
+});
+
+signupButton.addEventListener("click", (e) => {
+	e.preventDefault();
+	signup();
+	return false;
+});
+loginButton.addEventListener("click", (e) => {
+	e.preventDefault();
+	login();
+	return false;
+});
 closeButton.addEventListener("click", () => modal.close());
 
 const SERVER_URL = "http://localhost:3000";
