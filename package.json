@@ -13,7 +13,6 @@
     "start": "node server.js",
     "watch": "webpack --watch",
     "build":"webpack --mode=production",
-    "dev": "nodemon server.js",
     "test": "jest"
   },
   "name": "resumes",

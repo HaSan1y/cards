@@ -7,7 +7,8 @@ const port = 3000;
 
 app.use(
 	cors({
-		origin: "http://127.0.0.1:5500", // allow requests from this origin
+		// origin: "http://127.0.0.1:5500", // allow requests from this origin
+		origin: "*", // allow requests from this origin
 		methods: ["GET", "POST", "PUT", "DELETE"], // allow these methods
 		allowedHeaders: ["Content-Type", "Authorization"], // allow these headers
 		// maxAge: 3600, // cache CORS configuration for 1 hour
