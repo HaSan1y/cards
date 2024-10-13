@@ -27,11 +27,15 @@ class Counter {
 		this.sentences = [];
 		this.solution = [];
 		displ();
+		if (counter.switchedFiles === 0) {
+			document.getElementById("showmorec").style.display = "block";
+		}
+		document.getElementById("zminusbtn").textContent = "-" + counter.switchedFiles.toString();
 	}
 	decrementFileSwitch() {
 		const y = document.querySelectorAll(".myCard");
 		if (y.length > 0) {
-			cards.forEach((xy) => xy.remove());
+			y.forEach((xy) => xy.remove());
 		} else {
 			console.warn("No elements to remove found.");
 		}
@@ -43,6 +47,10 @@ class Counter {
 		this.sentences = [];
 		this.solution = [];
 		displ();
+		if (counter.switchedFiles === 0) {
+			document.getElementById("showmorec").style.display = "block";
+		}
+		document.getElementById("zminusbtn").textContent = "- " + counter.switchedFiles.toString();
 	}
 	incrementmax() {
 		this.maxCardsOverflow += 3;
@@ -184,12 +192,16 @@ async function showMoreCards() {
 		counter.howoftenOverflowed += 1;
 		counter.incrementmax() * counter.howoftenOverflowed;
 		let cardsToShow = counter.totalCards + counter.maxCardsOverflow;
-		document.getElementById("showmorec").setAttribute("data-content", solution.length.toString() + " CardsOnServer|displayingCards " + " (" + counter.totalCards.toString() + ")");
 		if (cardsToShow >= sentences.length) {
 			document.getElementById("showmorec").style.display = "none";
 			return;
+		} else {
+			document.getElementById("showmorec").style.display = "block";
 		}
 		displ();
+		document
+			.getElementById("showmorec")
+			.setAttribute("data-content", `(${solution.length.toString()}) CardsOnServer | displayingCards  (${counter.totalCards.toString()}/${cardsToShow.toString()})`);
 	}
 }
 

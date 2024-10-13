@@ -4,7 +4,7 @@
 @tailwind utilities;
 :root {
   --clr-body-bg: rgb(32, 32, 32);
-  --clr-card-bg: rgb(43, 43, 43);
+  --clr-card-bg: rgb(65, 65, 65);
   --clr-text: hsl(0, 0%, 44%);
   --clr-heading: hsl(0, 0%, 60%);
 }
@@ -17,15 +17,15 @@
 }
 
 :root:has(#blue:checked) {
-  --clr-body-bg: hsl(234, 100%, 57%);
-  --clr-card-bg: hsla(210, 100%, 66%, 0.61);
+  --clr-body-bg: hsl(234, 24%, 17%);
+  --clr-card-bg: hsla(231, 95%, 62%, 0.89);
   --clr-text: hsl(191, 28%, 55%);
   --clr-heading: hsl(180, 37%, 33%);
 }
 
 :root:has(#green:checked) {
-  --clr-body-bg: hsl(132, 24%, 21%);
-  --clr-card-bg: hsla(115, 54%, 36%, 0.575);
+  --clr-body-bg: hsl(131, 16%, 20%);
+  --clr-card-bg: hsl(115, 54%, 36%);
   --clr-text: hsl(109, 30%, 57%);
   --clr-heading: hsl(108, 100%, 75%);
 }
@@ -54,7 +54,7 @@ body {
   overflow: hidden;
   font-family: system-ui, sans-serif;
   font-display: swap;
-  font-size: 1.25rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   background: var(--clr-body-bg) !important;
   color: var(--clr-text);
@@ -263,7 +263,7 @@ main {
   padding-top: 20px;
 }
 
-.footer .btn-social {
+footer .btn-social {
   width: 35px;
   height: 35px;
   display: flex;
@@ -275,12 +275,12 @@ main {
   transition: 0.3s;
 }
 
-.footer .btn-social:hover,
+footer .btn-social:hover,
 .nav-link:hover {
   opacity: 0.7;
 }
 
-.footer .btn-link {
+.btn-link {
   display: block;
   padding: 2px 0;
   text-align: left;
@@ -290,7 +290,7 @@ main {
   transition: 0.3s;
 }
 
-.footer .btn-link::before {
+.btn-link::before {
   position: relative;
   /* \f105 bootstrap*/
   content: "\f105";
@@ -298,30 +298,30 @@ main {
   font-weight: 900;
 }
 
-.footer .btn-link:hover,
+.btn-link:hover,
 .btn:hover {
   letter-spacing: 0.25px;
 }
 
-.footer .form-control {
+footer .form-control {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.footer .copyright {
+footer .copyright {
   font-size: 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.footer .copyright a {
+footer .copyright a {
   color: var(--clr-text);
 }
 
-.footer .footer-menu a {
+footer .footer-menu a {
   padding-right: 15px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.footer .footer-menu a:last-child {
+footer .footer-menu a:last-child {
   padding-right: 0;
   border-right: none;
 }
@@ -540,8 +540,8 @@ ul {
   position: absolute;
   z-index: 1000;
   display: none;
-  min-width: 11rem;
-  min-height: 5rem;
+  min-width: 10rem;
+  min-height: 6.5rem;
   margin: 0;
   font-size: 1rem;
   color: var(--clr-text);
@@ -751,11 +751,11 @@ option {
 }
 
 button {
-  padding: 10px !important;
-  font-size: medium;
+  padding: 9px !important;
+  font-size: smaller;
   font-weight: bold;
   border-color: #000;
-  box-shadow: 3px 3px 3px #000;
+  overflow: hidden;
   cursor: pointer;
 }
 
@@ -810,6 +810,24 @@ fieldset {
 
 .fab {
   padding: 10px;
+}
+
+.col-lg {
+  margin-top: 20px;
+}
+
+#zplusbtn,
+#zminusbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  height: 25px;
+  width: 25px;
+}
+
+#zbtns {
+  display: flex;
 }
 
 /*///////////////////////////////////////////////////////////////////////////////////*/

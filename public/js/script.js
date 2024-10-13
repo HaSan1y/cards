@@ -144,14 +144,14 @@ function switchDatabase() {
 		txtplusButton.type = "button";
 		txtplusButton.id = "zplusbtn";
 		txtplusButton.classList.add("btn-primary");
-		txtplusButton.textContent = "z++";
+		txtplusButton.textContent = "+";
 		txtplusButton.onclick = () => counter.incrementFileSwitch();
 		document.getElementById("zbtns").appendChild(txtplusButton);
 		const txtminusButton = document.createElement("button");
 		txtminusButton.type = "button";
 		txtminusButton.id = "zminusbtn";
 		txtminusButton.classList.add("btn-primary");
-		txtminusButton.textContent = "z--";
+		txtminusButton.textContent = "-";
 		txtminusButton.onclick = () => counter.decrementFileSwitch();
 		document.getElementById("zbtns").appendChild(txtminusButton);
 		dboptionswitcher.style.display = "none";
@@ -192,7 +192,17 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 		var data = await response.json();
 		document.querySelector("#err").style.display = "none";
 		document.getElementById("advice").innerHTML = `${data.slip.advice}`;
-		document.getElementById("id").innerHTML = `${data.slip.id}`;
+		document.getElementById("adviceid").innerHTML = `${data.slip.id}`;
 	}
 });
 const apiUrl = "https://api.adviceslip.com/advice";
+
+checkbox.addEventListener("change", () => {
+	if (checkbox.checked && document.getElementById("twitch-embed")) {
+		document.getElementById("twitch-embed").remove();
+	} else {
+		const twitchEmbed = document.createElement("div");
+		twitchEmbed.id = "twitch-embed";
+		document.getElementById("tw").appendChild(twitchEmbed);
+	}
+});

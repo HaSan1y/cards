@@ -13,7 +13,8 @@
     "start": "node server.js",
     "watch": "webpack --watch",
     "build":"webpack --mode=production",
-    "test": "jest"
+    "test": "jest",
+    "build-css":"tailwindcss build public/css/style.css -o public/css/outputs.css"
   },
   "name": "resumes",
   "version": "1.0.0",

@@ -17,9 +17,9 @@
 		<title>cards</title>
 
 		<!-- Load the Twitch embed script -->
-		<!-- <script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
+		<script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script>
 		<!-- Create a Twitch.Player object. This will render within the placeholder div -->
-		<!-- <script type="text/javascript" src="./js/twitch.js"></script> -->
+		<script type="text/javascript" src="./js/twitch.js"></script>
 
 		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
 
@@ -210,6 +210,7 @@
 					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
 					<!-- <div id="script-output"></div> -->
 					<p><b>2.nd </b> Submit Unempty+Unique Data</p>
+					<input type="checkbox" name="checkbox" id="checkbox" value="checkbox" />
 				</div>
 				<form id="dbbtn" style="display: none">
 					<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required autocomplete="off" /></label>
@@ -276,14 +277,16 @@
 					<label for="s"><span></span>s</label>
 					<input value="c" name="hopping" type="radio" id="c" checked />
 					<label for="c"><span></span>T</label>
-					<div class="worm">
+					<div class="worm" id="worm">
 						<div class="worm__segment"></div>
 					</div>
 				</form>
 
 				<input type="text" list="streamers" placeholder="" id="buttonx" />
 				<!-- Add a placeholder for the Twitch embed -->
-				<div id="twitch-embed"></div>
+				<div class="tw" id="tw">
+					<div id="twitch-embed"></div>
+				</div>
 				<datalist id="streamers">
 					<option value="cerbervt"></option>
 					<option value="plush"></option>
@@ -314,7 +317,7 @@
 				<span id="span"></span>
 				<button class="btn-primary" type="button" id="buon">give me advice</button>
 				<div id="advice"></div>
-				<div id="id"></div>
+				<div id="adviceid"></div>
 			</div>
 			<!-- candle -->
 			<div class="holder">
@@ -341,15 +344,15 @@
 			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
 			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
 		</section> -->
-			<footer class="text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
-				<div class="container mx-auto px-4">
+			<footer class="container text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
+				<div class="mx-auto px-4">
 					<div class="pt-8 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-						<div class="space-y-2">
-							<h5 class="text-white text-lg font-semibold mb-4">Get In Touch</h5>
+						<div class="">
+							<h5 class="text-white text-lg font-semibold mb-6">Get In Touch</h5>
 							<div class="col-lg">
-								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
-								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
-								<p class="flex items-center"><i class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
+								<p class="flex items-center t"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
+								<p class="flex items-center t"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
+								<p class="flex items-center t"><i class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
 							</div>
 
 							<div class="flex space-x-4 d-flex pt-2">
@@ -359,7 +362,7 @@
 								<a class="text-gray-400 hover:text-white transition-colors btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
 							</div>
 						</div>
-						<div class="col-lg">
+						<div class="">
 							<h5 class="text-white text-lg font-semibold mb-4">Quick Links</h5>
 							<div class="space-y-2">
 								<a class="block hover:text-white transition-colors btn-link" href="#">About Us</a>
@@ -369,7 +372,7 @@
 								<a class="block hover:text-white transition-colors btn-link" href="#">Terms & Condition</a>
 							</div>
 						</div>
-						<div class="col-lg">
+						<div class="">
 							<h5 class="text-white text-lg font-semibold mb-4">Photo Gallery</h5>
 							<div class="grid grid-cols-4 gap-2 pt-2">
 								<div class="">
@@ -390,11 +393,11 @@
 						<div>
 							<h5 class="text-white text-lg font-semibold mb-4">Newsletter</h5>
 							<!-- <p class="mb-4">Dolor amet sit justo.</p> -->
-							<form class="max-w-md mx-auto">
+							<form class="">
 								<label class="block text-sm font-medium text-gray-300 mb-2" for="email">Email</label>
-								<div class="relative max-w-md mx-auto">
+								<div class="relative h-3 mx-auto">
 									<input
-										class="w-full rounded-md py-2 pl-4 pr-3 focus:outline-none focus:ring-2"
+										class="w-full rounded-md pl-4 pr-3 py-2 focus:outline-none focus:ring-2"
 										type="email"
 										placeholder="Your email"
 										autocomplete="off"
@@ -402,7 +405,7 @@
 										id="email"
 										required
 									/>
-									<button type="button" class="z-0 absolute right-0 top-0 h-3/4 text-white rounded-r-md px-4 btn-primary">SignUp</button>
+									<button type="button" class="z-0 absolute right-0 top-0 py-1 bottom-0 text-white rounded-r-md px-4 btn-primary">SignUp</button>
 								</div>
 							</form>
 						</div>
