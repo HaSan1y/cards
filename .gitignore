@@ -4,9 +4,11 @@ node_modules
 
 public/js/how
 public/js/client-server/expresstest
-public/js/script-switcher
+public/js/script-switcher.js
 public/image/blog1.webp
 public/css/style.scss
 yugioh-cardgame.js
 y2.js
 stripe.js
+*.env
+twitch2.js

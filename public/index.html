@@ -36,7 +36,7 @@
 		<!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
 		<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> -->
 
-		<link rel="stylesheet" href="./css/output.css" type="text/css" />
+		<!-- <link rel="stylesheet" href="./css/output.css" type="text/css" /> -->
 		<link rel="stylesheet" href="./css/style.css" type="text/css" />
 		<link rel="stylesheet" href="./css/animate/animate.min.css" type="text/css" />
 		<!-- <link rel="stylesheet" href="./css/candle.css" type="text/css"/> -->
@@ -201,8 +201,8 @@
 					<p><b>1.st</b> decide on which DB</p>
 					<div id="dboptionswitcher">
 						<select id="selectswitchdb">
-							<option value="server">server</option>
-							<option value="indexdb">indexdb</option>
+							<option value="server">Server</option>
+							<option value="indexdb">IndexDB</option>
 						</select>
 						<button type="button" class="btn-primary text-white" onclick="switchDatabase()">Switch DB</button>
 					</div>
@@ -210,7 +210,6 @@
 					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
 					<!-- <div id="script-output"></div> -->
 					<p><b>2.nd </b> Submit Unempty+Unique Data</p>
-					<input type="checkbox" name="checkbox" id="checkbox" value="checkbox" />
 				</div>
 				<form id="dbbtn" style="display: none">
 					<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required autocomplete="off" /></label>
@@ -285,6 +284,10 @@
 				<input type="text" list="streamers" placeholder="" id="buttonx" />
 				<!-- Add a placeholder for the Twitch embed -->
 				<div class="tw" id="tw">
+					<div class="tw__inner">
+						<label for="checkbox">close Twitch</label>
+						<input type="checkbox" id="checkbox" name="checkbox" />
+					</div>
 					<div id="twitch-embed"></div>
 				</div>
 				<datalist id="streamers">
@@ -315,7 +318,7 @@
 				<!-- advice api -->
 				<div id="err"></div>
 				<span id="span"></span>
-				<button class="btn-primary" type="button" id="buon">give me advice</button>
+				<button class="btn-primary" type="button" id="buon">give me Advice</button>
 				<div id="advice"></div>
 				<div id="adviceid"></div>
 			</div>
@@ -399,13 +402,13 @@
 									<input
 										class="w-full rounded-md pl-4 pr-3 py-2 focus:outline-none focus:ring-2"
 										type="email"
-										placeholder="Your email"
+										placeholder="Email"
 										autocomplete="off"
 										name="newsletter"
 										id="email"
 										required
 									/>
-									<button type="button" class="z-0 absolute right-0 top-0 py-1 bottom-0 text-white rounded-r-md px-4 btn-primary">SignUp</button>
+									<button type="button" class="z-0 absolute right-0 top-0 py-1 bottom-0 text-white rounded-r-md px-3 btn-primary">SignUp</button>
 								</div>
 							</form>
 						</div>

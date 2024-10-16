@@ -199,10 +199,27 @@ const apiUrl = "https://api.adviceslip.com/advice";
 
 checkbox.addEventListener("change", () => {
 	if (checkbox.checked && document.getElementById("twitch-embed")) {
-		document.getElementById("twitch-embed").remove();
+		const twitchEmbed = document.getElementById("twitch-embed").remove();
+		twitchEmbed.remove();
+		// 		const script = document.querySelector('script[src^="https://embed.twitch.tv"]');
+		// 		if (script) {
+		// 			script.src = script.src.replace(/\/embed\.js$/, "/embed.js");
+		// 		}
 	} else {
 		const twitchEmbed = document.createElement("div");
 		twitchEmbed.id = "twitch-embed";
 		document.getElementById("tw").appendChild(twitchEmbed);
+		// todo: after reembeding, switching channels via btn/input will no longer work.
+		var embed = new Twitch.Embed("twitch-embed", {
+			width: 480,
+			height: 270,
+			theme: "dark",
+			// channel: "onyxtao",
+			channel: "trumporkamala2024",
+			layout: "video",
+			autoplay: true,
+			muted: true,
+			parent: ["yourdomain.com"],
+		});
 	}
 });

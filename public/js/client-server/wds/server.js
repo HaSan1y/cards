@@ -3,15 +3,24 @@ const { generateRegistrationOptions, verifyRegistrationResponse, generateAuthent
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-// const { getUserByEmail, createUser, updateUserCounter, getUserById } = require("./db.js");
-// http://localhost:5500/jslogin.html
-
+const { USERS, getUserByUsername, getUserByEmail, createUser, updateUserCounter, getUserById } = require("./db.js");
+const dbModule = require("./db.js");
+console.log("Imported from db.js:", dbModule);
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 const CLIENT_URL = "http://localhost:5500"; //localhost| not127.0.0.1 invalid
 const RP_ID = "localhost";
-const USERS = [];
+// const { USERS, createUser } = require("./db.js");
+
+// After your app.listen() call
+createUser("testuser1", "test1@example.com", {
+	/* mock passKey data */
+});
+createUser("testuser2", "test2@example.com", {
+	/* mock passKey data */
+});
+console.log("Test users created:", USERS);
 
 // app.use(
 // 	cors({
@@ -26,23 +35,6 @@ app.use(cors({ origin: CLIENT_URL, credentials: true }));
 // 	res.header("Access-Control-Allow-Credentials", true);
 // 	next();
 // });
-
-function getUserByEmail(email) {
-	return USERS.find((user) => user.email === email);
-}
-
-function getUserById(id) {
-	return USERS.find((user) => user.id === id);
-}
-
-function createUser(id, email, passKey) {
-	USERS.push({ id, email, passKey });
-}
-
-function updateUserCounter(id, counter) {
-	const user = USERS.find((user) => user.id === id);
-	user.passKey.counter = counter;
-}
 
 app.get("/init-register", async (req, res) => {
 	const email = req.query.email;
@@ -59,6 +51,7 @@ app.get("/init-register", async (req, res) => {
 		rpName: "Web Dev Simplified",
 		userName: email,
 	});
+	console.log("Registration options:", options); // Log the options
 
 	res.cookie(
 		"regInfo",
@@ -104,14 +97,16 @@ app.post("/verify-register", async (req, res) => {
 });
 
 app.get("/init-auth", async (req, res) => {
-	const email = req.query.email;
-	if (!email) {
-		return res.status(400).json({ error: "Email is required" });
+	const username = req.query.username;
+	console.log("Received auth request for username:", username);
+	if (!username) {
+		return res.status(400).json({ error: "Username is required" });
 	}
 
-	const user = getUserByEmail(email);
+	const user = getUserByUsername(username);
+	console.log("User found:", user);
 	if (user == null) {
-		return res.status(400).json({ error: "No user for this email" });
+		return res.status(400).json({ error: "No user for this username" });
 	}
 
 	const options = await generateAuthenticationOptions({

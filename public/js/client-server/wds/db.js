@@ -1,5 +1,13 @@
 const USERS = [];
+console.log("DB module loaded");
 
+function getUserByUsername(username) {
+	console.log("Searching for user with username:", username);
+	console.log("Current USERS array:", USERS);
+	const user = USERS.find((user) => user.username === username);
+	console.log("Found user:", user);
+	return user;
+}
 function getUserByEmail(email) {
 	return USERS.find((user) => user.email === email);
 }
@@ -8,8 +16,11 @@ function getUserById(id) {
 	return USERS.find((user) => user.id === id);
 }
 
-function createUser(id, email, passKey) {
-	USERS.push({ id, email, passKey });
+function createUser(userId, email, passKey) {
+	const username = email.split("@")[0]; // Create a username from the email
+	const user = { id: userId, email, username, passKey };
+	USERS.push(user);
+	return user;
 }
 
 function updateUserCounter(id, counter) {
@@ -18,6 +29,7 @@ function updateUserCounter(id, counter) {
 }
 
 module.exports = {
+	getUserByUsername,
 	getUserByEmail,
 	getUserById,
 	createUser,

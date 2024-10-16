@@ -1,98 +1,133 @@
 // import { startAuthentication, startRegistration } from "@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js";
 import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
 // import { startAuthentication, startRegistration } from "https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js";
+console.log("Script loaded"); // This should appear when the page loads
 
-const signupButton = document.querySelector("[data-signup]");
-const loginButton = document.querySelector("[data-login]");
 const emailInput = document.querySelector("[data-email]");
 const modal = document.querySelector("[data-modal]");
 const closeButton = document.querySelector("[data-close]");
+document.addEventListener("DOMContentLoaded", function () {
+	console.log("DOM fully loaded");
 
-document.getElementById("authForm").addEventListener("submit", (e) => {
-	e.preventDefault();
-});
+	const form = document.getElementById("authForm");
+	const submitButton = document.getElementById("submitButton");
+	console.log("Form element:", form);
+	console.log("Submit button:", submitButton);
 
-signupButton.addEventListener("click", (e) => {
-	e.preventDefault();
-	signup();
-	return false;
-});
-loginButton.addEventListener("click", (e) => {
-	e.preventDefault();
-	login();
-	return false;
+	if (submitButton) {
+		submitButton.addEventListener("click", async (e) => {
+			e.preventDefault();
+			console.log("Form submitted");
+
+			if (submitButton.hasAttribute("data-login")) {
+				console.log("Login attempt");
+				await login();
+			} else if (submitButton.hasAttribute("data-signup")) {
+				console.log("Signup attempt");
+				await signup();
+			} else {
+				console.log("Button has neither data-login nor data-signup attribute");
+			}
+		});
+	} else {
+		console.error("Form element not found");
+	}
 });
 closeButton.addEventListener("click", () => modal.close());
 
 const SERVER_URL = "http://localhost:3000";
 
 async function signup() {
-	const email = emailInput.value;
+	console.log("Signup function called");
+	try {
+		const email = document.querySelector("[data-email]").value;
+		console.log("Registering with email:", email);
 
-	// 1. Get challenge from server
-	const initResponse = await fetch(`${SERVER_URL}/init-register?email=${email}`, { credentials: "include" });
-	const options = await initResponse.json();
-	if (!initResponse.ok) {
-		showModalText(options.error);
-	}
+		// 1. Get challenge from server
+		const initResponse = await fetch(`${SERVER_URL}/init-register?email=${email}`, { credentials: "include" });
+		if (!initResponse.ok) {
+			throw new Error(`HTTP error! status: ${initResponse.status}`);
+			// showModalText(options.error);
+		}
+		const options = await initResponse.json();
+		console.log("Server response:", options);
+		// 2. Create passkey
+		const registrationJSON = await startRegistration(options);
+		console.log("Registration JSON:", registrationJSON);
 
-	// 2. Create passkey
-	const registrationJSON = await startRegistration(options);
+		// 3. Save passkey in DB
+		const verifyResponse = await fetch(`${SERVER_URL}/verify-register`, {
+			credentials: "include",
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(registrationJSON),
+		});
 
-	// 3. Save passkey in DB
-	const verifyResponse = await fetch(`${SERVER_URL}/verify-register`, {
-		credentials: "include",
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(registrationJSON),
-	});
-
-	const verifyData = await verifyResponse.json();
-	if (!verifyResponse.ok) {
-		showModalText(verifyData.error);
-	}
-	if (verifyData.verified) {
-		showModalText(`Successfully registered ${email}`);
-	} else {
-		showModalText(`Failed to register`);
+		const verifyData = await verifyResponse.json();
+		if (!verifyResponse.ok) {
+			showModalText(verifyData.error);
+		}
+		if (verifyData.verified) {
+			showModalText(`Successfully registered ${email}`);
+		} else {
+			showModalText(`Failed to register`);
+		}
+	} catch (error) {
+		console.error("Signup error:", error);
 	}
 }
 
 async function login() {
-	const email = emailInput.value;
+	console.log("Login function called");
+	try {
+		const usernameInput = document.getElementById("username");
+		const username = usernameInput.value;
+		console.log("Attempting to log in with username:", username);
+		if (!username) {
+			showModalText("Please enter a username");
+			return;
+		}
 
-	// 1. Get challenge from server
-	const initResponse = await fetch(`${SERVER_URL}/init-auth?email=${email}`, {
-		credentials: "include",
-	});
-	const options = await initResponse.json();
-	if (!initResponse.ok) {
-		showModalText(options.error);
-	}
+		// 1. Get challenge from server
+		const initResponse = await fetch(`${SERVER_URL}/init-auth?username=${username}`, {
+			credentials: "include",
+		});
+		if (!initResponse.ok) {
+			const errorData = await initResponse.json();
+			throw new Error(errorData.error || `HTTP error! status: ${initResponse.status}`);
 
-	// 2. Get passkey
-	const authJSON = await startAuthentication(options);
+			// showModalText(options.error);
+		}
+		const options = await initResponse.json();
 
-	// 3. Verify passkey with DB
-	const verifyResponse = await fetch(`${SERVER_URL}/verify-auth`, {
-		credentials: "include",
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(authJSON),
-	});
+		// 2. Get passkey
+		const authJSON = await startAuthentication(options);
 
-	const verifyData = await verifyResponse.json();
-	if (!verifyResponse.ok) {
-		showModalText(verifyData.error);
-	}
-	if (verifyData.verified) {
-		showModalText(`Successfully logged in ${email}`);
-	} else {
-		showModalText(`Failed to log in`);
+		// 3. Verify passkey with DB
+		const verifyResponse = await fetch(`${SERVER_URL}/verify-auth`, {
+			credentials: "include",
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(authJSON),
+		});
+
+		const verifyData = await verifyResponse.json();
+		if (!verifyResponse.ok) {
+			throw new Error(verifyData.error || "Verification failed");
+			// showModalText(verifyData.error);
+		}
+		if (verifyData.verified) {
+			showModalText(`Successfully logged in ${username}`);
+		} else {
+			showModalText(`Failed to log in`);
+		}
+	} catch (error) {
+		console.error("Login error:", error);
+		// showModalText(error.message);
 	}
 }
 
