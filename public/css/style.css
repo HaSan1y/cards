@@ -105,16 +105,9 @@ h2 {
 }
 
 .wrapper .buttons {
-  gap: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: none;
-  color: #fff;
-  padding: 8px;
-  border-radius: 4px;
-  background: #4070f4;
-  cursor: pointer;
   transition: all 0.2s ease;
 }
 

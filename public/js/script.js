@@ -1,5 +1,5 @@
 const cookieBox = document.querySelector(".wrapper");
-const buttons = document.querySelectorAll(".button");
+const buttons = document.querySelectorAll(".butt");
 const disc = document.querySelector("#disclaimerModal");
 
 // cookie+disclaimer//////////////////////////////////////////////////////////////////////////////
@@ -197,6 +197,23 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 });
 const apiUrl = "https://api.adviceslip.com/advice";
 
+// document.querySelector('button[id="ins"]').addEventListener("click", async () => {
+// 	const resp = await fetch(api_Url);
+// 	if (resp.status != 200) {
+// 		document.getElementById("err").style.display = "block";
+// 		document.getElementById("span").innerHTML = `${resp.status}`;
+// 	} else {
+// 		var dat = await resp.json();
+// 		document.querySelector("#err").style.display = "none";
+// 		console.log("data:" + JSON.stringify(dat));
+// 		document.getElementById("insult").innerHTML = `${dat.insult}`;
+// 		document.getElementById("insultid").innerHTML = `${dat.number}`;
+// 	}
+// });
+// // insult api doesnt include cors header in their server, so had to use cors-anywhere for dev testing, unless make own server including response with cors header this wont work
+// const api_Url = "https://cors-anywhere.herokuapp.com/https://evilinsult.com/generate_insult.php?lang=en&type=json";
+
+// twitch
 checkbox.addEventListener("change", () => {
 	if (checkbox.checked && document.getElementById("twitch-embed")) {
 		const twitchEmbed = document.getElementById("twitch-embed").remove();

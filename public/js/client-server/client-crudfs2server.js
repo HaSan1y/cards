@@ -41,7 +41,9 @@ class Counter {
 		}
 		this.maxCardsOverflow = 6;
 		this.howoftenOverflowed = 0;
-		this.switchedFiles--;
+		if (counter.switchedFiles > 0) {
+			this.switchedFiles--;
+		}
 		console.log(counter.switchedFiles);
 		this.totalCards = 0;
 		this.sentences = [];
