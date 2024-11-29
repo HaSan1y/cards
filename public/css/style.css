@@ -292,7 +292,6 @@ fieldset {
 }
 
 /*** Footer ***/
-footer,
 main {
   border-top: 1px solid rgb(161, 161, 161);
   margin: auto;
@@ -300,6 +299,7 @@ main {
 }
 
 footer .btn-social {
+  margin-right: 5px;
   width: 35px;
   height: 35px;
   display: flex;
@@ -319,6 +319,7 @@ footer .btn-social:hover,
 .btn-link {
   display: block;
   padding: 2px 0;
+  margin-top: 1px;
   text-align: left;
   font-size: 15px;
   font-weight: normal;
@@ -332,6 +333,7 @@ footer .btn-social:hover,
   content: "\f105";
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
+  margin-right: 10px;
 }
 
 .btn-link:hover,
@@ -345,7 +347,6 @@ footer .form-control {
 
 footer .copyright {
   font-size: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 footer .copyright a {
@@ -353,11 +354,13 @@ footer .copyright a {
 }
 
 footer .footer-menu a {
+  margin-right: 15px;
   padding-right: 15px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 footer .footer-menu a:last-child {
+  margin-right: 0;
   padding-right: 0;
   border-right: none;
 }
@@ -366,75 +369,6 @@ footer .footer-menu a:last-child {
   padding: 10px 0;
   display: flex;
   justify-content: space-between !important;
-}
-
-.footer .btn.btn-social {
-  margin-right: 5px;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--light);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 35px;
-  transition: 0.3s;
-}
-
-.footer .btn.btn-social:hover,
-.nav-link:hover {
-  opacity: 0.7;
-}
-
-.footer .btn.btn-link {
-  display: block;
-  margin-top: 1px;
-  padding: 2px 0;
-  text-align: left;
-  font-size: 15px;
-  font-weight: normal;
-  text-transform: capitalize;
-  transition: 0.3s;
-}
-
-.footer .btn.btn-link::before {
-  position: relative;
-  /* \f105 bootstrap*/
-  content: "\f105";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  margin-right: 10px;
-}
-
-.footer .btn.btn-link:hover,
-.btn:hover {
-  letter-spacing: 0.25px;
-}
-
-.footer .form-control {
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-.footer .copyright {
-  margin: 10px 0 0 0;
-  font-size: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer .copyright a {
-  color: var(--light);
-}
-
-.footer .footer-menu a {
-  margin-right: 15px;
-  padding-right: 15px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer .footer-menu a:last-child {
-  margin-right: 0;
-  padding-right: 0;
-  border-right: none;
 }
 
 /*--------------------------------------------bootstrap----------------------*/
@@ -1129,30 +1063,6 @@ fieldset {
     visibility: visible;
     transition: 0.5s;
     opacity: 1;
-  }
-  .navbar-expand-lg .navbar-nav {
-    flex-direction: row;
-  }
-  .navbar-expand-lg {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-  }
-  .navbar-expand-lg .navbar-nav .dropdown-menu {
-    position: absolute;
-  }
-  .navbar-expand-lg .navbar-nav .nav-link {
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
-  }
-  .navbar-expand-lg .navbar-nav-scroll {
-    overflow: visible !important;
-  }
-  .navbar-expand-lg .navbar-collapse {
-    display: flex !important;
-    flex-basis: auto;
-  }
-  .navbar-expand-lg .navbar-toggler {
-    display: none;
   }
   fieldset,
   #txtbtn {
