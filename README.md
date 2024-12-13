@@ -1,1 +1,1 @@
-- beta site in construction. intention of site: `crud` operations (nodejs, indexdb..)
+- intention of this website: `crud` operations (nodejs, indexdb,...)

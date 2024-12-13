@@ -8,7 +8,7 @@ function loadScript(src, callback) {
 }
 
 loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
-	let x = "trumporkamala2024";
+	let x = "trumporbiden2028";
 	var options = {
 		width: 400,
 		height: 200,
@@ -71,7 +71,7 @@ loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
 				buttonx.value = "shonzo";
 				break;
 			case "c":
-				buttonx.value = "trumporkamala2024";
+				buttonx.value = "trumporbiden2028";
 				break;
 		}
 
