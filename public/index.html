@@ -195,18 +195,20 @@
 					<p hidden>dont forget to deploy the server-provider which allows CRUD Manipulation with the ServerJS file</p>
 					<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
 					<hr />
-					<p><b>1.st</b> decide on which DB</p>
-					<div id="dboptionswitcher" class="dboptionswitcher" style="width: 200px; font-family: Arial">
-						<select id="selectswitchdb">
-							<option value="server">Server</option>
-							<option value="indexdb">IndexDB</option>
-						</select>
+					<div id="coco">
+						<div id="dboptionswitcher" class="dboptionswitcher" style="width: 200px; font-family: Arial">
+							<select id="selectswitchdb">
+								<option value="0">decide on which DB</option>
+								<option value="server">Server</option>
+								<option value="indexdb">IndexDB</option>
+							</select>
+						</div>
+						<p><b>Submit Unempty+Unique Data</b></p>
 						<button type="button" class="btn-primary text-white" onclick="switchDatabase()">Confirm DB</button>
+						<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
+						<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
+						<!-- <div id="script-output"></div> -->
 					</div>
-					<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
-					<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
-					<!-- <div id="script-output"></div> -->
-					<p><b>2.nd </b> Submit Unempty+Unique Data</p>
 				</div>
 				<form id="dbbtn" style="display: none">
 					<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required autocomplete="off" /></label>

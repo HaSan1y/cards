@@ -154,7 +154,7 @@ function switchDatabase() {
 		txtminusButton.textContent = "-";
 		txtminusButton.onclick = () => counter.decrementFileSwitch();
 		document.getElementById("zbtns").appendChild(txtminusButton);
-		dboptionswitcher.style.display = "none";
+		coco.style.display = "none";
 		dbbtn.style.display = "block";
 		displ();
 		document.getElementById("dbbtn").addEventListener("submit", postsensolData);
@@ -175,7 +175,7 @@ function switchDatabase() {
 		wipeDBButton.setAttribute("onclick", "wipeData()");
 		wipeDBButton.classList.add("btn-primary");
 		document.getElementById("buttons").appendChild(wipeDBButton);
-		dboptionswitcher.style.display = "none";
+		coco.style.display = "none";
 		txtbtn.style.display = "flex";
 		ensureDatabaseConnection();
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);

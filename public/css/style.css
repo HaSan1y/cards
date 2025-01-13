@@ -870,7 +870,7 @@ select:after {
   width: 0;
   height: 0;
   border: 6px solid transparent;
-  border-color: #fff transparent transparent transparent;
+  border-color: #040e46 transparent transparent transparent;
 }
 
 .select-selected {
