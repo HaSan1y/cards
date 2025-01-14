@@ -50,8 +50,8 @@ app.post("/:fileType", (req, res) => {
 	// 	content += req.body[i] + "\n";
 	// }
 	// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
-	const sentenceFilePath = `${fileType}.txt`;
-	const solutionFilePath = `sol${fileType === "sen1" ? "1" : ""}.txt`;
+	const sentenceFilePath = `./public/${fileType}.txt`;
+	const solutionFilePath = `./public/sol${fileType === "sen1" ? "1" : ""}.txt`;
 
 	const writeToFile = (filePath, content) => {
 		return new Promise((resolve, reject) => {

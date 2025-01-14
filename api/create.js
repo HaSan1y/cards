@@ -1,18 +1,15 @@
 const express = require("express");
+const cors = require("cors"); // Import CORS
 const app = express();
 const port = 3000;
 
-// Import CRUD functions
-const createRecord = require("./create");
-const readRecords = require("./read");
-const updateRecord = require("./update");
-const deleteRecord = require("./delete");
+app.use(cors());
+app.use(express.json());
 
 // Create API endpoints
 app.post("/create", (req, res) => {
-	createRecord(req.body)
-		.then((data) => res.json(data))
-		.catch((error) => res.status(500).json({ error: "Failed to create record" }));
+	console.log("Received data:", req.body);
+	res.json({ message: "Data received successfully!", data: req.body });
 });
 
 app.get("/read", (req, res) => {
@@ -35,5 +32,5 @@ app.delete("/delete", (req, res) => {
 
 // Start server
 app.listen(port, () => {
-	console.log(`Server started on port ${port}`);
+	console.log(`Server started on port http://localhost:${port}`);
 });

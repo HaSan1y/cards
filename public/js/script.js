@@ -182,7 +182,8 @@ function switchDatabase() {
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
 	} else if (isSup) {
 		console.log("Switching to Supabase");
-		fetch("/create", {
+		fetch("/api/create", {
+			// /create   http://localhost:3000/create  https://your-vercel-app.vercel.app/js/client-server/sup/create
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ column1: "value1", column2: "value2" }),
