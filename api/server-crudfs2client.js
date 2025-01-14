@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
 const app = express();
-const port = 3000;
+const port = 3030;
 // const port = process.env.PORT || 3000;
 
 app.use(
@@ -83,7 +83,6 @@ app.post("/:fileType", (req, res) => {
 // 	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 // 	res.send('Inhalt von sol.txt');
 //  });
-app.listen(port, () => console.log(`Server listening at ${port}`));
 // app.post("/sol", (req, res) => {
 // 	let solutionText = "";
 // 	for (let i = 0; i < req.body.length; i++) {
@@ -123,3 +122,4 @@ app.listen(port, () => console.log(`Server listening at ${port}`));
 //    link.click();
 //    document.body.removeChild(link);
 //  }
+app.listen(port, () => console.log(`Server listening at ${port}`));
