@@ -10,4 +10,7 @@ module.exports = {
 	resolve: {
 		modules: ["node_modules"],
 	},
+	externals: {
+		"@simplewebauthn/browser": "commonjs2 @simplewebauthn/browser",
+	},
 };

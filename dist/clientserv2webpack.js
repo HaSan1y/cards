@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 closeButton.addEventListener("click", () => modal.close());
 
-const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = "https://db-2-cards.vercel.app"; //http://localhost:3000";
 
 async function signup() {
 	console.log("Signup function called");
