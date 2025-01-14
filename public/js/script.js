@@ -119,9 +119,9 @@ const cardHolder = document.getElementById("cardHolder");
 function switchDatabase() {
 	var select = document.getElementById("selectswitchdb");
 	var selectedValue = select.value;
-	const isServer = selectedValue === "server" || "supbase";
+	const isServer = selectedValue === "server";
 	const isIndexDB = selectedValue === "indexdb";
-	// const isSupabase = selectedValue === "supabase";
+	const isSup = selectedValue === "supbase";
 	if (isServer) {
 		console.log("Switching to server database");
 		const ssubmitButtonContainer = document.getElementById("dbbtn");
@@ -180,6 +180,18 @@ function switchDatabase() {
 		txtbtn.style.display = "flex";
 		ensureDatabaseConnection();
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
+	} else if (isSup) {
+		console.log("Switching to Supabase");
+		fetch("/create", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ column1: "value1", column2: "value2" }),
+		})
+			.then((response) => response.json())
+			.then((data) => console.log(data))
+			.catch((error) => console.error(error));
+	} else {
+		console.log("No valid option selected");
 	}
 }
 
@@ -241,3 +253,4 @@ checkbox.addEventListener("change", () => {
 		});
 	}
 });
+//

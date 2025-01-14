@@ -848,6 +848,7 @@ svg {
 .dboptionswitcher {
   position: relative;
   font-family: Arial;
+  margin-bottom: 100px;
 }
 
 .dboptionswitcher select {
