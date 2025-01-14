@@ -119,8 +119,9 @@ const cardHolder = document.getElementById("cardHolder");
 function switchDatabase() {
 	var select = document.getElementById("selectswitchdb");
 	var selectedValue = select.value;
-	const isServer = selectedValue === "server";
+	const isServer = selectedValue === "server" || "supabase";
 	const isIndexDB = selectedValue === "indexdb";
+	// const isSupabase = selectedValue === "supabase";
 	if (isServer) {
 		console.log("Switching to server database");
 		const ssubmitButtonContainer = document.getElementById("dbbtn");
@@ -229,13 +230,13 @@ checkbox.addEventListener("change", () => {
 		// todo: after reembeding, switching channels via btn/input will no longer work.
 		var embed = new Twitch.Embed("twitch-embed", {
 			width: 480,
-			height: 270,
+			height: 260,
 			theme: "dark",
 			// channel: "onyxtao",
 			channel: "trumporkamala2024",
 			layout: "video",
 			autoplay: true,
-			muted: true,
+			muted: false,
 			parent: ["yourdomain.com"],
 		});
 	}

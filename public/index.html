@@ -24,8 +24,9 @@
 
 		<script type="text/javascript" src="./js/script.js" defer></script>
 		<!-- <script type="text/javascript" src="./js/script-switcher.js" defer></script> -->
-		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
+		<!-- <script type="text/javascript" src="./js/client-server/client-supa.js" defer></script> -->
 		<script type="text/javascript" src="./js/client-server/client-crudfs2server.js" defer></script>
+		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
 
 		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
 		<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous" type="text/css" /> -->
@@ -199,12 +200,13 @@
 						<div id="dboptionswitcher" class="dboptionswitcher" style="width: 200px; font-family: Arial">
 							<select id="selectswitchdb">
 								<option value="0">decide on which DB</option>
-								<option value="server">Server</option>
 								<option value="indexdb">IndexDB</option>
+								<option value="server">Server</option>
+								<option value="supabase">supa</option>
 							</select>
 						</div>
-						<p><b>Submit Unempty+Unique Data</b></p>
 						<button type="button" class="btn-primary text-white" onclick="switchDatabase()">Confirm DB</button>
+						<p><b>Submit Unempty+Unique Data</b></p>
 						<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
 						<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
 						<!-- <div id="script-output"></div> -->
@@ -412,7 +414,7 @@
 			<div class="border-t border-gray-700 container">
 				<div class="flex flex-col md:flex-row justify-between items-center copyright row">
 					<div class="text-center md:text-left mb-4 md:mb-0 text-md-start mb-md-0">
-						&copy; 2023
+						&copy; 2024
 						<!--a class="" href="#">Your Site Name</a>, All Rights Reserved.-->
 						<span> <a id="blink" class="hover:text-white transition-colors" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
 					</div>

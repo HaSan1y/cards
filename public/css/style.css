@@ -845,14 +845,6 @@ svg {
   content: attr(data-content);
 }
 
-select,
-option {
-  height: auto;
-  padding: 40px;
-  color: black !important;
-  field-sizing: content-box; /* 1 */
-}
-
 .dboptionswitcher {
   position: relative;
   font-family: Arial;
@@ -860,17 +852,6 @@ option {
 
 .dboptionswitcher select {
   display: none; /*hide original SELECT element: */
-}
-
-select:after {
-  position: absolute;
-  content: "";
-  top: 14px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
-  border-color: #040e46 transparent transparent transparent;
 }
 
 .select-selected {
@@ -909,7 +890,7 @@ select:after {
 .select-items {
   position: absolute;
   background-color: DodgerBlue;
-  top: 100%;
+  top: auto;
   left: 0;
   right: 0;
   z-index: 99;
@@ -1302,11 +1283,8 @@ fieldset {
 ::after {
   box-sizing: border-box;
   /* 1 */
-  border-width: 0;
   /* 2 */
-  border-style: solid;
   /* 2 */
-  border-color: #e5e7eb;
   /* 2 */
 }
 
@@ -1475,7 +1453,6 @@ table {
 button,
 input,
 optgroup,
-select,
 textarea {
   font-family: inherit;
   /* 1 */
