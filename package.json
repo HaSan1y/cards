@@ -2,6 +2,7 @@
 	"name": "crud-cards",
 	"version": "1.0.0",
 	"main": "public/js/script.js",
+	"repository": "https://github.com/HaSan1y/cards.git",
 	"keywords": [],
 	"author": "hy",
 	"license": "ISC",

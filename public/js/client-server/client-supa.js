@@ -1,11 +1,10 @@
 // import fetch from "node-fetch";  this file becomes independent if implemented
-const { createClient } = require("@supabase/supabase-js");
 
 require("dotenv").config();
-// const supabaseUrl = "https://your-supabase-url.supabase.co";
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
-// const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
+const { createClient } = require("@supabase/supabase-js");
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const cards = document.querySelectorAll("#card");

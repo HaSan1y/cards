@@ -119,7 +119,7 @@ const cardHolder = document.getElementById("cardHolder");
 function switchDatabase() {
 	var select = document.getElementById("selectswitchdb");
 	var selectedValue = select.value;
-	const isServer = selectedValue === "server" || "supabase";
+	const isServer = selectedValue === "server" || "supbase";
 	const isIndexDB = selectedValue === "indexdb";
 	// const isSupabase = selectedValue === "supabase";
 	if (isServer) {
