@@ -2,8 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
 const app = express();
-const port = 3030;
-// const port = process.env.PORT || 3000;
+const ports = process.env.PORT || 3000;
 
 app.use(
 	cors({
@@ -122,4 +121,4 @@ app.post("/:fileType", (req, res) => {
 //    link.click();
 //    document.body.removeChild(link);
 //  }
-app.listen(port, () => console.log(`Server listening at ${port}`));
+app.listen(ports, () => console.log(`Server listening at ${ports}`));
