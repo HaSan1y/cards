@@ -51,7 +51,7 @@ app.get("/init-register", async (req, res) => {
 		rpName: "Web Dev Simplified",
 		userName: email,
 	});
-	console.log("Registration options:", options); // Log the options
+	console.log("Registration options:", options);
 
 	res.cookie(
 		"regInfo",

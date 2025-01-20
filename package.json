@@ -20,7 +20,7 @@
 	"dependencies": {
 		"@simplewebauthn/browser": "^10.0.0",
 		"@simplewebauthn/server": "^10.0.1",
-		"@supabase/supabase-js": "^2.47.12",
+		"@supabase/supabase-js": "^2.47.15",
 		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"dotenv": "^16.4.7",

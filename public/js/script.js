@@ -1,3 +1,5 @@
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
 const cookieBox = document.querySelector(".wrapper");
 const buttons = document.querySelectorAll(".butt");
 const disc = document.querySelector("#disclaimerModal");
@@ -116,12 +118,24 @@ setTheme();
 
 // database switcher
 const cardHolder = document.getElementById("cardHolder");
-function switchDatabase() {
+
+window.switchDatabase = async function switchDatabase() {
+	console.log("Switching database");
 	var select = document.getElementById("selectswitchdb");
 	var selectedValue = select.value;
+	if (selectedValue === "supabase") {
+		console.log("Switching to supabase database");
+
+		// const supabase = createClient(window.__ENV__.SUPABASE_URL, window.__ENV__.SUPABASE_ANON_KEY);
+		//////////////////////////////////////////////////////////////////////////////////
+		const { data, error } = await supabase.from("notes").select("*");
+		console.log(data);
+		if (error) {
+			throw error;
+		}
+	}
 	const isServer = selectedValue === "server";
 	const isIndexDB = selectedValue === "indexdb";
-	const isSup = selectedValue === "supbase";
 	if (isServer) {
 		console.log("Switching to server database");
 		const ssubmitButtonContainer = document.getElementById("dbbtn");
@@ -131,7 +145,6 @@ function switchDatabase() {
 		nnewSubmitButton.classList.add("btn-primary");
 		nnewSubmitButton.id = "serversubmitbtn";
 		ssubmitButtonContainer.appendChild(nnewSubmitButton);
-		// submitButtonContainer.id = "isaform";
 		const showMoreButton = document.createElement("button");
 		showMoreButton.type = "button";
 		showMoreButton.id = "showmorec";
@@ -168,7 +181,6 @@ function switchDatabase() {
 		newSubmitButton.classList.add("btn-primary");
 		newSubmitButton.id = "indexdbsubmitbtn";
 		submitButtonContainer.appendChild(newSubmitButton);
-		// submitButtonContainer.id = "dbbtn";
 		const wipeDBButton = document.createElement("button");
 		wipeDBButton.textContent = "wipe IndexDB";
 		wipeDBButton.type = "button";
@@ -180,22 +192,9 @@ function switchDatabase() {
 		txtbtn.style.display = "flex";
 		ensureDatabaseConnection();
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
-	} else if (isSup) {
-		console.log("Switching to Supabase");
-		fetch("./api/create", {
-			// /create   http://localhost:3000/create  https://your-vercel-app.vercel.app/js/client-server/sup/create
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ column1: "value1", column2: "value2" }),
-		})
-			.then((response) => response.json())
-			.then((data) => console.log(data))
-			.catch((error) => console.error(error));
-	} else {
-		console.log("No valid option selected");
 	}
-}
-
+};
+window.switchDatabase = switchDatabase;
 // advise api
 document.querySelector('button[id="buon"]').addEventListener("click", async () => {
 	const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10));
@@ -224,7 +223,7 @@ const apiUrl = "https://api.adviceslip.com/advice";
 // 		document.getElementById("insultid").innerHTML = `${dat.number}`;
 // 	}
 // });
-// // insult api doesnt include cors header in their server, so had to use cors-anywhere for dev testing, unless make own server including response with cors header this wont work
+// insult api doesnt include cors header in their server, so had to use cors-anywhere for dev testing, unless make own server including response with cors header this wont work
 // const api_Url = "https://cors-anywhere.herokuapp.com/https://evilinsult.com/generate_insult.php?lang=en&type=json";
 
 // twitch
@@ -240,17 +239,16 @@ checkbox.addEventListener("change", () => {
 		const twitchEmbed = document.createElement("div");
 		twitchEmbed.id = "twitch-embed";
 		document.getElementById("tw").appendChild(twitchEmbed);
-		// todo: after reembeding, switching channels via btn/input will no longer work.
+		// todo: after re-embeding, switching twitch channels via input-btn, will no longer work.
 		var embed = new Twitch.Embed("twitch-embed", {
 			width: 480,
 			height: 260,
 			theme: "dark",
-			// channel: "onyxtao",
 			channel: "trumporkamala2024",
 			layout: "video",
 			autoplay: true,
 			muted: false,
-			parent: ["yourdomain.com"],
+			// parent: ["yourdomain.com"],
 		});
 	}
 });

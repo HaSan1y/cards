@@ -6,8 +6,7 @@ const ports = process.env.PORT || 3000;
 
 app.use(
 	cors({
-		// origin: "http://127.0.0.1:5500", // allow requests from this origin
-		origin: "*", // allow requests from this origin
+		origin: "*", // origin: "http://127.0.0.1:5500", // allow requests from this origin
 		methods: ["GET", "POST", "PUT", "DELETE"], // allow these methods
 		allowedHeaders: ["Content-Type", "Authorization"], // allow these headers
 		// maxAge: 3600, // cache CORS configuration for 1 hour
@@ -18,7 +17,6 @@ app.post("/:fileType", (req, res) => {
 	const fileType = req.params.fileType.split(".")[0];
 	const { switchedFiles, t1, t2, solution } = req.body;
 	// const [t1, t2, solution, switchedFiles] = req.body;
-
 	// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
 	// const switchedFiles = req.query.switchedFiles; 3000/${filePath}?switchedFiles=${counter.switchedFiles}`, true);
 
@@ -34,21 +32,15 @@ app.post("/:fileType", (req, res) => {
 	let solutionContent = "";
 	switch (fileType) {
 		case `sen${switchedFiles > 0 ? switchedFiles : ""}`:
-			// case "sen":
-			// case "sen1":
+			// case "sen*":
 			sentenceContent = `${t1}\n${t2}\n`;
 			solutionContent = `${solution}\n`;
 			break;
 		case `sol${switchedFiles > 0 ? switchedFiles : ""}`:
-			// case "sol":
-			// case "sol1":
+			// case "sol*":
 			solutionContent = `${solution}\n`;
 			break;
 	}
-	// for (let i = 0; i < req.body.length; i++) {
-	// 	content += req.body[i] + "\n";
-	// }
-	// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
 	const sentenceFilePath = `./public/${fileType}.txt`;
 	const solutionFilePath = `./public/sol${fileType === "sen1" ? "1" : ""}.txt`;
 

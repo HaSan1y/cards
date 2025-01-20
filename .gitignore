@@ -1,7 +1,7 @@
 git config core.ignorecase false
 
 node_modules
-*.env.local
+*.env
 
 how
 
@@ -10,3 +10,5 @@ public/css/style.scss
 public/css/style.css.map
 
 .vscode
+guide.txt
+config.js

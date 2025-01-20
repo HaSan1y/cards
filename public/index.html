@@ -7,9 +7,8 @@
 		<link rel="icon" type="image" sizes="32x32" href="./image/favicon-32x32.png" />
 		<link rel="apple-touch-icon" sizes="180x180" href="./image/apple-touch-icon.png" />
 		<link rel="manifest" href="./image/site.webmanifest" />
-		<!-- <meta http-equiv="Content-Security-Policy" content="Access-Control-Allow-Origin='https://github.com/HaSan1y/res'; Vary='Origin'"> default-src *; img-src *; child-src *; media-src *; script-src *;" / X-Content-Security-Policy-->
-		<!-- <meta Access-Control-Allow-Origin="no-cors" /> -->
 		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com https://evilinsult.com" /> -->
+		<!-- script-src 'self' 'unsafe-inline' 'unsafe-eval' allow scripts only from the same origin -->
 		<!-- <base href="./" -->
 		<title>cards</title>
 
@@ -19,10 +18,12 @@
 		<!-- <script type="text/javascript" src="./js/twitch.js"></script> -->
 		<!-- <link rel="preload" href="./js/script.js" as="script" /> as image, style, font, script -->
 
-		<script type="text/javascript" src="./js/script.js" defer></script>
-		<!-- <script type="text/javascript" src="./js/script-switcher.js" defer></script> -->
+		<!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script> -->
+		<!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.15/dist/umd/supabase.min.js" defer></script> -->
 		<script type="text/javascript" src="./js/client-crudfs2server.js" defer></script>
 		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
+
+		<script type="module" src="./js/script.js" defer></script>
 		<script type="text/javascript" src="./js/select.js" defer></script>
 
 		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
@@ -199,7 +200,7 @@
 								<option value="0">decide on which DB</option>
 								<option value="indexdb">IndexDB</option>
 								<option value="server">Server</option>
-								<option value="supbase">Supabase</option>
+								<option value="supabase">Supabase</option>
 							</select>
 						</div>
 						<button type="button" class="btn-primary text-white" onclick="switchDatabase()">Confirm DB</button>
@@ -237,14 +238,17 @@
 				</div> -->
 			</div>
 			<br />
-
-			<div id="buttons" class="container">
+			<div style="display: grid">
 				<div class="" id="google_translate_element"></div>
-				<div id="zbtns"></div>
-				<!-- <button type="button" id="tofile" onclick="addTextToFile()">clientside js save 'title' into .txt-file</button> -->
-				<!--button type="button" class="btn-primary" onclick="remove()">
-					<b> remove all cards back to 6 </b>
-				</button> &ndash;- &nbsp; &amp;&-->
+
+				<textarea name="text" id=""></textarea>
+				<div id="buttons" class="container">
+					<div id="zbtns"></div>
+					<!-- <button type="button" id="tofile" onclick="addTextToFile()">clientside js save 'title' into .txt-file</button> -->
+					<!--button type="button" class="btn-primary" onclick="remove()">
+		<b> remove all cards back to 6 </b>
+	</button> &ndash;- &nbsp; &amp;&-->
+				</div>
 			</div>
 			<div class="links">
 				<p><a rel="nofollow" class="btn" href="https://humanbenchmark.com/" name="linkhumanbenchmark">humanbenchmark</a></p>
@@ -343,11 +347,6 @@
 
 			<!-- <section class="wowplayground">
 			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInLeft" data-wow-offset="5" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
-			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="1" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
-			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInDown" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
-			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
-			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInRight" data-wow-offset="10" data-wow-iteration="1" data-wow-duration="3s" data-wow-delay="1s" />
-			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInUp" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s" data-wow-delay="1s" />
 		</section> -->
 		</main>
 		<footer class="container text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
@@ -427,7 +426,7 @@
 				</div>
 			</div>
 		</footer>
-		<!-- Back to Top -->
+		<!-- ^Back to Top -->
 		<a href="#" class="btn-primary back-to-top">^</a>
 
 		<script type="text/javascript">
