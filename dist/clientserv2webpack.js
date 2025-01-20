@@ -1,6 +1,5 @@
-// import { startAuthentication, startRegistration } from "@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js";
 import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
-// import { startAuthentication, startRegistration } from "https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js";
+// import { startAuthentication, startRegistration } from "@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js | https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@10.0.0/dist/bundle/index.umd.min.js";
 console.log("Script loaded"); // This should appear when the page loads
 
 const emailInput = document.querySelector("[data-email]");
@@ -34,8 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 });
 closeButton.addEventListener("click", () => modal.close());
-
-const SERVER_URL = "https://db-2-cards.vercel.app"; //http://localhost:3000";
+const SERVER_URL = "http://localhost:3000"; //https://db-2-cards.vercel.app/";
 
 async function signup() {
 	console.log("Signup function called");

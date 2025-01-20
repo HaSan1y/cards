@@ -235,7 +235,7 @@ async function postsensolData(event) {
 	// const solFilePath = counter.switchedFiles === 0 ? "sol.txt" : counter.switchedFiles === 1 ? `sol${counter.switchedFiles}.txt` : "sol.txt";
 
 	const xhrSen = new XMLHttpRequest();
-	xhrSen.open("POST", `https://db-2-cards.vercel.app/${filePath}`, true); //http://127.0.0.1:3000/
+	xhrSen.open("POST", `http://127.0.0.1:3000/${filePath}`, true); //https://db-2-cards.vercel.app/
 	xhrSen.setRequestHeader("Content-Type", "application/json");
 	const data = {
 		t1: t1,

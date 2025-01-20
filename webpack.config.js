@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-	mode: "development",
+	mode: "production",
 	entry: { main: path.resolve(__dirname, "./dist/clientserv2webpack.js") },
 	output: {
 		path: path.resolve(__dirname, "dist"),
@@ -11,6 +11,6 @@ module.exports = {
 		modules: ["node_modules"],
 	},
 	externals: {
-		"@simplewebauthn/browser": "commonjs2 @simplewebauthn/browser",
+		"@simplewebauthn/browser": "SimpleWebAuthnBrowser",
 	},
 };

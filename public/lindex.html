@@ -3,6 +3,14 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" sizes="16x16" href="./image/favicon-16x16.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-32x32.png" />
+		<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/apple-touch-icon.png" />
+		<link rel="manifest" href="./image/site.webmanifest" />
+		<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://unpkg.com 'unsafe-eval';" /> -->
+		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://vercel.live/; script-src https://vercel.live/;" /> -->
+		<!-- <meta X-Content-Security-Policy: default-src *; img-src *; child-src *; media-src *;  style-src *; font-src *; connect-src *; form-action *; frame-ancestors *; sandbox * script-src-elem unsafe-inline;">-->
+
 		<title>Login/Register Page</title>
 		<link rel="stylesheet" href="./css/login.css" type="text/css" />
 	</head>
@@ -124,9 +132,9 @@
 			});
 		</script>
 
-		<!-- https://www.jsdelivr.com/package/npm/@simplewebauthn/browser -->
-		<script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
-		<!-- <script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@13.1.0/dist/bundle/index.umd.min.js"></script> -->
+		<!-- <script src="https://www.jsdelivr.com/package/npm/@simplewebauthn/browser"></script> -->
+		<!-- <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@13.1.0/dist/bundle/index.umd.min.js" crossorigin="anonymous" type="module"></script>
 		<!-- webpack -->
 		<script src="../dist/main.js" crossorigin="anonymous" type="module"></script>
 	</body>

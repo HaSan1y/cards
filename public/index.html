@@ -3,35 +3,36 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image" sizes="16x16" href="./image/favicon-16x16.png" />
-		<link rel="icon" type="image" sizes="32x32" href="./image/favicon-32x32.png" />
-		<link rel="apple-touch-icon" sizes="180x180" href="./image/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="./image/favicon-16x16.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-32x32.png" />
+		<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/apple-touch-icon.png" />
 		<link rel="manifest" href="./image/site.webmanifest" />
-		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com https://evilinsult.com" /> -->
-		<!-- script-src 'self' 'unsafe-inline' 'unsafe-eval' allow scripts only from the same origin -->
-		<!-- <base href="./" -->
 		<title>cards</title>
+		<!-- <base href="./" -->
+		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com https://evilinsult.com" /> -->
+		<!-- script-src 'self' | 'unsafe-inline' | 'unsafe-eval';default-src 'self' allow scripts only from the same origin -->
+		<!-- <meta http-equiv="Content-Security-Policy" content="style-src 'self' https://translate.google.com; style-src-attr 'self' https://translate.google.com; style-src-elem 'self' https://translate.google.com;" ; /> -->
 
 		<!-- Load the Twitch embed script-->
-		<!-- <script type="text/javascript" src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
+		<!-- <script src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
 		<!-- Create a Twitch.Player object. This will render within the placeholder div, actually i should think mobile first, enable with a checkmark -->
-		<!-- <script type="text/javascript" src="./js/twitch.js"></script> -->
+		<!-- <script src="./js/twitch.js"></script> -->
+
 		<!-- <link rel="preload" href="./js/script.js" as="script" /> as image, style, font, script -->
-
-		<!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script> -->
 		<!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.15/dist/umd/supabase.min.js" defer></script> -->
-		<script type="text/javascript" src="./js/client-crudfs2server.js" defer></script>
-		<script type="text/javascript" src="./js/with-indexdb.js" defer></script>
-
-		<script type="module" src="./js/script.js" defer></script>
+		<script src="./js/client-crudfs2server.js" defer></script>
+		<script src="./js/with-indexdb.js" defer></script>
+		<script type="module" src="./js/script.js"></script>
 		<script type="text/javascript" src="./js/select.js" defer></script>
-
-		<!-- <script type="text/javascript" src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
+		<!-- w3: defer on module unneccesary, type txt/js unneccesary, body id=body fatal error, img loading attribute, give an id-name only once in the whole document,+ dont put empty string as id,  -->
+		<!-- dont give a 'name' nor 'alt' attribute to a link but give it a 'title' attribute, alt belongs to img, name belongs to input,type image needs subtype mime image/*, -->
+		<!-- img attributes: alt src srcset sizes crossorigin usemap  ismap  width  height  referrerpolicy  decoding  loading  fetchpriority  -->
+		<!-- A resource is blocked by OpaqueResponseBlocking. cuz google-translate sends data/script? to my unopen csp/meta/mimetype thx google for making my consolelog-output full of shit-->
+		<!-- <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> err-->
 		<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous" type="text/css" /> -->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" type="text/css" />
 		<!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
 		<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> -->
-		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementImit"></script>
 
 		<!-- <link rel="stylesheet" href="./css/output.css" type="text/css" /> -->
 		<link rel="stylesheet" href="./css/style.css" type="text/css" />
@@ -41,8 +42,7 @@
 		<!-- <link rel="stylesheet" href="./css/candle.css" type="text/css"/> -->
 	</head>
 	<noscript> this Website needs Javascript </noscript>
-
-	<body id="body">
+	<body>
 		<nav class="container bg-transparent navbar py-0 px-4">
 			<svg id="hy" viewBox="0 0 73 94" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<rect width="70" height="70" fill="#1E1E1E" />
@@ -138,7 +138,7 @@
 					I understand and agree to the terms of this disclaimer.
 				</label>
 				<p>If you have any questions or concerns, please contact us at [Your Contact Information].</p>
-				<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+				<!-- <span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span> -->
 				<div class="modal-footer">
 					<button type="button" id="closeDisclaimerModal" name="termsCloseBtn">Close</button>
 				</div>
@@ -148,7 +148,7 @@
 		<!-- banner -->
 		<div class="yourbanner">
 			<div class="x">your banner</div>
-			<img src="#" alt=" " load="lazy" />
+			<img src="#" alt=" " loading="lazy" />
 		</div>
 		<br />
 
@@ -191,8 +191,8 @@
 						Click on any IndexDB-Card to view its (Backside) Solution (pre-written by you)Text. Works as long as you Input <i><b>always</b></i> Unique Inputs..
 					</p>
 					<em hidden>Restart Your Browser after Deleting an IndexDB-Card. indexdb(sol-ID) wont reset to 0 or -1 or -2 cus im clueless..</em>
-					<p hidden>dont forget to deploy the server-provider which allows CRUD Manipulation with the ServerJS file</p>
-					<span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+					<p hidden>dont forget to deploy a server-provider which allows CRUD Manipulation with the ServerJS file</p>
+					<!-- <span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span> -->
 					<hr />
 					<div id="coco">
 						<div id="dboptionswitcher" class="dboptionswitcher" style="width: 200px; font-family: Arial">
@@ -239,31 +239,29 @@
 			</div>
 			<br />
 			<div style="display: grid">
-				<div class="" id="google_translate_element"></div>
+				<div id="google_translate_element"></div>
 
-				<textarea name="text" id=""></textarea>
+				<textarea name="text"></textarea>
 				<div id="buttons" class="container">
 					<div id="zbtns"></div>
 					<!-- <button type="button" id="tofile" onclick="addTextToFile()">clientside js save 'title' into .txt-file</button> -->
-					<!--button type="button" class="btn-primary" onclick="remove()">
-		<b> remove all cards back to 6 </b>
-	</button> &ndash;- &nbsp; &amp;&-->
+					<!--button type="button" class="btn-primary" onclick="remove()">		<b> remove all cards back to 6 </b>	</button> &ndash;- &nbsp; &amp;&-->
 				</div>
 			</div>
 			<div class="links">
-				<p><a rel="nofollow" class="btn" href="https://humanbenchmark.com/" name="linkhumanbenchmark">humanbenchmark</a></p>
-				<p><a rel="nofollow" class="btn" href="https://www.duolingo.com" name="linkduolingo">duolingo</a></p>
-				<p><a rel="nofollow" class="btn" href="https://quillbot.com/">quillbot</a></p>
-				<p><a rel="nofollow" class="btn" href="https://www.grammarly.com/paraphrasing-tool">grammarly</a></p>
-				<p><a rel="nofollow" class="btn" href="https://www.feedough.com/">feedough</a></p>
-				<p><a rel="nofollow" class="btn" href="https://jenni.ai/">jenni.ai</a></p>
+				<p><a rel="nofollow" class="btn" title="humanbenchmark" href="https://humanbenchmark.com/">humanbenchmark</a></p>
+				<p><a rel="nofollow" class="btn" title="linkduolingo" href="https://www.duolingo.com">duolingo</a></p>
+				<p><a rel="nofollow" class="btn" title="quillbot" href="https://quillbot.com/">quillbot</a></p>
+				<p><a rel="nofollow" class="btn" title="grammarly" href="https://www.grammarly.com/paraphrasing-tool">grammarly</a></p>
+				<p><a rel="nofollow" class="btn" title="feedough" href="https://www.feedough.com/">feedough</a></p>
+				<p><a rel="nofollow" class="btn" title="jenni.ai" href="https://jenni.ai/">jenni.ai</a></p>
 
-				<p><a rel="nofollow" class="btn" href="https://www.getmagical.com/">getmagical</a></p>
-				<p><a rel="nofollow" class="btn" href="https://www.unriddle.ai/">unriddle.ai</a></p>
-				<p><a rel="nofollow" class="btn" href="https://mr-dialect.com/de-ch/deutsch-raetoromanisch-uebersetzer-2/">mr.dialect</a></p>
-				<p><a rel="nofollow" class="btn" href="http://openpsychometrics.org/">openpsychometrics</a></p>
-				<p><a rel="nofollow" class="btn" href="https://www.deepl.com/write#en/">deepl</a></p>
-				<p><a rel="nofollow" class="btn" href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a></p>
+				<p><a rel="nofollow" class="btn" title="getmagical" href="https://www.getmagical.com/">getmagical</a></p>
+				<p><a rel="nofollow" class="btn" title="unriddle.ai" href="https://www.unriddle.ai/">unriddle.ai</a></p>
+				<p><a rel="nofollow" class="btn" title="mr.dialect" href="https://mr-dialect.com/de-ch/deutsch-raetoromanisch-uebersetzer-2/">mr.dialect</a></p>
+				<p><a rel="nofollow" class="btn" title="openpsychometrics" href="http://openpsychometrics.org/">openpsychometrics</a></p>
+				<p><a rel="nofollow" class="btn" title="deepl" href="https://www.deepl.com/write#en/">deepl</a></p>
+				<p><a rel="nofollow" class="btn" title="translate.google" href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a></p>
 			</div>
 			<div class="embedholder">
 				<form class="radio-form" id="f">
@@ -381,17 +379,17 @@
 						<h5 class="text-white text-lg font-semibold mb-4">Photo Gallery</h5>
 						<div class="grid grid-cols-4 gap-2 pt-2">
 							<div class="">
-								<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								<img loading="lazy" class="img-fluid rounded p-1" src="#" alt="" />
 							</div>
 							<div class="">
-								<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								<img loading="lazy" class="img-fluid rounded p-1" src="#" alt="" />
 							</div>
 							<div class="">
-								<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								<img loading="lazy" class="img-fluid rounded p-1" src="#" alt="" />
 							</div>
 
 							<div class="">
-								<img load="lazy" class="img-fluid rounded p-1" src="#" alt="" />
+								<img loading="lazy" class="img-fluid rounded p-1" src="#" alt="" />
 							</div>
 						</div>
 					</div>
@@ -429,12 +427,12 @@
 		<!-- ^Back to Top -->
 		<a href="#" class="btn-primary back-to-top">^</a>
 
-		<script type="text/javascript">
+		<script>
 			function googleTranslateElementImit() {
 				new google.translate.TranslateElement({ pageLanguage: "en" }, "google_translate_element");
 			}
 		</script>
-
+		<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementImit"></script>
 		<!-- npm i wowjs //animate.css-->
 		<script src="./js/wow/wow.min.js"></script>
 		<!-- v has to be lastly initiated new WOW().init()-->

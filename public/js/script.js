@@ -127,8 +127,15 @@ window.switchDatabase = async function switchDatabase() {
 		console.log("Switching to supabase database");
 
 		// const supabase = createClient(window.__ENV__.SUPABASE_URL, window.__ENV__.SUPABASE_ANON_KEY);
-		//////////////////////////////////////////////////////////////////////////////////
-		const { data, error } = await supabase.from("notes").select("*");
+
+		const { data, error } = await supabase
+			.from("notes")
+			// .insert({
+			// 	title: "note.title",
+			// });
+			.select("*")
+			.order("id", { ascending: false })
+			.limit(2);
 		console.log(data);
 		if (error) {
 			throw error;
