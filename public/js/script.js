@@ -127,7 +127,10 @@ window.switchDatabase = async function switchDatabase() {
 		console.log("Switching to supabase database");
 
 		// const supabase = createClient(window.__ENV__.SUPABASE_URL, window.__ENV__.SUPABASE_ANON_KEY);
-
+		const supabase = createClient(
+			"https://ufregefviedmexfjnxut.supabase.co",
+			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcmVnZWZ2aWVkbWV4ZmpueHV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczNDQ0NjMsImV4cCI6MjA1MjkyMDQ2M30.bBiOROarZXlEqDutT_6x-7UsesoHzF0Ixmt3mqBWnTo",
+		);
 		const { data, error } = await supabase
 			.from("notes")
 			// .insert({

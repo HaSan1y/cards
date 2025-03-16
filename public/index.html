@@ -9,6 +9,15 @@
 		<link rel="manifest" href="./image/site.webmanifest" />
 		<title>cards</title>
 		<!-- <base href="./" -->
+
+		<!-- (Open Graph Protocol)https://ogp.me/ -->
+		<!-- <meta property="og:title" content="Page Title" />
+      <meta property="og:description" content="Page Description" />
+      <meta property="og:image" content="https://example.com/image.jpg" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://example.com/page" />
+      <meta name="twitter:card" content="summary_large_image" /> -->
+
 		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com https://evilinsult.com" /> -->
 		<!-- script-src 'self' | 'unsafe-inline' | 'unsafe-eval';default-src 'self' allow scripts only from the same origin -->
 		<!-- <meta http-equiv="Content-Security-Policy" content="style-src 'self' https://translate.google.com; style-src-attr 'self' https://translate.google.com; style-src-elem 'self' https://translate.google.com;" ; /> -->
@@ -181,7 +190,7 @@
 			<!-- submit form -->
 			<fieldset class="conainer">
 				<div class="msg">
-					<p>
+					<p hidden>
 						<!-- <p contenteditable="true">I Hasan Yildirim constructed this Website &rBarr;</p> -->
 						<br />
 					</p>
@@ -193,9 +202,9 @@
 					<em hidden>Restart Your Browser after Deleting an IndexDB-Card. indexdb(sol-ID) wont reset to 0 or -1 or -2 cus im clueless..</em>
 					<p hidden>dont forget to deploy a server-provider which allows CRUD Manipulation with the ServerJS file</p>
 					<!-- <span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span> -->
-					<hr />
+					<!-- <hr /> -->
 					<div id="coco">
-						<div id="dboptionswitcher" class="dboptionswitcher" style="width: 200px; font-family: Arial">
+						<div class="dboptionswitcher">
 							<select id="selectswitchdb">
 								<option value="0">decide on which DB</option>
 								<option value="indexdb">IndexDB</option>
@@ -203,8 +212,8 @@
 								<option value="supabase">Supabase</option>
 							</select>
 						</div>
-						<button type="button" class="btn-primary text-white" onclick="switchDatabase()">Confirm DB</button>
-						<p><b>Submit Unempty+Unique Data</b></p>
+						<button type="button" class="btn-primary text-white" onclick="switchDatabase()" style="max-width: 100px; margin: auto">Confirm DB</button>
+						<p class="text"><b>Submit Unempty+Unique Data</b></p>
 						<!-- <button type="submit" id="switch-script" class="btn sw btn-primary">SwitchDB</button> -->
 						<!-- onclick="import('.js/client-server/client-crudfs2server.js')" -->
 						<!-- <div id="script-output"></div> -->
@@ -263,46 +272,52 @@
 				<p><a rel="nofollow" class="btn" title="deepl" href="https://www.deepl.com/write#en/">deepl</a></p>
 				<p><a rel="nofollow" class="btn" title="translate.google" href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a></p>
 			</div>
-			<div class="embedholder">
-				<form class="radio-form" id="f">
-					<input value="a" name="hopping" type="radio" id="a" />
-					<label for="a"><span></span>C</label>
-					<input value="b" name="hopping" type="radio" id="b" />
-					<label for="b"><span></span>P</label>
-					<input value="tb" name="hopping" type="radio" id="tb" />
-					<label for="tb"><span></span>tb</label>
-					<input value="w" name="hopping" type="radio" id="w" />
-					<label for="w"><span></span>w</label>
-					<input value="s" name="hopping" type="radio" id="s" />
-					<label for="s"><span></span>s</label>
-					<input value="c" name="hopping" type="radio" id="c" checked />
-					<label for="c"><span></span>T</label>
-					<div class="worm" id="worm">
-						<div class="worm__segment"></div>
-					</div>
-				</form>
+			<aside>
+				<div class="embedholder">
+					<form class="radio-form" id="f">
+						<input value="a" name="hopping" type="radio" id="a" />
+						<label for="a"><span></span>C</label>
+						<input value="b" name="hopping" type="radio" id="b" />
+						<label for="b"><span></span>P</label>
+						<input value="tb" name="hopping" type="radio" id="tb" />
+						<label for="tb"><span></span>tb</label>
+						<input value="w" name="hopping" type="radio" id="w" />
+						<label for="w"><span></span>w</label>
+						<input value="s" name="hopping" type="radio" id="s" />
+						<label for="s"><span></span>s</label>
+						<input value="c" name="hopping" type="radio" id="c" checked />
+						<label for="c"><span></span>T</label>
+						<div class="worm" id="worm">
+							<div class="worm__segment"></div>
+						</div>
+					</form>
 
-				<input type="text" list="streamers" placeholder="" id="buttonx" />
-				<div class="tw" id="tw">
-					<div class="tw__inner">
-						<label for="checkbox">close Twitch</label>
-						<input type="checkbox" id="checkbox" name="checkbox" />
+					<input type="text" list="streamers" placeholder="" id="buttonx" />
+					<div class="tw" id="tw">
+						<div class="tw__inner">
+							<label for="checkbox">close Twitch</label>
+							<input type="checkbox" id="checkbox" name="checkbox" />
+						</div>
+						<!-- Add a placeholder for the Twitch embed -->
+						<div id="twitch-embed"></div>
 					</div>
-					<!-- Add a placeholder for the Twitch embed -->
-					<div id="twitch-embed"></div>
+					<datalist id="streamers">
+						<option value="cerbervt"></option>
+						<option value="plush"></option>
+						<option value="trumporbiden2028"></option>
+						<option value="thinkerbella"></option>
+						<option value="spwooqi"></option>
+						<option value="shonzo"></option>
+					</datalist>
+					<!--twitch-chat embed does'nt work- ff embed not allowed: https issue? -->
+					<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
+					<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
 				</div>
-				<datalist id="streamers">
-					<option value="cerbervt"></option>
-					<option value="plush"></option>
-					<option value="trumporbiden2028"></option>
-					<option value="thinkerbella"></option>
-					<option value="spwooqi"></option>
-					<option value="shonzo"></option>
-				</datalist>
-				<!--twitch-chat embed does'nt work- ff embed not allowed: https issue? -->
-				<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
-				<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
-			</div>
+				<label class="ox" for="ox" name="toggle Opacity"></label>
+
+				<input type="checkbox" name="ox" class="ox" />
+			</aside>
+
 			<!-- youtube video -->
 			<!-- <iframe
 				id="asdf"
@@ -318,8 +333,8 @@
 			<div class="advice container">
 				<!-- advice api -->
 				<div id="err"></div>
-				<span id="span"></span>
-				<button class="btn-primary" type="button" id="buon">give me Advice</button>
+				<!-- <span id="span"></span> -->
+				<button class="btn-primary" type="button" id="buon">Advice</button>
 				<div id="advice"></div>
 				<div id="adviceid"></div>
 				<!-- <button class="btn-primary" type="button" id="ins">give me Insult</button>
@@ -346,20 +361,22 @@
 			<!-- <section class="wowplayground">
 			<img src="./public/image/blog1.webp" width="100" height="100" class="wow slideInLeft" data-wow-offset="5" data-wow-iteration="1" data-wow-duration="2s" data-wow-delay="1s" />
 		</section> -->
+
+			<a href="#" class="btn-primary back-to-top">^</a>
 		</main>
-		<footer class="container text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
+		<footer class="text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
 			<div class="mx-auto px-4">
-				<div class="pt-8 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+				<div class="pt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 					<div class="">
 						<h5 class="text-white text-lg font-semibold mb-6">Get In Touch</h5>
 						<div class="col-lg">
-							<p class="flex items-center t"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
-							<p class="flex items-center t"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
-							<p class="flex items-center t"><i class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
+							<p class="flex items-center touch"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
+							<p class="flex items-center touch"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
+							<p class="flex items-center touch"><i class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
 						</div>
 
-						<div class="flex space-x-4 d-flex pt-2">
-							<a class="text-gray-400 hover:text-white transition-colors btn-social" href="https://x.com/"><i class="h-6 w-6 fab fa-twitter"></i></a>
+						<div class="flex space-x-4 d-flex pt-2 i">
+							<a class="text-gray-400 hover:text-white transition-colors btn-social" href="https://x.com/"><i class="fab fa-twitter"></i></a>
 							<a class="text-gray-400 hover:text-white transition-colors btn-social" href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
 							<a class="text-gray-400 hover:text-white transition-colors btn-social" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
 							<a class="text-gray-400 hover:text-white transition-colors btn-social" href="https://ch.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
@@ -398,7 +415,7 @@
 						<!-- <p class="mb-4">Dolor amet sit justo.</p> -->
 						<form class="">
 							<label class="block text-sm font-medium text-gray-300 mb-2" for="email">Email</label>
-							<div class="relative h-3 mx-auto">
+							<div class="relative h-3 asdf">
 								<input class="w-full rounded-md pl-4 pr-3 py-2 focus:outline-none focus:ring-2" type="email" placeholder="Email" autocomplete="off" name="newsletter" id="email" required />
 								<button type="button" class="z-0 absolute right-0 top-0 py-1 bottom-0 text-white rounded-r-md px-3 btn-primary">SignUp</button>
 							</div>
@@ -425,7 +442,6 @@
 			</div>
 		</footer>
 		<!-- ^Back to Top -->
-		<a href="#" class="btn-primary back-to-top">^</a>
 
 		<script>
 			function googleTranslateElementImit() {
