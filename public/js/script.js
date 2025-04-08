@@ -217,35 +217,68 @@ window.switchDatabase = async function switchDatabase() {
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
 	}
 };
-window.switchDatabase = switchDatabase;
-// advise api
+window.switchDatabase = switchDatabase;	
 document.querySelector('button[id="buon"]').addEventListener("click", async () => {
-	const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10));
-	if (response.status != 200) {
-		document.getElementById("err").style.display = "block";
-		document.getElementById("span").innerHTML = `${response.status}`;
-	} else {
-		var data = await response.json();
-		document.querySelector("#err").style.display = "none";
-		document.getElementById("advice").innerHTML = `${data.slip.advice}`;
-		document.getElementById("adviceid").innerHTML = `${data.slip.id}`;
-	}
-});
-const apiUrl = "https://api.adviceslip.com/advice";
+const apiUrl = "http://localhost:3000/proxy";
+const apiiUrl  = "http://localhost:3000/proxxy";
+// const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+// const apiUrl = "https://api.adviceslip.com/advice";
 
-// document.querySelector('button[id="ins"]').addEventListener("click", async () => {
-// 	const resp = await fetch(api_Url);
-// 	if (resp.status != 200) {
-// 		document.getElementById("err").style.display = "block";
-// 		document.getElementById("span").innerHTML = `${resp.status}`;
-// 	} else {
-// 		var dat = await resp.json();
-// 		document.querySelector("#err").style.display = "none";
-// 		console.log("data:" + JSON.stringify(dat));
+fetch(apiUrl)
+.then(response => response.json())
+  .then(data => {
+	  console.log(data);
+    document.getElementById("adviceid").innerHTML = data.joke || "No joke found";
+	})
+	.catch(error => console.error("Error:", error));
+
+fetch("https://icanhazdadjoke.com/", {
+	headers: { Accept: "application/json" },
+})
+.then(response => response.json())
+.then(data => document.getElementById("advice").innerHTML = `${data.joke}`)
+.catch(error => console.error("Error:", error));
+
+fetch(apiiUrl)
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+    document.getElementById("insult").innerHTML = data.insult || "No joke found";
+  })
+  .catch(error => console.error("Error:", error));
+  });
 // 		document.getElementById("insult").innerHTML = `${dat.insult}`;
 // 		document.getElementById("insultid").innerHTML = `${dat.number}`;
-// 	}
-// });
+
+// document.querySelector('button[id="buon"]').addEventListener("click", async () => {
+	// const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10, {
+// 	const response = await fetch(proxyUrl +apiUrl, {
+// 		cache: "no-cache",
+// 		method: "GET",
+// 		headers: {
+// 			accept: "application/json",
+// 			"Content-Type": "application/json",
+// 		},
+// 	});
+// 		if (response.status != 200) {
+// 					document.getElementById("err").style.display = "block";
+// 					document.getElementById("span").innerHTML = `${response.status}`;
+// 				} else {
+// 					var data = await response.json();
+// 					document.querySelector("#err").style.display = "none";
+// 					console.log("data:" + JSON.stringify(data));
+// 					document.getElementById("advice").innerHTML = `${data.joke}`;
+// 					 document.getElementById("advice").innerHTML = `${data.slip.advice}`;
+// 					 document.getElementById("adviceid").innerHTML = `${data.slip.id}`;
+// 				}
+//  });
+// const apiUrl = "https://www.yomama-jokes.com/api/v1/jokes/random/";
+
+
+//	document.getElementById("insult").innerHTML = `${dat.insult}`;
+// document.getElementById("insultid").innerHTML = `${dat.number}`;
+// document.querySelector('button[id="ins"]').addEventListener("click", async () => {
+
 // insult api doesnt include cors header in their server, so had to use cors-anywhere for dev testing, unless make own server including response with cors header this wont work
 // const api_Url = "https://cors-anywhere.herokuapp.com/https://evilinsult.com/generate_insult.php?lang=en&type=json";
 
