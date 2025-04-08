@@ -1,5 +1,18 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
+document.addEventListener('DOMContentLoaded', () => {
+	const repoSelectElements = document.getElementsByClassName('repoSelect');
+	
+	for (let i = 0; i < repoSelectElements.length; i++) {
+	  repoSelectElements[i].addEventListener('change', function(e) {
+		 const selected = this.options[this.selectedIndex];
+		 
+		 if (selected.dataset.url) {
+			window.open(selected.dataset.url); 
+			this.blur();
+		 }
+	  });
+	}
+ });
 const cookieBox = document.querySelector(".wrapper");
 const buttons = document.querySelectorAll(".butt");
 const disc = document.querySelector("#disclaimerModal");

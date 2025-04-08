@@ -5,10 +5,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" sizes="16x16" href="./image/favicon-16x16.png" />
 		<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-32x32.png" />
-		<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-192x192.png" />
+		<!-- <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/apple-touch-icon.png" /> -->
 		<link rel="manifest" href="./image/site.webmanifest" />
 		<title>cards</title>
-		<!-- <base href="./" -->
+		<!-- <base href="./public" /> -->
 
 		<!-- (Open Graph Protocol)https://ogp.me/ -->
 		<!-- <meta property="og:title" content="Page Title" />
@@ -18,9 +19,8 @@
       <meta property="og:url" content="https://example.com/page" />
       <meta name="twitter:card" content="summary_large_image" /> -->
 
-		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv https://embed.twitch.tv https://www.twitch.tv https://www.youtube-nocookie.com https://evilinsult.com" /> -->
+		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://player.twitch.tv; script-src 'self'; https://embed.twitch.tv; https://www.twitch.tv; https://www.youtube-nocookie.com; https://evilinsult.com; https://api.adviceslip.com; style-src 'self'; https://translate.google.com; https://fonts.googleapis.com; https://fonts.gstatic.com;" /> -->
 		<!-- script-src 'self' | 'unsafe-inline' | 'unsafe-eval';default-src 'self' allow scripts only from the same origin -->
-		<!-- <meta http-equiv="Content-Security-Policy" content="style-src 'self' https://translate.google.com; style-src-attr 'self' https://translate.google.com; style-src-elem 'self' https://translate.google.com;" ; /> -->
 
 		<!-- Load the Twitch embed script-->
 		<!-- <script src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
@@ -205,11 +205,11 @@
 					<!-- <hr /> -->
 					<div id="coco">
 						<div class="dboptionswitcher">
-							<select id="selectswitchdb">
+							<select id="selectswitchdb" class="repoSelect" name="form-select" aria-label="Default select example" style="width: 200px; margin: auto">
 								<option value="0">decide on which DB</option>
 								<option value="indexdb">IndexDB</option>
 								<option value="server">Server</option>
-								<option value="supabase">Supabase</option>
+								<option  data-url="https://github.com/HaSan1y/nextjs" value="supabase">Supabase</option>
 							</select>
 						</div>
 						<button type="button" class="btn-primary text-white" onclick="switchDatabase()" style="max-width: 100px; margin: auto">Confirm DB</button>
@@ -315,7 +315,7 @@
 				</div>
 				<label class="ox" for="ox" name="toggle Opacity"></label>
 
-				<input type="checkbox" name="ox" class="ox" />
+				<input type="checkbox" name="ox" class="ox" id="ox"/>
 			</aside>
 
 			<!-- youtube video -->
@@ -382,7 +382,7 @@
 							<a class="text-gray-400 hover:text-white transition-colors btn-social" href="https://ch.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
 						</div>
 					</div>
-					<div class="">
+					<div class="quick">
 						<h5 class="text-white text-lg font-semibold mb-4">Quick Links</h5>
 						<div class="space-y-2">
 							<a class="block hover:text-white transition-colors btn-link" href="#">About Us</a>
@@ -442,7 +442,6 @@
 			</div>
 		</footer>
 		<!-- ^Back to Top -->
-
 		<script>
 			function googleTranslateElementImit() {
 				new google.translate.TranslateElement({ pageLanguage: "en" }, "google_translate_element");

@@ -130,7 +130,7 @@
 @media screen and (prefers-color-scheme: dark) {
    body {
       background: #17181c;
-      color: #e3e4e8;
+      /* color: #e3e4e8; */
    }
 
    .radio-form input:checked+label,

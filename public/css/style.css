@@ -3,16 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-  --clr-body-bg: rgba(97, 97, 97, 0.486);
+  --clr-body-bg: rgba(221, 221, 221, 0.836);
   --clr-card-bg: rgb(150, 150, 150);
-  --clr-text: hsl(0, 0%, 44%);
-  --clr-heading: hsl(0, 0%, 60%);
+  --clr-text: hsl(0, 0%, 27%);
+  --clr-heading: hsl(0, 0%, 52%);
 }
 
 :root:has(#pink:checked) {
   --clr-body-bg: hsl(310, 12%, 30%);
   --clr-card-bg: hsl(305, 97%, 75%);
-  --clr-text: hsl(307, 100%, 79%);
+  --clr-text: hsl(307, 100%, 88%);
   --clr-heading: hsl(298, 98%, 22%);
 }
 
@@ -33,7 +33,7 @@
 :root:has(#dark:checked) {
   --clr-body-bg: hsl(0, 0%, 0%);
   --clr-card-bg: hsl(0, 0%, 39%);
-  --clr-text: hsl(0, 0%, 100%);
+  --clr-text: hsla(0, 0%, 77%, 0.5);
   --clr-heading: hsl(195, 5%, 16%);
 }
 
@@ -45,7 +45,6 @@
   font-display: swap;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: var(--clr-text);
   opacity: 1;
 }
 
@@ -54,7 +53,6 @@ body {
   font-size: 1.25rem;
   overflow: hidden;
   font-family: system-ui, sans-serif;
-  font-display: swap;
   font-size: 0.75rem;
   line-height: 1.5;
   background: var(--clr-body-bg) !important;
@@ -107,7 +105,7 @@ footer {
   border-radius: 8px;
   overflow: hidden;
   transition: right 0.3s ease;
-  /*ive no idea y the 2 btns r connected*/
+  background-color: var(--clr-heading);
 }
 
 .wrapper .buttons {
@@ -131,7 +129,6 @@ footer {
 }
 
 .wrapper .data p {
-  color: #333;
   font-size: 16px;
 }
 
@@ -165,6 +162,15 @@ footer {
 
 .fa {
   padding: 4px;
+}
+
+.space-y-2 a {
+  color: var(--clr-text);
+  text-decoration: none;
+}
+
+.space-y-2 a:hover {
+  text-decoration: underline;
 }
 
 /* terms */
@@ -351,7 +357,7 @@ footer .form-control {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-footer .copyright a {
+a {
   color: var(--clr-text);
 }
 
@@ -359,6 +365,13 @@ footer .footer-menu a {
   margin-right: 15px;
   padding-right: 15px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--clr-text);
+  text-decoration: none;
+}
+
+footer .footer-menu a:hover {
+  text-decoration: underline;
+  opacity: 0.7;
 }
 
 .copyright.row {
@@ -378,6 +391,13 @@ footer .footer-menu a {
   padding: 20px;
   font-size: small;
   border-radius: 4px;
+}
+
+.links:hover {
+  opacity: 1;
+  padding: 20px;
+  font-size: small;
+  text-decoration: underline;
 }
 
 .row {
@@ -587,7 +607,6 @@ nav {
   /* \f107 == v */
   content: "\f107";
   font-family: "Font Awesome 5 Free";
-  font-display: swap;
   font-weight: 900;
   vertical-align: middle;
   margin-left: 5px;
@@ -674,6 +693,22 @@ input {
   line-height: 0 !important;
   margin-inline: 5px;
   max-width: 400px;
+}
+
+input::-moz-placeholder, option::-moz-placeholder {
+  color: #000000;
+  opacity: 0.5;
+  font-size: 12px;
+  font-weight: bolder;
+  text-align: center;
+}
+
+input::placeholder, option::placeholder, selecct {
+  color: #000000;
+  opacity: 0.5;
+  font-size: 12px;
+  font-weight: bolder;
+  text-align: center;
 }
 
 label input {
@@ -864,6 +899,14 @@ svg {
   display: none; /*hide original SELECT element: */
 }
 
+option ::-moz-placeholder {
+  color: #250404;
+}
+
+select, option ::placeholder {
+  color: #250404;
+}
+
 .select-selected {
   background-color: DodgerBlue;
 }
@@ -978,7 +1021,6 @@ button {
 
 fieldset {
   display: grid;
-  grid-template-columns: content;
   align-items: center;
 }
 
@@ -992,7 +1034,7 @@ fieldset {
 }
 
 .col-lg {
-  margin-top: 20px;
+  margin-block: 20px;
 }
 
 .touch {
@@ -1011,7 +1053,6 @@ fieldset {
 
 #zbtns {
   display: flex;
-  filter: drop-shadow(5px 5px 1px 3px rgba(0, 0, 0, 0.5));
 }
 
 .text-white {
@@ -1034,24 +1075,34 @@ fieldset {
   background-image: conic-gradient(from 0deg, #000000 25%, #351bc7 75%);
   -o-border-image: linear-gradient(90deg, rgb(255, 0, 0), rgb(255, 255, 0)) 1 1 1 1;
      border-image: linear-gradient(90deg, rgb(255, 0, 0), rgb(255, 255, 0)) 1 1 1 1;
-  animation: rotateColor 6s linear infinite;
+  animation: rotateColor 5s linear infinite;
 }
 
 @keyframes rotateColor {
   0% {
     background-image: conic-gradient(from 0deg, #000000 25%, #351bc7 75%);
+    -o-border-image: linear-gradient(0deg, rgb(158, 134, 0), rgb(57, 155, 0)) 1 1 1 1;
+       border-image: linear-gradient(0deg, rgb(158, 134, 0), rgb(57, 155, 0)) 1 1 1 1;
   }
   25% {
     background-image: conic-gradient(from 90deg, #000000 25%, #14a52c 75%);
+    -o-border-image: linear-gradient(90deg, rgb(62, 168, 0), rgb(0, 128, 43)) 1 1 1 1;
+       border-image: linear-gradient(90deg, rgb(62, 168, 0), rgb(0, 128, 43)) 1 1 1 1;
   }
   50% {
     background-image: conic-gradient(from 180deg, #000000 25%, #c7821b 75%);
+    -o-border-image: linear-gradient(180deg, rgb(0, 134, 83), rgb(0, 80, 145)) 1 1 1 1;
+       border-image: linear-gradient(180deg, rgb(0, 134, 83), rgb(0, 80, 145)) 1 1 1 1;
   }
   75% {
     background-image: conic-gradient(from 270deg, #000000 25%, #ff0066 75%);
+    -o-border-image: linear-gradient(27deg, rgb(0, 63, 156), rgb(7, 0, 102)) 1 1 1 1;
+       border-image: linear-gradient(27deg, rgb(0, 63, 156), rgb(7, 0, 102)) 1 1 1 1;
   }
   100% {
     background-image: conic-gradient(from 360deg, #000000 25%, #351bc7 75%);
+    -o-border-image: linear-gradient(90deg, rgb(47, 0, 122), rgb(126, 0, 73)) 1 1 1 1;
+       border-image: linear-gradient(90deg, rgb(47, 0, 122), rgb(126, 0, 73)) 1 1 1 1;
   }
 }
 /*///////////////////////////////////////////////////////////////////////////////////*/
