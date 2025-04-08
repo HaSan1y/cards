@@ -93,7 +93,7 @@
 
 .frontSide,
 .frontSide::before {
-   background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(200, 80, 192) 46%, rgb(255, 204, 112) 100%);
+   background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(10, 4, 10) 46%, rgb(255, 204, 112) 100%);
    animation: animatez 5s linear infinite;
    /* too flashy/ramy? */
 }

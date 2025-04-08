@@ -63,10 +63,6 @@ body.hide {
   display: none;
 }
 
-p {
-  margin: 10px 0;
-}
-
 h1,
 h2,
 h3 {
@@ -333,7 +329,7 @@ footer .btn-social:hover,
   padding: 2px 0;
   margin-top: 1px;
   text-align: left;
-  font-size: 15px;
+  font-size: 0.9rem;
   font-weight: normal;
   text-transform: capitalize;
   transition: 0.3s;
@@ -359,6 +355,11 @@ footer .form-control {
 
 a {
   color: var(--clr-text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 footer .footer-menu a {
@@ -385,19 +386,14 @@ footer .footer-menu a:hover {
   outline: 1px dotted;
   opacity: 0.5;
   padding: 20px;
-  padding-inline: 40px;
-  outline: 1px dotted;
-  opacity: 0.5;
-  padding: 20px;
   font-size: small;
   border-radius: 4px;
+  transition: 0.5s;
 }
 
 .links:hover {
-  opacity: 1;
+  padding: 0 20px;
   padding: 20px;
-  font-size: small;
-  text-decoration: underline;
 }
 
 .row {
@@ -454,7 +450,10 @@ footer .footer-menu a:hover {
 .img-fluid {
   max-width: 100%;
   height: auto;
-  outline: 1px dotted rgba(0, 0, 0, 0.3215686275);
+  outline: 1px dotted var(--clr-text);
+  opacity: 0.5;
+  border-radius: 5px;
+  transition: 0.5s;
 }
 
 .end-0 {
@@ -654,7 +653,6 @@ ul {
   outline: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   transition: 0.5s;
-  padding: 1rem;
 }
 
 li {
@@ -677,15 +675,25 @@ li {
   flex-wrap: wrap;
 }
 
-.asdf {
-  max-width: 400px;
+#subscribe {
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 0;
+  position: absolute;
+  right: 0;
+  padding-block: 1px;
+  padding-inline: 5px;
+  transform: translateY(-50%);
+  top: 50%;
 }
 
 .grid-cols-4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
-input {
+input:not(#email) {
   padding-inline: 5px;
   color: black !important;
   accent-color: var(--radio-color);
@@ -695,7 +703,7 @@ input {
   max-width: 400px;
 }
 
-input::-moz-placeholder, option::-moz-placeholder {
+input::-moz-placeholder option::-moz-placeholder {
   color: #000000;
   opacity: 0.5;
   font-size: 12px;
@@ -703,12 +711,30 @@ input::-moz-placeholder, option::-moz-placeholder {
   text-align: center;
 }
 
-input::placeholder, option::placeholder, selecct {
+input::placeholder option::placeholder,
+select {
   color: #000000;
   opacity: 0.5;
   font-size: 12px;
   font-weight: bolder;
   text-align: center;
+}
+
+#email {
+  text-align: left;
+  flex-grow: 1;
+  border: none;
+  padding: 8px;
+  outline: none;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.asdf {
+  display: flex;
+  position: relative;
+  border: 1px solid #ccc; /* Optional */
+  border-radius: 5px;
 }
 
 label input {
@@ -871,6 +897,7 @@ input:checked + .slider:before {
   right: 25px;
   z-index: 10000 !important;
   opacity: 0;
+  pointer-events: none;
 }
 
 aside:has(.ox:checked) > .embedholder {
@@ -896,14 +923,16 @@ svg {
 }
 
 .dboptionswitcher select {
-  display: none; /*hide original SELECT element: */
+  display: none;
+  /*hide original SELECT element: */
 }
 
 option ::-moz-placeholder {
   color: #250404;
 }
 
-select, option ::placeholder {
+select,
+option ::placeholder {
   color: #250404;
 }
 

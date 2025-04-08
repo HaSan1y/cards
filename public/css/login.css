@@ -1,6 +1,6 @@
 body {
    font-family: Arial, sans-serif;
-   background-color: #f0f0f0;
+   background-color: #2523237e;
    margin: 0;
    padding: 0;
    display: flex;
@@ -40,6 +40,7 @@ body {
 
 .card-content {
    padding: 20px;
+   overflow: hidden;
 }
 
 .form-group {
@@ -47,6 +48,8 @@ body {
 }
 
 label {
+   font-size: 16px;
+   font-weight: bold;
    display: block;
    margin-bottom: 5px;
    color: #333;
@@ -55,11 +58,23 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-   width: 100%;
-   padding: 8px;
+   width: 97%;
+   padding: 8px 4px;
    border: 1px solid #ddd;
-   border-radius: 4px;
-   font-size: 14px;
+   border-radius: 2px;
+   font-size: 16px;
+}
+
+.back a {
+   text-decoration: none;
+   color: #007bff;
+   font-size: 15px;
+   padding: 0 10px;
+   margin: auto;
+   align-self: end;
+   display: block;
+   transform: translateY(-5px);
+   float: inline-end;
 }
 
 button {
@@ -72,6 +87,7 @@ button {
    font-size: 16px;
    cursor: pointer;
    transition: background-color 0.3s;
+   font-weight: bolder;
 }
 
 button:hover {
@@ -128,7 +144,7 @@ button:hover {
    height: 16px;
    width: 16px;
    left: 4px;
-   bottom: 4px;
+   bottom: 2px;
    background-color: white;
    transition: 0.4s;
    border-radius: 50%;
