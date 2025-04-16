@@ -15,3 +15,5 @@ config.js
 
 # Local Netlify folder
 .netlify
+
+.vercel
