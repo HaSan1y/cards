@@ -230,10 +230,14 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 	// 		  ? 'http://localhost:8888/api/proxxy'  // Netlify Dev
 	//   : '/api/proxxy';                      // Production
 	// const papiUrl = "http://localhost:3000/pproxy";
-	const apiUrl = "/api/vercel-proxy?type=joke"; // "http://localhost:8888/api/proxy";
-	const apiiUrl = "/netlify/functions/api/proxxy"; // "/.netlify/functions/api/proxxy";
+
 	// const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 	// const apiUrl = "https://api.adviceslip.com/advice";
+
+	// "http://localhost:8888/api/proxy";
+	// "/.netlify/functions/api/proxxy";
+	const apiUrl = "/api/vercel-proxy?type=joke";
+	const apiiUrl = "/.netlify/functions/net-proxy?path=proxxy";
 
 	fetch(apiUrl)
 		.then((response) => response.json())

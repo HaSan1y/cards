@@ -9,7 +9,8 @@ const getData = require("./shared-proxy.js");
 
 exports.handler = async (event) => {
 	console.log("Netlify function called!");
-	const path = event.path.replace("/api/", "");
+	const path = event.queryStringParameters && event.queryStringParameters.path;
+	// const path = event.path.replace("/api/", "");
 
 	// const endpoint = { proxy: "https://www.yomama-jokes.com/api/v1/jokes/random/" };
 	// const endpoin = { proxxy: "https://evilinsult.com/generate_insult.php?lang=en&type=json" };
@@ -81,3 +82,4 @@ exports.handler = async (event) => {
 };
 
 // app.listen(3000, () => console.log("Proxy server running on port 3000"));
+// "Think what you will, so make in your pants, hang it round your neck, then make a jelly of it and eat it like the vulgar sows and asses you are!"
