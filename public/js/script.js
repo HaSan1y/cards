@@ -3,20 +3,20 @@
 // dotenv.config();
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-document.addEventListener('DOMContentLoaded', () => {
-	const repoSelectElements = document.getElementsByClassName('repoSelect');
-	
+document.addEventListener("DOMContentLoaded", () => {
+	const repoSelectElements = document.getElementsByClassName("repoSelect");
+
 	for (let i = 0; i < repoSelectElements.length; i++) {
-	  repoSelectElements[i].addEventListener('change', function(e) {
-		 const selected = this.options[this.selectedIndex];
-		 
-		 if (selected.dataset.url) {
-			window.open(selected.dataset.url); 
-			this.blur();
-		 }
-	  });
+		repoSelectElements[i].addEventListener("change", function (e) {
+			const selected = this.options[this.selectedIndex];
+
+			if (selected.dataset.url) {
+				window.open(selected.dataset.url);
+				this.blur();
+			}
+		});
 	}
- });
+});
 const cookieBox = document.querySelector(".wrapper");
 const buttons = document.querySelectorAll(".butt");
 const disc = document.querySelector("#disclaimerModal");
@@ -144,9 +144,7 @@ window.switchDatabase = async function switchDatabase() {
 		console.log("Switching to supabase database");
 
 		// const supabase = createClient(window.__ENV__.SUPABASE_URL, window.__ENV__.SUPABASE_ANON_KEY);
-		const supabase = createClient(
-			X
-		);
+		const supabase = createClient(X);
 		const { data, error } = await supabase
 			.from("notes")
 			// .insert({
@@ -220,60 +218,59 @@ window.switchDatabase = async function switchDatabase() {
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
 	}
 };
-window.switchDatabase = switchDatabase;	
+window.switchDatabase = switchDatabase;
 document.querySelector('button[id="buon"]').addEventListener("click", async () => {
-// 	const apiUrl = process.env.NODE_ENV === 'development'
-// 	  ? 'http://localhost:8888/api/proxy'  // Netlify Dev
-//   : '/api/proxy';                      // Production
-//   	const papiUrl = process.env.NODE_ENV === 'development'
-// 		  ? 'http://localhost:8888/api/pproxy'  // Netlify Dev
-//   : '/api/pproxy';                      // Production
-//   	const apiiUrl = process.env.NODE_ENV === 'development'
-// 		  ? 'http://localhost:8888/api/proxxy'  // Netlify Dev
-//   : '/api/proxxy';                      // Production
-// const papiUrl = "http://localhost:3000/pproxy";
-const apiUrl = "api/proxy";
-const apiiUrl  = "http://localhost:8888/api/proxxy";
-// const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-// const apiUrl = "https://api.adviceslip.com/advice";
+	// 	const apiUrl = process.env.NODE_ENV === 'development'
+	// 	  ? 'http://localhost:8888/api/proxy'  // Netlify Dev
+	//   : '/api/proxy';                      // Production
+	//   	const papiUrl = process.env.NODE_ENV === 'development'
+	// 		  ? 'http://localhost:8888/api/pproxy'  // Netlify Dev
+	//   : '/api/pproxy';                      // Production
+	//   	const apiiUrl = process.env.NODE_ENV === 'development'
+	// 		  ? 'http://localhost:8888/api/proxxy'  // Netlify Dev
+	//   : '/api/proxxy';                      // Production
+	// const papiUrl = "http://localhost:3000/pproxy";
+	const apiUrl = "/api/vercel-proxy?type=joke"; // "http://localhost:8888/api/proxy";
+	const apiiUrl = "/netlify/functions/api/proxxy"; // "/.netlify/functions/api/proxxy";
+	// const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+	// const apiUrl = "https://api.adviceslip.com/advice";
 
-fetch(apiUrl)
-.then(response => response.json())
-  .then(data => {
-	//   console.log(data);
-    document.getElementById("adviceid").innerHTML = data.joke || "No joke found";
+	fetch(apiUrl)
+		.then((response) => response.json())
+		.then((data) => {
+			//   console.log(data);
+			document.getElementById("adviceid").innerHTML = data.joke || "No joke found";
+		})
+		.catch((error) => console.error("Error:", error));
+
+	fetch("https://icanhazdadjoke.com/", {
+		headers: { Accept: "application/json" },
 	})
-	.catch(error => console.error("Error:", error));
+		.then((response) => response.json())
+		.then((data) => (document.getElementById("advice").innerHTML = `${data.joke}`))
+		.catch((error) => console.error("Error:", error));
 
-fetch("https://icanhazdadjoke.com/", {
-	headers: { Accept: "application/json" },
-})
-.then(response => response.json())
-.then(data => document.getElementById("advice").innerHTML = `${data.joke}`)
-.catch(error => console.error("Error:", error));
+	fetch(apiiUrl)
+		.then((response) => response.json())
+		.then((data) => {
+			//  console.log(data);
+			document.getElementById("insult").innerHTML = data.insult || "No joke found";
+		})
+		.catch((error) => console.error("Error:", error));
 
-fetch(apiiUrl)
-.then(response => response.json())
-.then(data => {
-   //  console.log(data);
-    document.getElementById("insult").innerHTML = data.insult || "No joke found";
-  })
-  .catch(error => console.error("Error:", error));
-
-
-// fetch(papiUrl)
-// .then(response => {
-//     console.log(response);
-//     document.getElementById("imgg").setAttribute("src", response.url) || "No img found";
-//   })
-//   .catch(error => console.error("Error:", error));
-  });
+	// fetch(papiUrl)
+	// .then(response => {
+	//     console.log(response);
+	//     document.getElementById("imgg").setAttribute("src", response.url) || "No img found";
+	//   })
+	//   .catch(error => console.error("Error:", error));
+});
 
 // 		document.getElementById("insult").innerHTML = `${dat.insult}`;
 // 		document.getElementById("insultid").innerHTML = `${dat.number}`;
 
 // document.querySelector('button[id="buon"]').addEventListener("click", async () => {
-	// const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10, {
+// const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10, {
 // 	const response = await fetch(proxyUrl +apiUrl, {
 // 		cache: "no-cache",
 // 		method: "GET",
@@ -295,7 +292,6 @@ fetch(apiiUrl)
 // 				}
 //  });
 // const apiUrl = "https://www.yomama-jokes.com/api/v1/jokes/random/";
-
 
 //	document.getElementById("insult").innerHTML = `${dat.insult}`;
 // document.getElementById("insultid").innerHTML = `${dat.number}`;

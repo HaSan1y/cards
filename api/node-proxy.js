@@ -5,33 +5,35 @@ const fetch = require("node-fetch");
 
 const app = express();
 app.use(cors());
+//module.exports = (req, res) => { ... }     w   vercel node
+// module.exports = async function getJoke() {
 
 // api/server.js (for Vercel)   res.json({ message: "Vercel works!" });
 app.get("/proxy", async (req, res) => {
-    const apiUrl = "https://www.yomama-jokes.com/api/v1/jokes/random/";
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-      return  res.json(data);
-    } catch (error) {
-        res.status(500).send("Error fetching data");
-    }
+	const apiUrl = "https://www.yomama-jokes.com/api/v1/jokes/random/";
+	try {
+		const response = await fetch(apiUrl);
+		const data = await response.json();
+		return res.json(data);
+	} catch (error) {
+		res.status(500).send("Error fetching data");
+	}
 });
 
 app.get("/proxxy", async (req, res) => {
-    const apiUrl = "https://evilinsult.com/generate_insult.php?lang=en&type=json";
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-      return  res.json(data);
-    } catch (error) {
-        res.status(500).send("Error fetching data");
-    }
+	const apiUrl = "https://evilinsult.com/generate_insult.php?lang=en&type=json";
+	try {
+		const response = await fetch(apiUrl);
+		const data = await response.json();
+		return res.json(data);
+	} catch (error) {
+		res.status(500).send("Error fetching data");
+	}
 });
 
 // app.get("/pproxy", async (req, res) => {
 //     const apiUrl = "https://picsum.photos/200/300";
-//     // const apiUrl = "https://placekitten.com/200/300"; 
+//     // const apiUrl = "https://placekitten.com/200/300";
 //     try {
 //         const response = await fetch(apiUrl).then((res) => {
 //             if (!res.ok) {
@@ -40,7 +42,7 @@ app.get("/proxxy", async (req, res) => {
 //             return res;
 //         });
 //         if (!response.ok) {
-//             console.log("API Error:", await response.text()); 
+//             console.log("API Error:", await response.text());
 //             throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
 //         }
 //         const nodeStream = Readable.fromWeb(response.body);

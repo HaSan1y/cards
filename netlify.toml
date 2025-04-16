@@ -17,10 +17,11 @@
 [build]
   command = "npm run build"  # or your build command (e.g., `webpack`)
   publish = "public"         # Webpack's output folder
-  functions = "netlify/functions"          # Only if `api/` contains serverless functions
+  functions = "api"
+# functions = "netlify/functions"          # Only if `api/` contains serverless functions;
 
 
-  [[headers]]
+[[headers]]
     for = "/*"
     [headers.values]
       X-Frame-Options = "DENY"
@@ -37,6 +38,6 @@
   for = "/api/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
-    
+
 # netlify/functions/api/hello.js becomes /.netlify/functions/api/hello.;
 # You can redirect URLs to /.netlify/functions/api...:;

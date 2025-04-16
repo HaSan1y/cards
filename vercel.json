@@ -17,12 +17,6 @@
 		},
 		{
 			"src": "/(.*)",
-			"headers": {
-				"Content-Type": "text/javascript"
-			}
-		},
-		{
-			"src": "/(.*)",
 			"dest": "/public/index.html"
 		}
 	]
