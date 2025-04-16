@@ -1,3 +1,7 @@
+// dotenv
+// import dotenv from "./dotenv";
+// dotenv.config();
+
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 document.addEventListener('DOMContentLoaded', () => {
 	const repoSelectElements = document.getElementsByClassName('repoSelect');
@@ -50,31 +54,31 @@ const executeCodes = () => {
 };
 
 //3state slider//////////////////////////////////////////////////////////////////////////////////////////
-function filterme(value) {
-	value = parseInt(value, 10); // Convert to an integer
-	var customToggle = document.getElementById("custom-toggle");
-	var spanElements = document.querySelectorAll("span");
+// function filterme(value) {
+// 	value = parseInt(value, 10); // Convert to an integer
+// 	var customToggle = document.getElementById("custom-toggle");
+// 	var spanElements = document.querySelectorAll("span");
 
-	if (value === 1) {
-		customToggle.classList.remove("tgl-off", "tgl-def");
-		customToggle.classList.add("tgl-on");
-		spanElements.forEach(function (span) {
-			span.textContent = "Enabled";
-		});
-	} else if (value === 2) {
-		customToggle.classList.remove("tgl-on", "tgl-off");
-		customToggle.classList.add("tgl-def");
-		spanElements.forEach(function (span) {
-			span.textContent = "Undetermined";
-		});
-	} else if (value === 3) {
-		customToggle.classList.remove("tgl-def", "tgl-on");
-		customToggle.classList.add("tgl-off");
-		spanElements.forEach(function (span) {
-			span.textContent = "Disabled";
-		});
-	}
-}
+// 	if (value === 1) {
+// 		customToggle.classList.remove("tgl-off", "tgl-def");
+// 		customToggle.classList.add("tgl-on");
+// 		spanElements.forEach(function (span) {
+// 			span.textContent = "Enabled";
+// 		});
+// 	} else if (value === 2) {
+// 		customToggle.classList.remove("tgl-on", "tgl-off");
+// 		customToggle.classList.add("tgl-def");
+// 		spanElements.forEach(function (span) {
+// 			span.textContent = "Undetermined";
+// 		});
+// 	} else if (value === 3) {
+// 		customToggle.classList.remove("tgl-def", "tgl-on");
+// 		customToggle.classList.add("tgl-off");
+// 		spanElements.forEach(function (span) {
+// 			span.textContent = "Disabled";
+// 		});
+// 	}
+// }
 
 // theme switcher//////////////////////////////////////////////////////////////////////////////////////////
 const colorThemes = document.querySelectorAll('[name="theme"]');
@@ -218,18 +222,18 @@ window.switchDatabase = async function switchDatabase() {
 };
 window.switchDatabase = switchDatabase;	
 document.querySelector('button[id="buon"]').addEventListener("click", async () => {
-	const apiUrl = process.env.NODE_ENV === 'development'
-	  ? 'http://localhost:8888/api/proxy'  // Netlify Dev
-  : '/api/proxy';                      // Production
-  	const papiUrl = process.env.NODE_ENV === 'development'
-		  ? 'http://localhost:8888/api/pproxy'  // Netlify Dev
-  : '/api/pproxy';                      // Production
-  	const apiiUrl = process.env.NODE_ENV === 'development'
-		  ? 'http://localhost:8888/api/proxxy'  // Netlify Dev
-  : '/api/proxxy';                      // Production
+// 	const apiUrl = process.env.NODE_ENV === 'development'
+// 	  ? 'http://localhost:8888/api/proxy'  // Netlify Dev
+//   : '/api/proxy';                      // Production
+//   	const papiUrl = process.env.NODE_ENV === 'development'
+// 		  ? 'http://localhost:8888/api/pproxy'  // Netlify Dev
+//   : '/api/pproxy';                      // Production
+//   	const apiiUrl = process.env.NODE_ENV === 'development'
+// 		  ? 'http://localhost:8888/api/proxxy'  // Netlify Dev
+//   : '/api/proxxy';                      // Production
 // const papiUrl = "http://localhost:3000/pproxy";
-// const apiUrl = "http://localhost:3000/proxy";
-// const apiiUrl  = "http://localhost:3000/proxxy";
+const apiUrl = "api/proxy";
+const apiiUrl  = "http://localhost:8888/api/proxxy";
 // const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 // const apiUrl = "https://api.adviceslip.com/advice";
 
@@ -257,12 +261,12 @@ fetch(apiiUrl)
   .catch(error => console.error("Error:", error));
 
 
-fetch(papiUrl)
-.then(response => {
-    console.log(response);
-    document.getElementById("imgg").setAttribute("src", response.url) || "No img found";
-  })
-  .catch(error => console.error("Error:", error));
+// fetch(papiUrl)
+// .then(response => {
+//     console.log(response);
+//     document.getElementById("imgg").setAttribute("src", response.url) || "No img found";
+//   })
+//   .catch(error => console.error("Error:", error));
   });
 
 // 		document.getElementById("insult").innerHTML = `${dat.insult}`;
@@ -297,7 +301,7 @@ fetch(papiUrl)
 // document.getElementById("insultid").innerHTML = `${dat.number}`;
 // document.querySelector('button[id="ins"]').addEventListener("click", async () => {
 
-// insult api doesnt include cors header in their server, so had to use cors-anywhere for dev testing, unless make own server including response with cors header this wont work
+// insult api doesnt include cors header in their server, cors-anywhere for dev testing., unless u make own server including response with cors header this wont work
 // const api_Url = "https://cors-anywhere.herokuapp.com/https://evilinsult.com/generate_insult.php?lang=en&type=json";
 
 // twitch

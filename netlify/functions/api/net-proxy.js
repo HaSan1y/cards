@@ -1,35 +1,40 @@
-const express = require("express");
-const cors = require("cors");
+// const express = require("express");
+// const cors = require("cors");
 const fetch = require("node-fetch");
 // import { Readable } from 'stream';
 
-const app = express();
-app.use(cors());
+// const app = express();
+// app.use(cors());
 
-app.get("/proxy", async (req, res) => {
-    const apiUrl = "https://www.yomama-jokes.com/api/v1/jokes/random/";
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-      return  res.json(data);
-//         return {
-//     statusCode: 200,
-//     body: JSON.stringify({ message: "It works!" })
-//   };
-    } catch (error) {
-        res.status(500).send("Error fetching data");
-    }
-});
-app.get("/proxxy", async (req, res) => {
-    const apiUrl = "https://evilinsult.com/generate_insult.php?lang=en&type=json";
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-      return  res.json(data);
-    } catch (error) {
-        res.status(500).send("Error fetching data");
-    }
-});
+
+exports.handler = async (event) => {
+  const path = event.path.replace('/api/', '');
+
+  const endpoints = {
+    'proxy': 'https://www.yomama-jokes.com/api/v1/jokes/random/',
+    'proxxy': 'https://evilinsult.com/generate_insult.php?lang=en&type=json',
+    'pproxy': 'https://picsum.photos/200/300'
+  };
+
+  try {
+    const response = await fetch(endpoints[path]);
+    const data = await response.json();
+    
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Failed fetching data" })
+    };
+  }
+};
 // app.get("/pproxy", async (req, res) => {
 //     const apiUrl = "https://picsum.photos/200/300";
 //     // const apiUrl = "https://placekitten.com/200/300"; 
@@ -69,4 +74,4 @@ app.get("/proxxy", async (req, res) => {
 //     }
 // });
 
-app.listen(3000, () => console.log("Proxy server running on port 3000"));
+// app.listen(3000, () => console.log("Proxy server running on port 3000"));

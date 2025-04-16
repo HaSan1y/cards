@@ -4,6 +4,13 @@ const app = express();
 const port = 3000;
 
 app.use(cors());
+// app.use(cors({
+//   origin: [
+//     'http://localhost:8888',
+//     'https://your-netlify-site.netlify.app'
+//   ],
+//   credentials: true
+// }));
 app.use(express.json());
 
 // Create API endpoints
