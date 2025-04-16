@@ -8,6 +8,7 @@
 const getData = require("./shared-proxy.js");
 
 exports.handler = async (event) => {
+	console.log("Netlify function called!");
 	const path = event.path.replace("/api/", "");
 
 	// const endpoint = { proxy: "https://www.yomama-jokes.com/api/v1/jokes/random/" };
