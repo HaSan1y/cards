@@ -5,7 +5,7 @@
 
 // const app = express();
 // app.use(cors());
-const getData = require("../api/shared-proxy.js");
+const getData = require("./shared-proxy.js");
 
 exports.handler = async (event) => {
 	const path = event.path.replace("/api/", "");
