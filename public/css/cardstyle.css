@@ -1,0 +1,146 @@
+.removebtn {
+   outline: 2px solid red;
+   opacity: 0.3;
+   border-radius: 5px;
+   cursor: pointer;
+   background-color: #666;
+   padding: 3px;
+   color: white;
+
+   &:hover {
+      opacity: 1;
+      background-color: rgba(255, 0, 0, 0.192);
+      cursor: pointer;
+   }
+}
+
+#card {
+   scale: 0.5;
+   padding: 20px;
+   outline: 1px dotted;
+
+}
+
+#cardHolder {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr));
+   gap: 10px;
+   padding: 40px;
+   outline: 1px dotted;
+   opacity: 0.3;
+   border-radius: 0.5rem;
+}
+
+/* From Uiverse.io by htwarriors108 */
+.myCard {
+   background-color: transparent;
+   width: 190px;
+   height: 254px;
+   perspective: 500000px;
+   position: relative;
+   max-width: 250px;
+   padding: 1rem;
+   background-color: var(--clr-card-bg);
+   border-block-start: 0.4rem solid;
+   border-radius: 0.5rem;
+   box-shadow: 3px 3px 2px 2px var(--clr-heading);
+
+   /* resize: both !important;
+   overflow: auto; */
+}
+
+.title {
+   font-size: 1.5em;
+   font-weight: 900;
+   text-align: center;
+   margin: 0;
+}
+
+.innerCard {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   text-align: center;
+   transition: transform 0.8s;
+   transform-style: preserve-3d;
+   cursor: pointer;
+}
+
+.myCard:hover .innerCard {
+   transform: rotateY(180deg);
+   /* scale: 110%; */
+}
+
+.frontSide,
+.backSide {
+   position: absolute;
+   letter-spacing: 2px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: space-evenly;
+   width: 100%;
+   height: 100%;
+   -webkit-backface-visibility: hidden;
+   backface-visibility: hidden;
+   border: 1px solid rgba(255, 255, 255, 0.8);
+   border-radius: 1rem;
+   color: white;
+   box-shadow: 0 0 0.3em rgba(255, 255, 255, 0.5);
+   font-size: 1rem;
+   font-weight: 700;
+}
+
+.frontSide,
+.frontSide::before {
+   background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(10, 4, 10) 46%, rgb(255, 204, 112) 100%);
+   animation: animatez 5s linear infinite;
+   /* too flashy/ramy? */
+}
+
+.backSide,
+.backSide::before {
+   background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+   backdrop-filter: blur(15px);
+}
+
+.backSide {
+   transform: rotateY(180deg);
+}
+
+.frontSide::before,
+.backSide::before {
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   content: '';
+   width: 110%;
+   height: 110%;
+   position: absolute;
+   z-index: -1;
+   border-radius: 1em;
+   animation: animate 5s linear infinite;
+}
+
+@keyframes animate {
+   0% {
+      opacity: 0.3;
+   }
+
+   80% {
+      opacity: 1;
+   }
+
+   100% {
+      opacity: 0.3;
+
+   }
+
+}
+
+@keyframes animatez {
+   100% {
+      filter: hue-rotate(360deg);
+      /* filter: blur(5px); */
+   }
+}

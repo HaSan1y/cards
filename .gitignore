@@ -1,0 +1,17 @@
+git config core.ignorecase false
+
+node_modules
+*.env
+
+how
+
+public/image/blog1.webp
+public/css/style.scss
+public/css/style.css.map
+
+.vscode
+guide.txt
+config.js
+
+# Local Netlify folder
+.netlify

@@ -1,0 +1,41 @@
+{
+	"name": "crud-cards",
+	"version": "1.0.0",
+	"main": "public/js/script.js",
+	"repository": "https://github.com/HaSan1y/cards.git",
+	"keywords": [],
+	"author": "hy",
+	"license": "ISC",
+	"description": "",
+	"scripts": {
+		"run": "",
+		"serv": "node api/server-crudfs2client.js",
+		"watch": "webpack --watch",
+		"build": "webpack --mode=production",
+		"test": "jest",
+		"build-css": "tailwindcss build public/css/style.css -o public/css/outputs.css",
+		"dev:netlify": "netlify dev",
+		"dev:vercel": "vercel dev"
+	},
+	"engines": {
+		"node": "20.13.1"
+	},
+	"dependencies": {
+		"@simplewebauthn/browser": "^10.0.0",
+		"@simplewebauthn/server": "^10.0.1",
+		"@supabase/supabase-js": "^2.47.15",
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
+		"express": "^5.1.0",
+		"express-fileupload": "^1.5.0",
+		"multer": "^1.4.5-lts.1",
+		"wowjs": "^1.1.3"
+	},
+	"devDependencies": {
+		"@types/cors": "^2.8.17",
+		"tailwindcss": "^3.4.13",
+		"webpack": "^5.95.0",
+		"webpack-cli": "^5.1.4"
+	}
+}
