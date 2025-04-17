@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { USERS, getUserByUsername, getUserByEmail, createUser, updateUserCounter, getUserById } = require("./wds/db.js");
-const dbModule = require("wds/db.js");
+const dbModule = require("./wds/db.js");
 console.log("Imported from db.js:", dbModule);
 const app = express();
 app.use(express.json());
