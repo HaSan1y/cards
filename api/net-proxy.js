@@ -32,7 +32,7 @@ exports.handler = async (event) => {
 		} catch (error) {
 			return {
 				statusCode: 500,
-				body: JSON.stringify({ error: "Failed fetching data" }),
+				body: JSON.stringify({ error: "Failed fetching datax" + error }),
 			};
 		}
 	} else if (path === "proxxy") {
@@ -51,7 +51,7 @@ exports.handler = async (event) => {
 		} catch (error) {
 			return {
 				statusCode: 500,
-				body: JSON.stringify({ error: "Failed fetching data" }),
+				body: JSON.stringify({ error: "Failed fetching dataxx" + error }),
 			};
 		}
 	} else if (path === "pproxy") {
@@ -70,7 +70,7 @@ exports.handler = async (event) => {
 		} catch (error) {
 			return {
 				statusCode: 500,
-				body: JSON.stringify({ error: "Failed fetching data" }),
+				body: JSON.stringify({ error: "Failed fetching dataxxx" + error }),
 			};
 		}
 	} else {

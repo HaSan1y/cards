@@ -243,7 +243,7 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 		.then((response) => response.json())
 		.then((data) => {
 			//   console.log(data);
-			document.getElementById("adviceid").innerHTML = data.joke || "No joke found";
+			document.getElementById("adviceid").innerHTML = data.joke || "No joke found v";
 		})
 		.catch((error) => console.error("Error:", error));
 
@@ -257,8 +257,8 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 	fetch(apiiUrl)
 		.then((response) => response.json())
 		.then((data) => {
-			//  console.log(data);
-			document.getElementById("insult").innerHTML = data.insult || "No joke found";
+			console.log(data);
+			document.getElementById("insult").innerHTML = data.insult || "No joke found n";
 		})
 		.catch((error) => console.error("Error:", error));
 

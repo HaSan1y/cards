@@ -27,7 +27,7 @@ app.get("/proxxy", async (req, res) => {
 		const data = await response.json();
 		return res.json(data);
 	} catch (error) {
-		res.status(500).send("Error fetching data");
+		res.status(500).send("Error fetching datax");
 	}
 });
 

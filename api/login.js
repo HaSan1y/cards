@@ -9,7 +9,8 @@ console.log("Imported from db.js:", dbModule);
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-const CLIENT_URL = "http://localhost:5500"; // not127.0.0.1 invalid | https://db-2-cards.vercel.app
+const CLIENT_URL = "https://db-2-cards.vercel.app"; //| http://localhost:5500";
+// not127.0.0.1 invalid
 const RP_ID = "localhost";
 // const { USERS, createUser } = require("./db.js");
 
