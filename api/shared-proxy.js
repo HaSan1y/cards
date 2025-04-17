@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 
 module.exports = async function getData(type) {
+	console.log(`Incoming ${req.method} to ${req.url}`);
 	try {
 		if (type === "joke") {
 			const response = await fetch("https://www.yomama-jokes.com/api/v1/jokes/random/");
