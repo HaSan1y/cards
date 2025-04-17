@@ -17,7 +17,7 @@
 [build]
   command = "npm run build"  # or your build command (e.g., `webpack`)
   publish = "public"         # Webpack's output folder
-  functions = "api"
+  functions = "public/api"
 # functions = "netlify/functions"          # Only if `api/` contains serverless functions;
 
 

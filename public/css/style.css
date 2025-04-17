@@ -83,8 +83,12 @@ footer {
   margin-inline: auto;
 }
 
+.select-hide {
+  display: none;
+}
+
 .conainer {
-  display: flex;
+  display: flex !important;
   justify-content: center;
   align-items: center;
 }
@@ -280,23 +284,6 @@ fieldset {
 
 .color-picker input[type=radio]#dark {
   --radio-color: #1f0505;
-}
-
-.msg {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  font-weight: bolder;
-  text-align: left;
-  padding: 10px;
-  text-transform: uppercase;
-  color: var(--clr-text);
-}
-
-.msg:hover {
-  display: grid;
 }
 
 /*** Footer ***/
@@ -671,19 +658,6 @@ li {
 }
 
 /* txt form submit */
-#txtbtn {
-  display: flex;
-  margin: auto;
-  justify-content: space-evenly;
-  align-items: center;
-  filter: grayscale(1);
-  padding: 20px;
-  margin: 0;
-  -moz-columns: auto;
-       columns: auto;
-  flex-wrap: wrap;
-}
-
 #subscribe {
   color: white;
   border: none;
@@ -988,10 +962,6 @@ option ::placeholder {
 }
 
 /* Hide the items when the select box is closed: */
-.select-hide {
-  display: none;
-}
-
 .select-items div:hover,
 .same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
@@ -1060,11 +1030,6 @@ button {
 fieldset {
   display: grid;
   align-items: center;
-}
-
-#dbbtn {
-  padding: 20px;
-  display: grid;
 }
 
 .fab {

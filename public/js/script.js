@@ -1,8 +1,10 @@
 // dotenv
 // import dotenv from "./dotenv";
 // dotenv.config();
+// import "htmx.org";
+// import "/initiate-htmx.js";
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+// import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 document.addEventListener("DOMContentLoaded", () => {
 	const repoSelectElements = document.getElementsByClassName("repoSelect");
 
@@ -140,23 +142,23 @@ window.switchDatabase = async function switchDatabase() {
 	console.log("Switching database");
 	var select = document.getElementById("selectswitchdb");
 	var selectedValue = select.value;
-	if (selectedValue === "supabase") {
+	if (selectedValue === "htmx") {
 		console.log("Switching to supabase database");
 
 		// const supabase = createClient(window.__ENV__.SUPABASE_URL, window.__ENV__.SUPABASE_ANON_KEY);
-		const supabase = createClient(X);
-		const { data, error } = await supabase
-			.from("notes")
-			// .insert({
-			// 	title: "note.title",
-			// });
-			.select("*")
-			.order("id", { ascending: false })
-			.limit(2);
-		console.log(data);
-		if (error) {
-			throw error;
-		}
+		// const supabase = createClient(X);
+		// const { data, error } = await supabase
+		// 	.from("notes")
+		// 	// .insert({
+		// 	// 	title: "note.title",
+		// 	// });
+		// 	.select("*")
+		// 	.order("id", { ascending: false })
+		// 	.limit(2);
+		// console.log(data);
+		// if (error) {
+		// 	throw error;
+		// }
 	}
 	const isServer = selectedValue === "server";
 	const isIndexDB = selectedValue === "indexdb";
