@@ -1,5 +1,4 @@
 const getData = require("./shared-proxy.js");
-
 export default async function handler(req, res) {
 	console.log("Vercel function called!");
 	// Example: /api/vercel-proxy?type=joke or /api/vercel-proxy?type=insult or ?type=image
