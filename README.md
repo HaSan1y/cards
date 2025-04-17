@@ -2,3 +2,5 @@
 - doing crud on vanillajs(with exposing api) would be actually not secure and dumb... for you it means if u want to c my crud capabilities, check out different projects that i have. which do provide the utility- backend.
 - for example:"nextjs react project nextjs-h451.vercel.app, django project https://github.com/HaSan1y/spotify-python_django-rapidapi, c# project(maui+asp.net mvc)(currently offline), php project https://github.com/HaSan1y/some-php, react native project (currently offline),
 
+- https://elegant-bubblegum-a62895.netlify.app/              //serving server works 
+- https://db-2-cards.vercel.app/                          //after hours of trial and fail with the help of documentation and ai i couldnt set up a simple server 
