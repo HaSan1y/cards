@@ -1,6 +1,7 @@
 const getData = require("./shared-proxy.js");
-export default async function handler(req, res) {
-	console.log("Vercel function called!");
+// export default async function handler(req, res) {
+module.exports = async (req, res) => {
+	console.log("Vercel function called! +type" + req.query.type);
 	// Example: /api/vercel-proxy?type=joke or /api/vercel-proxy?type=insult or ?type=image
 	const { type } = req.query;
 
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
 		console.error("Error fetching data:", error);
 		res.status(500).json({ error: "Failed fetching data" });
 	}
-}
+};
 // /api/vercel-proxy?type=joke
 // /api/vercel-proxy?type=insult
 // /api/vercel-proxy?type=image
