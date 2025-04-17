@@ -257,7 +257,7 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 	fetch(apiiUrl)
 		.then((response) => response.json())
 		.then((data) => {
-			console.log(data);
+			//	console.log(data);
 			document.getElementById("insult").innerHTML = data.insult || "No joke found n";
 		})
 		.catch((error) => console.error("Error:", error));

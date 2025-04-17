@@ -8,7 +8,7 @@
 const getData = require("./shared-proxy.js");
 
 exports.handler = async (event) => {
-	console.log("Netlify function called!");
+	//console.log("Netlify function called!");
 	const path = event.queryStringParameters && event.queryStringParameters.path;
 	// const path = event.path.replace("/api/", "");
 
