@@ -2,11 +2,11 @@ const path = require("path");
 
 module.exports = {
 	mode: "production",
-	entry: { main: path.resolve(__dirname, "./public/clientserv2webpack.js") },
+	entry: { main: path.resolve(__dirname, "./public/login4Webpack.js") },
 	output: {
 		path: path.resolve(__dirname, "public"),
 		filename: "[name].js",
-    publicPath: '/' 
+		publicPath: "/",
 	},
 	resolve: {
 		modules: ["node_modules"],

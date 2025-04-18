@@ -14,7 +14,3 @@ g
 arson
 h 
 indulging
-x
-xx
-y
-yy

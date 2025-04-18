@@ -866,7 +866,7 @@ input:checked + .slider:before {
   color: #1f0505;
 }
 
-.ox {
+.twitch-toggle {
   position: fixed;
   bottom: 50px;
   right: 25px;
@@ -878,13 +878,15 @@ input:checked + .slider:before {
   position: fixed;
   bottom: 50px;
   right: 25px;
-  z-index: 10000 !important;
+  z-index: 9999 !important;
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.3s;
 }
 
-aside:has(.ox:checked) > .embedholder {
-  opacity: 0.5;
+.twitch-toggle:checked ~ .embedholder {
+  pointer-events: all;
+  opacity: 1;
 }
 
 svg {

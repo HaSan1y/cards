@@ -30,9 +30,9 @@
 	<!-- script-src 'self' | 'unsafe-inline' | 'unsafe-eval';default-src 'self' allow scripts only from the same origin -->
 
 	<!-- Load the Twitch embed script-->
-	<!-- <script src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
-	<!-- Create a Twitch.Player object. This will render within the placeholder div, actually i should think mobile first, enable with a checkmark -->
-	<!-- <script src="./js/twitch.js"></script> -->
+	<script src="https://player.twitch.tv/js/embed/v1.js" defer></script>
+	<!-- Create a Twitch.Player object. This will render within the placeholder div, actually i should think mobile first, enable with a checkbox -->
+	<script src="./js/twitch.js"></script>
 
 	<!-- <link rel="preload" href="./js/script.js" as="script" /> as image, style, font, script -->
 	<!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.15/dist/umd/supabase.min.js" defer></script> -->
@@ -306,6 +306,8 @@
 					href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a></p>
 		</div>
 		<aside>
+			<label class="ox" for="ox" name="toggle Opacity">toggle twitch</label>
+			<input type="checkbox" name="ox" class="twitch-toggle ox" id="twitch-toggle" />
 			<div class="embedholder">
 				<form class="radio-form" id="f">
 					<input value="a" name="hopping" type="radio" id="a" />
@@ -328,7 +330,7 @@
 				<input type="text" list="streamers" placeholder="" id="buttonx" />
 				<div class="tw" id="tw">
 					<div class="tw__inner">
-						<label for="checkbox">close Twitch</label>
+						<label for="checkbox">delete Twitch embed</label>
 						<input type="checkbox" id="checkbox" name="checkbox" />
 					</div>
 					<!-- Add a placeholder for the Twitch embed -->
@@ -346,9 +348,7 @@
 				<!-- https://www.twitch.tv/embed/thinkerbella/chat?parent=127.0.0.1:5500 -->
 				<!-- <iframe src="https://player.twitch.tv/?channel=thinkerbella&parent=127.0.0.1:5500" frameborder="0" scrolling="no" height="300" width="620"></iframe> -->
 			</div>
-			<label class="ox" for="ox" name="toggle Opacity"></label>
 
-			<input type="checkbox" name="ox" class="ox" id="ox" />
 		</aside>
 
 		<!-- youtube video -->

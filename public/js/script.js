@@ -307,20 +307,23 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 // const api_Url = "https://cors-anywhere.herokuapp.com/https://evilinsult.com/generate_insult.php?lang=en&type=json";
 
 // twitch
+const oldEmbed = document.getElementById("twitch-embed");
+const twContainer = document.getElementById("tw");
+
 checkbox.addEventListener("change", () => {
-	if (checkbox.checked && document.getElementById("twitch-embed")) {
-		const twitchEmbed = document.getElementById("twitch-embed").remove();
-		twitchEmbed.remove();
-		// 		const script = document.querySelector('script[src^="https://embed.twitch.tv"]');
-		// 		if (script) {
-		// 			script.src = script.src.replace(/\/embed\.js$/, "/embed.js");
-		// 		}
-	} else {
+	const oldEmbed = document.getElementById("twitch-embed");
+	if (oldEmbed) oldEmbed.remove();
+
+	// 		const script = document.querySelector('script[src^="https://embed.twitch.tv"]');
+	// 		if (script) {
+	// 			script.src = script.src.replace(/\/embed\.js$/, "/embed.js");
+	// 		}
+	if (checkbox.checked) {
 		const twitchEmbed = document.createElement("div");
 		twitchEmbed.id = "twitch-embed";
-		document.getElementById("tw").appendChild(twitchEmbed);
-		// todo: after re-embeding, switching twitch channels via input-btn, will no longer work.
-		var embed = new Twitch.Embed("twitch-embed", {
+		twContainer.appendChild(twitchEmbed);
+
+		new Twitch.Embed("twitch-embed", {
 			width: 480,
 			height: 260,
 			theme: "dark",
@@ -328,8 +331,8 @@ checkbox.addEventListener("change", () => {
 			layout: "video",
 			autoplay: true,
 			muted: false,
-			// parent: ["yourdomain.com"],
+			parent: ["localhost", "db-2-cards.vercel.app", "elegant-bubblegum-a62895.netlify.app"],
+			quality: "low", // "source" or "low" quality: "180p",
 		});
 	}
 });
-//

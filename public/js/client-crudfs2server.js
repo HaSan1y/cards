@@ -257,39 +257,4 @@ async function postsensolData(event) {
 	xhrSen.onerror = function () {
 		console.error(`Error writing to ${filePath}:`, xhrSen.status);
 	};
-
-	// Fetch sol.txt
-	// const xhrSol = new XMLHttpRequest();
-	// xhrSol.open("POST", `http://127.0.0.1:3000/${solFilePath}`, true);
-	// xhrSol.setRequestHeader("Content-Type", "application/json");
-	// xhrSol.send(JSON.stringify(solution));
-
-	// xhrSol.onload = function () {
-	// 	console.log(`Solution data written to ${solFilePath} successfully`);
-	// };
-
-	// xhrSol.onerror = function () {
-	// 	console.error(`Error writing to ${solFilePath}:`, xhrSol.status);
-	// };
-	// try {
-	// 	const response = await fetch(`http://127.0.0.1:3000/${filePath}`, {
-	// 		method: "POST",
-	// 		headers: { "Content-Type": "application/json" },
-	// 		// body: JSON.stringify(sentences),
-	// 		body: JSON.stringify([t1, t2]), // Send an array of strings
-	// 	});
-	// 	const data = await response.text();
-	// 	console.log(data);
-
-	// 	const solResponse = await fetch(`http://127.0.0.1:3000/${solFilePath}`, {
-	// 		method: "POST",
-	// 		headers: { "Content-Type": "application/json" },
-	// 		body: JSON.stringify(solution),
-	// 		// { solution: solution }
-	// 	});
-	// 	const solData = await solResponse.text();
-	// 	console.log(solData);
-	// } catch (error) {
-	// 	console.error("Error writing to files:", error);
-	// }
 }
