@@ -11,7 +11,8 @@ app.use(express.json());
 app.use(cookieParser());
 const CLIENT_URL = "https://db-2-cards.vercel.app"; //| http://localhost:5500";
 // not127.0.0.1 invalid
-const RP_ID = "localhost";
+// const RP_ID = "localhost";
+const RP_ID = "https://db-2-cards.vercel.app/api/login";
 // const { USERS, createUser } = require("./db.js");
 
 // After your app.listen() call
@@ -37,7 +38,7 @@ app.use(cors({ origin: CLIENT_URL, credentials: true }));
 // 	next();
 // });
 
-app.get("/init-register", async (req, res) => {
+app.get(`/init-register`, async (req, res) => {
 	const email = req.query.email;
 	if (!email) {
 		return res.status(400).json({ error: "Email is required" });
@@ -49,7 +50,7 @@ app.get("/init-register", async (req, res) => {
 
 	const options = await generateRegistrationOptions({
 		rpID: RP_ID,
-		rpName: "Web Dev Simplified",
+		rpName: "h451",
 		userName: email,
 	});
 	console.log("Registration options:", options);
@@ -67,7 +68,7 @@ app.get("/init-register", async (req, res) => {
 	res.json(options);
 });
 
-app.post("/verify-register", async (req, res) => {
+app.post(`/verify-register`, async (req, res) => {
 	const regInfo = JSON.parse(req.cookies.regInfo);
 
 	if (!regInfo) {
@@ -97,7 +98,7 @@ app.post("/verify-register", async (req, res) => {
 	}
 });
 
-app.get("/init-auth", async (req, res) => {
+app.get(`/init-auth`, async (req, res) => {
 	const username = req.query.username;
 	console.log("Received auth request for username:", username);
 	if (!username) {
@@ -133,7 +134,7 @@ app.get("/init-auth", async (req, res) => {
 	res.json(options);
 });
 
-app.post("/verify-auth", async (req, res) => {
+app.post(`/verify-auth`, async (req, res) => {
 	const authInfo = JSON.parse(req.cookies.authInfo);
 
 	if (!authInfo) {

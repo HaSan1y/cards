@@ -235,7 +235,11 @@ async function postsensolData(event) {
 	// const solFilePath = counter.switchedFiles === 0 ? "sol.txt" : counter.switchedFiles === 1 ? `sol${counter.switchedFiles}.txt` : "sol.txt";
 
 	const xhrSen = new XMLHttpRequest();
-	xhrSen.open("POST", `http://127.0.0.1:3000/${filePath}`, true); //https://db-2-cards.vercel.app/
+	// cors issue:
+	// to make it work locally-> make the request from url http://localhost:5500/public/
+	// also run the server (with right click, run) server-crudfs2client.js   ->:3000
+	// http://127.0.0.1:* is ur running server not ur url, also del cookies i guess
+	xhrSen.open("POST", `http://127.0.0.1:3000/${filePath}`, true); // unwork on vercel do db there
 	xhrSen.setRequestHeader("Content-Type", "application/json");
 	const data = {
 		t1: t1,

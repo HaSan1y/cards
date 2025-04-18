@@ -7,66 +7,84 @@ const ports = process.env.PORT || 3000;
 app.use(
 	cors({
 		origin: "*", // origin: "http://127.0.0.1:5500", // allow requests from this origin
-		methods: ["GET", "POST", "PUT", "DELETE"], // allow these methods
-		allowedHeaders: ["Content-Type", "Authorization"], // allow these headers
+		//,	methods: ["GET", "POST", "PUT", "DELETE"], // allow these methods
+		//	allowedHeaders: ["Content-Type", "Authorization"], // allow these headers
 		// maxAge: 3600, // cache CORS configuration for 1 hour
+
+		// cors issue:
+		// to make it work-> make the request from url http://localhost:5500/public/
+		// and run the server with right click on the file server-crudfs2client.js
 	}),
 );
 app.use(express.json());
 app.post("/:fileType", (req, res) => {
-	const fileType = req.params.fileType.split(".")[0];
-	const { switchedFiles, t1, t2, solution } = req.body;
-	// const [t1, t2, solution, switchedFiles] = req.body;
-	// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
-	// const switchedFiles = req.query.switchedFiles; 3000/${filePath}?switchedFiles=${counter.switchedFiles}`, true);
+	try {
+		// res.header("Access-Control-Allow-Origin", "*");
+		// res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+		// res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+		// res.header("Access-Control-Allow-Credentials", "true");
+		// res.header("Access-Control-Max-Age", "3600"); // cache CORS configuration for 1 hour
+		const fileType = req.params.fileType.split(".")[0];
+		const { switchedFiles, t1, t2, solution } = req.body;
+		// const [t1, t2, solution, switchedFiles] = req.body;
+		// const filePath = `${fileType}${switchedFiles > 0 ? switchedFiles : ""}.txt`;
+		// const switchedFiles = req.query.switchedFiles; 3000/${filePath}?switchedFiles=${counter.switchedFiles}`, true);
 
-	if (![`sen${switchedFiles > 0 ? switchedFiles : ""}`, `sol${switchedFiles > 0 ? switchedFiles : ""}`].includes(fileType)) {
-		// if (!["sen", "sol", `sen$`, "sol1"].includes(fileType)) {
-		return res.status(400).send(`Invalid file type: ${fileType}`);
-	}
-	if (typeof req.body !== "object" || Object.keys(req.body).length === 0) {
-		// if (!Array.isArray(req.body) || req.body.length === 0) {
-		return res.status(400).send("Invalid input: Expected non-empty object");
-	}
-	let sentenceContent = "";
-	let solutionContent = "";
-	switch (fileType) {
-		case `sen${switchedFiles > 0 ? switchedFiles : ""}`:
-			// case "sen*":
-			sentenceContent = `${t1}\n${t2}\n`;
-			solutionContent = `${solution}\n`;
-			break;
-		case `sol${switchedFiles > 0 ? switchedFiles : ""}`:
-			// case "sol*":
-			solutionContent = `${solution}\n`;
-			break;
-	}
-	const sentenceFilePath = `./public/${fileType}.txt`;
-	const solutionFilePath = `./public/sol${fileType === "sen1" ? "1" : ""}.txt`;
+		if (![`sen${switchedFiles > 0 ? switchedFiles : ""}`, `sol${switchedFiles > 0 ? switchedFiles : ""}`].includes(fileType)) {
+			// if (!["sen", "sol", `sen$`, "sol1"].includes(fileType)) {
+			return res.status(400).send(`Invalid file type: ${fileType}`);
+		}
+		if (typeof req.body !== "object" || Object.keys(req.body).length === 0) {
+			// if (!Array.isArray(req.body) || req.body.length === 0) {
+			return res.status(400).send("Invalid input: Expected non-empty object");
+		}
+		let sentenceContent = "";
+		let solutionContent = "";
+		switch (fileType) {
+			case `sen${switchedFiles > 0 ? switchedFiles : ""}`:
+				// case "sen*":
+				sentenceContent = `${t1}\n${t2}\n`;
+				solutionContent = `${solution}\n`;
+				break;
+			case `sol${switchedFiles > 0 ? switchedFiles : ""}`:
+				// case "sol*":
+				solutionContent = `${solution}\n`;
+				break;
+		}
+		const sentenceFilePath = `./public/${fileType}.txt`;
+		const solutionFilePath = `./public/sol${fileType === "sen1" ? "1" : ""}.txt`;
 
-	const writeToFile = (filePath, content) => {
-		return new Promise((resolve, reject) => {
-			fs.appendFile(filePath, content, "utf8", (error) => {
-				if (error) {
-					console.error(`Error writing to ${filePath}:`, error);
-					reject(error);
-				} else {
-					console.log(`Data written to ${filePath} successfully`);
-					resolve();
-				}
+		const writeToFile = (filePath, content) => {
+			return new Promise((resolve, reject) => {
+				fs.appendFile(filePath, content, "utf8", (error) => {
+					if (error) {
+						console.error(`Error writing to ${filePath}:`, error);
+						reject(error);
+					} else {
+						console.log(`Data written to ${filePath} successfully`);
+						resolve();
+					}
+				});
 			});
-		});
-	};
+		};
 
-	// Write to files
-	Promise.all([sentenceContent && writeToFile(sentenceFilePath, sentenceContent), solutionContent && writeToFile(solutionFilePath, solutionContent)])
-		.then(() => {
-			res.send(`Data written to files successfully`);
-		})
-		.catch((error) => {
-			res.status(500).send(`Error writing to files: ${error}`);
-		});
-	// fs.writeFile
+		// Write to files
+		// Promise.all([sentenceContent && writeToFile(sentenceFilePath, sentenceContent), solutionContent && writeToFile(solutionFilePath, solutionContent)])
+		const promises = [];
+		if (sentenceContent) promises.push(writeToFile(sentenceFilePath, sentenceContent));
+		if (solutionContent) promises.push(writeToFile(solutionFilePath, solutionContent));
+		Promise.all(promises)
+			.then(() => {
+				res.send(`Data written to files successfully`);
+			})
+			.catch((error) => {
+				res.status(500).send(`Error writing to files: ${error}`);
+			});
+		// fs.writeFile
+	} catch (error) {
+		console.error("Error processing request:", error);
+		res.status(500).send("Internal server errorr");
+	}
 });
 // app.get('/sol.txt', (req, res) => {
 // 	res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
