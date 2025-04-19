@@ -889,6 +889,22 @@ input:checked + .slider:before {
   opacity: 1;
 }
 
+.twitch-toggle::after {
+  content: "Twitch";
+  position: absolute;
+  bottom: -10px;
+  right: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s ease-in-out;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #7d878d;
+}
+
+.twitch-toggle:hover::after {
+  opacity: 0.2;
+}
+
 svg {
   height: 24px;
   width: 24px;
@@ -1060,20 +1076,20 @@ fieldset {
   display: flex;
 }
 
-.text-white {
-  color: white !important;
-}
-
 .tw__inner {
   position: absolute;
-  top: 0;
+  top: -35px;
   right: 0;
 }
 
-#tw {
+#embedholders {
   position: relative;
   display: grid;
   color: white;
+}
+
+.text-white {
+  color: white !important;
 }
 
 #buon {

@@ -305,34 +305,3 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 
 // insult api doesnt include cors header in their server, cors-anywhere for dev testing., unless u make own server including response with cors header this wont work
 // const api_Url = "https://cors-anywhere.herokuapp.com/https://evilinsult.com/generate_insult.php?lang=en&type=json";
-
-// twitch
-const oldEmbed = document.getElementById("twitch-embed");
-const twContainer = document.getElementById("tw");
-
-checkbox.addEventListener("change", () => {
-	const oldEmbed = document.getElementById("twitch-embed");
-	if (oldEmbed) oldEmbed.remove();
-
-	// 		const script = document.querySelector('script[src^="https://embed.twitch.tv"]');
-	// 		if (script) {
-	// 			script.src = script.src.replace(/\/embed\.js$/, "/embed.js");
-	// 		}
-	if (checkbox.checked) {
-		const twitchEmbed = document.createElement("div");
-		twitchEmbed.id = "twitch-embed";
-		twContainer.appendChild(twitchEmbed);
-
-		new Twitch.Embed("twitch-embed", {
-			width: 480,
-			height: 260,
-			theme: "dark",
-			channel: "trumporkamala2024",
-			layout: "video",
-			autoplay: true,
-			muted: false,
-			parent: ["localhost", "db-2-cards.vercel.app", "elegant-bubblegum-a62895.netlify.app"],
-			quality: "low", // "source" or "low" quality: "180p",
-		});
-	}
-});

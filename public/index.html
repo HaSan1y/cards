@@ -29,18 +29,18 @@
 		style-src-attr 'self' 'nonce-abc123' https://translate-pa.googleapis.com" /> -->
 	<!-- script-src 'self' | 'unsafe-inline' | 'unsafe-eval';default-src 'self' allow scripts only from the same origin -->
 
-	<!-- Load the Twitch embed script-->
-	<script src="https://player.twitch.tv/js/embed/v1.js" defer></script>
-	<!-- Create a Twitch.Player object. This will render within the placeholder div, actually i should think mobile first, enable with a checkbox -->
-	<script src="./js/twitch.js"></script>
-
 	<!-- <link rel="preload" href="./js/script.js" as="script" /> as image, style, font, script -->
-	<!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.15/dist/umd/supabase.min.js" defer></script> -->
+
 	<script src="./js/client-crudfs2server.js" nonce="abc123" defer></script>
 	<script src="./js/with-indexdb.js" nonce="abc123" defer></script>
 	<script type="module" src="./js/script.js" nonce="abc123"></script>
 	<script type="text/javascript" src="./js/select.js" nonce="abc123" defer></script>
 	<script src="https://unpkg.com/htmx.org" nonce="abc123" defer></script>
+	<!-- Load the Twitch embed script-->
+	<!-- <script src="https://player.twitch.tv/js/embed/v1.js" defer></script> -->
+	<!-- Create a Twitch.Player object. This will render within the placeholder div, actually i should think mobile first, enable with a checkbox -->
+	<script src="./js/twitch.js"></script>
+
 	<!-- w3: defer on module unneccesary, type txt/js unneccesary, body id=body fatal error, img loading attribute, give an id-name only once in the whole document,+ dont put empty string as id,  -->
 	<!-- dont give a 'name' nor 'alt' attribute to a link but give it a 'title' attribute, alt belongs to img, name belongs to input,type image needs subtype mime image/*, -->
 	<!-- img attributes: alt src srcset sizes crossorigin usemap  ismap  width  height  referrerpolicy  decoding  loading  fetchpriority  -->
@@ -306,8 +306,7 @@
 					href="https://translate.google.com/?hl=de&tab=TT&sl=en&tl=de&text=">translate.google</a></p>
 		</div>
 		<aside>
-			<label class="ox" for="ox" name="toggle Opacity">toggle twitch</label>
-			<input type="checkbox" name="ox" class="twitch-toggle ox" id="twitch-toggle" />
+			<input type="checkbox" name="ox" class="twitch-toggle" id="twitch-toggle" />
 			<div class="embedholder">
 				<form class="radio-form" id="f">
 					<input value="a" name="hopping" type="radio" id="a" />
@@ -328,10 +327,10 @@
 				</form>
 
 				<input type="text" list="streamers" placeholder="" id="buttonx" />
-				<div class="tw" id="tw">
+				<div class="embedholders" id="embedholders">
 					<div class="tw__inner">
-						<label for="checkbox">delete Twitch embed</label>
-						<input type="checkbox" id="checkbox" name="checkbox" />
+						<label for="delboxx">delete Twitch embed</label>
+						<input type="checkbox" id="delboxx" name="delboxx" />
 					</div>
 					<!-- Add a placeholder for the Twitch embed -->
 					<div id="twitch-embed"></div>
