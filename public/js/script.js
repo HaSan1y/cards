@@ -7,14 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	const htmxButton = document.getElementById("htmx-proxy");
 	const currentUrl = window.location.origin;
 	console.log("Current URL:", currentUrl);
-	if (currentUrl.includes("vercel.app")) {
-		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
-	} else if (currentUrl.includes("netlify.app")) {
+	if (currentUrl.includes("netlify.app")) {
 		htmxButton.setAttribute("hx-get", "/.netlify/functions/htmx-joke");
-	} else {
-		console.error("Unknown URL, no API endpoint configured.");
-	}
+	} else currentUrl.includes("vercel.app");
+	htmxButton.setAttribute("hx-get", "/api/htmx-joke");
 });
+
 // import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 document.addEventListener("DOMContentLoaded", () => {
 	const repoSelectElements = document.getElementsByClassName("repoSelect");
