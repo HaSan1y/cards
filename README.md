@@ -3,5 +3,5 @@
 - for example:"nextjs react project nextjs-h451.vercel.app, django project https://github.com/HaSan1y/spotify-python_django-rapidapi, c# project(maui+asp.net mvc)(currently offline), php project https://github.com/HaSan1y/some-php, react native project (currently offline),
 
 ## server deployment experiences with vanillajs(+ exposing api)
-- https://elegant-bubblegum-a62895.netlify.app/              //on netlify: serving server for jokeapi works, +local server
-- https://db-2-cards.vercel.app/                        //on vercel:  serving server... for jokeapi , +local server
+- https://elegant-bubblegum-a62895.netlify.app/   //on netlify: serving server for jokeapi works, +local server
+- https://db-2-cards.vercel.app/   //on vercel:  serving server... for jokeapi , +local server

@@ -1,40 +1,19 @@
-//credits to @webdevsimplified https://www.youtube.com/watch?v=viZs1iVsLpA
 const { generateRegistrationOptions, verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } = require("@simplewebauthn/server");
-const express = require("express");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
+
 const { USERS, getUserByUsername, getUserByEmail, createUser, updateUserCounter, getUserById } = require("./wds/db.js");
 const dbModule = require("./wds/db.js");
-console.log("Imported from db.js:", dbModule);
-// const { USERS, createUser } = require("./db.js");
 
-const app = express();
-app.use(express.json());
-app.use(cookieParser());
-const CLIENT_URL = "https://db-2-cards.vercel.app"; //| http://localhost:5500";| not127.0.0.1 invalid
-// const RP_ID = "localhost";
+const CLIENT_URL = "https://db-2-cards.vercel.app"; //| http://localhost:5500";| not127.0.0.1
 const RP_ID = "https://db-2-cards.vercel.app/api/login";
+const RP_NAME = "h451";
 
-// After your app.listen() call
-createUser("testuser1", "test1@example.com", {
-	/* mock passKey data */
-});
-createUser("testuser2", "test2@example.com", {
-	/* mock passKey data */
-});
-console.log("Test users created:", USERS);
+createUser("testuser1", "test1@example.com", {});
+createUser("testuser2", "test2@example.com", {});
 
-app.use(cors({ origin: CLIENT_URL, credentials: true }));
-// app.use((req, res, next) => {
-// 	res.header("Access-Control-Allow-Origin", "http://localhost:5500");
-// 	res.header("Access-Control-Allow-Credentials", true);
-// 	next();
-// });
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// module.exports = async (req, res) => {  //vercel
-// exports.handler = async (event) => { // netlify
-app.get(`/init-register`, async (req, res) => {
+//////////////////////////////////////////////////////////////////////////////////////////////verce
+module.exports = async (req, res) => {
+	// exports.handler = async (event) => { // netlify
+	// app.get(`/init-register`, async (req, res) => {  //node
 	const email = req.query.email;
 	if (!email) {
 		return res.status(400).json({ error: "Email is required" });
@@ -46,25 +25,53 @@ app.get(`/init-register`, async (req, res) => {
 
 	const options = await generateRegistrationOptions({
 		rpID: RP_ID,
-		rpName: "h451",
+		rpName: RP_NAME,
 		userName: email,
 	});
-	console.log("Registration options:", options);
 
-	res.cookie(
-		"regInfo",
-		JSON.stringify({
-			userId: options.user.id,
-			email,
-			challenge: options.challenge,
-		}),
-		{ httpOnly: true, maxAge: 60000, secure: true },
+	res.setHeader(
+		"Set-Cookie",
+		`regInfo=${encodeURIComponent(
+			JSON.stringify({
+				userId: options.user.id,
+				email,
+				challenge: options.challenge,
+			}),
+		)}; HttpOnly; Path=/; Max-Age=60; Secure`,
 	);
 
 	res.json(options);
-});
+};
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////net
+exports.handler = async (event) => {
+	const params = new URLSearchParams(event.queryStringParameters);
+	const email = params.get("email");
+	if (!email) return { statusCode: 400, body: JSON.stringify({ error: "Email is required" }) };
+	if (getUserByEmail(email)) return { statusCode: 400, body: JSON.stringify({ error: "User already exists" }) };
+
+	const options = await generateRegistrationOptions({
+		rpID: RP_ID,
+		rpName: RP_NAME,
+		userName: email,
+	});
+
+	return {
+		statusCode: 200,
+		headers: {
+			"Set-Cookie": `regInfo=${encodeURIComponent(
+				JSON.stringify({
+					userId: options.user.id,
+					email,
+					challenge: options.challenge,
+				}),
+			)}; HttpOnly; Path=/; Max-Age=60; Secure`,
+		},
+		body: JSON.stringify(options),
+	};
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// module.exports = async (req, res) => {
 app.post(`/verify-register`, async (req, res) => {
 	const regInfo = JSON.parse(req.cookies.regInfo);
 
