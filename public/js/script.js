@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	console.log("Current URL:", currentUrl);
 	if (currentUrl.includes("netlify.app")) {
 		htmxButton.setAttribute("hx-get", "/.netlify/functions/htmx-joke");
-	} else currentUrl.includes("vercel.app");
-	htmxButton.setAttribute("hx-get", "/api/htmx-joke");
+	} else if (currentUrl.includes("vercel.app")) {
+		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
+	}
 });
 
 // import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
