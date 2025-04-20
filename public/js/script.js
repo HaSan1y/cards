@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	const currentUrl = window.location.origin;
 	console.log("Current URL:", currentUrl);
 	if (currentUrl.includes("vercel.app")) {
-		htmxButton.setAttribute("hx-get", "/api/vercel-proxy?type=image");
+		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
 	} else if (currentUrl.includes("netlify.app")) {
-		htmxButton.setAttribute("hx-get", "/.netlify/functions/net-proxy?path=images");
+		htmxButton.setAttribute("hx-get", "/.netlify/functions/htmx-joke");
 	} else {
 		console.error("Unknown URL, no API endpoint configured.");
 	}
