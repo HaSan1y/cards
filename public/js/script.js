@@ -6,7 +6,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 	const htmxButton = document.getElementById("htmx-proxy");
 	const currentUrl = window.location.origin;
-
+	console.log("Current URL:", currentUrl);
 	if (currentUrl.includes("vercel.app")) {
 		htmxButton.setAttribute("hx-get", "/api/vercel-proxy?type=image");
 	} else if (currentUrl.includes("netlify.app")) {
@@ -183,7 +183,7 @@ window.switchDatabase = async function switchDatabase() {
 				},
 			})
 				.then((response) => {
-					console.log("API Response:", response);
+					// console.log("API Response:", response);
 					if (!response.ok) {
 						throw new Error("Network response was not ok " + response.statusText);
 					}
