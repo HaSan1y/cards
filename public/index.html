@@ -229,7 +229,7 @@
 							<option value="0">decide on which DB</option>
 							<option value="indexdb">IndexDB</option>
 							<option value="server">Server(local)</option>
-							<option data-url="https://github.com/HaSan1y/nextjs" value="HTMX">HTMX</option>
+							<option data-url="https://github.com/HaSan1y/nextjs" value="htmx">HTMX</option>
 						</select>
 					</div>
 					<button nonce="abc123" type="button" class="btn-primary text-white" onclick="switchDatabase()"
@@ -378,16 +378,16 @@
 				<!-- <img id="img" alt="Random Image" /> -->
 				<!-- <img id="imgg" src="http://localhost:3000/pproxy" height="200" width="200" alt="Random Image" /> -->
 				<!-- htmx -->
-				<button hx-get="/api/htmx-joke" hx-trigger="click" id="joke-proxy" hx-target="#joke" hx-swap="innerHTML"
-					hx-indicator="#indicator" class="btn btn-primary" hidden>
+				<button hx-get="/api/htmx-joke" hx-trigger="click" id="htmx-proxy" hidden hx-target="#joke"
+					hx-swap="innerHTML" hx-indicator="#indicator" class="btn btn-primary">
 					Click Me!
-					<img class="htmx-indicator" id="indicator" src="/spinner.gif">
+					<img class="htmx-indicator" id="indicator" src="image/favicon-16x16.png" alt="Loading..." />
 				</button>
-				<div hide id="joke" hidden></div>
+				<div hide id="joke"></div>
 				<!-- hx-trigger="click[ctrlKey]" hx-trigger="every 2s"-->
 
 				<!-- </picture> -->
-				<img id="imgg" src="" height="200" width="200" alt="Random Image" />
+				<img id="imgg" src="" class="htmx-img" height="200" width="200" alt="Random Image" hidden />
 			</div>
 		</div>
 		<!-- candle -->

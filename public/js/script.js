@@ -3,7 +3,18 @@
 // dotenv.config();
 // import "htmx.org";
 // import "/initiate-htmx.js";
+document.addEventListener("DOMContentLoaded", () => {
+	const htmxButton = document.getElementById("htmx-proxy");
+	const currentUrl = window.location.origin;
 
+	if (currentUrl.includes("vercel.app")) {
+		htmxButton.setAttribute("hx-get", "/api/vercel-proxy?type=image");
+	} else if (currentUrl.includes("netlify.app")) {
+		htmxButton.setAttribute("hx-get", "/.netlify/functions/net-proxy?path=images");
+	} else {
+		console.error("Unknown URL, no API endpoint configured.");
+	}
+});
 // import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 document.addEventListener("DOMContentLoaded", () => {
 	const repoSelectElements = document.getElementsByClassName("repoSelect");
@@ -142,16 +153,54 @@ window.switchDatabase = async function switchDatabase() {
 	console.log("Switching database");
 	var select = document.getElementById("selectswitchdb");
 	var selectedValue = select.value;
+
 	if (selectedValue === "htmx") {
-		console.log("Switching to supabase database");
+		document.getElementById("htmx-proxy").style.display = "block";
+		document.getElementById("imgg").style.display = "block";
+		const getApiUrl = () => {
+			const currentUrl = window.location.origin;
+
+			if (currentUrl === "https://db-2-cards.vercel.app" || currentUrl === "http://localhost:3000") {
+				return "/api/vercel-proxy?type=image"; // Vercel API endpoint
+			} else if (currentUrl === "https://elegant-bubblegum-a62895.netlify.app" || currentUrl === "http://localhost:8888") {
+				return "/.netlify/functions/net-proxy?path=images"; // Netlify API endpoint
+			} else {
+				console.error("Unknown URL, no API endpoint configured.");
+				return null;
+			}
+		};
+
+		const apiUrl = getApiUrl();
+		document.getElementById("imgg").setAttribute("src", "Loading...");
+		if (apiUrl) {
+			fetch(`${apiUrl}&random=${Date.now()}`, {
+				method: "GET",
+				cache: "no-store", // Prevent caching
+				headers: {
+					"Cache-Control": "no-cache, no-store, must-revalidate", // HTTP headers to disable caching
+					Pragma: "no-cache",
+					Expires: "0",
+				},
+			})
+				.then((response) => {
+					console.log("API Response:", response);
+					if (!response.ok) {
+						throw new Error("Network response was not ok " + response.statusText);
+					}
+					document.getElementById("imgg").setAttribute("src", response.url || "No image found");
+				})
+				.catch((error) => console.error("Error:", error));
+		} else {
+			console.error("No API endpoint configured.");
+		}
 
 		// const supabase = createClient(window.__ENV__.SUPABASE_URL, window.__ENV__.SUPABASE_ANON_KEY);
 		// const supabase = createClient(X);
 		// const { data, error } = await supabase
 		// 	.from("notes")
-		// 	// .insert({
-		// 	// 	title: "note.title",
-		// 	// });
+		// 	 .insert({
+		// 	 	title: "note.title",
+		// 	 });
 		// 	.select("*")
 		// 	.order("id", { ascending: false })
 		// 	.limit(2);
@@ -225,13 +274,6 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 	// 	const apiUrl = process.env.NODE_ENV === 'development'
 	// 	  ? 'http://localhost:8888/api/proxy'  // Netlify Dev
 	//   : '/api/proxy';                      // Production
-	//   	const papiUrl = process.env.NODE_ENV === 'development'
-	// 		  ? 'http://localhost:8888/api/pproxy'  // Netlify Dev
-	//   : '/api/pproxy';                      // Production
-	//   	const apiiUrl = process.env.NODE_ENV === 'development'
-	// 		  ? 'http://localhost:8888/api/proxxy'  // Netlify Dev
-	//   : '/api/proxxy';                      // Production
-	// const papiUrl = "http://localhost:3000/pproxy";
 
 	// const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 	// const apiUrl = "https://api.adviceslip.com/advice";
@@ -239,7 +281,7 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 	// "http://localhost:8888/api/proxy";
 	// "/.netlify/functions/api/proxxy";
 	const apiUrl = "/api/vercel-proxy?type=joke";
-	const apiiUrl = "/.netlify/functions/net-proxy?path=proxxy";
+	const apiiUrl = "/.netlify/functions/net-proxy?path=insults";
 
 	fetch(apiUrl)
 		.then((response) => response.json())
@@ -263,17 +305,7 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 			document.getElementById("insult").innerHTML = data.insult || "No joke found n";
 		})
 		.catch((error) => console.error("Error:", error));
-
-	// fetch(papiUrl)
-	// .then(response => {
-	//     console.log(response);
-	//     document.getElementById("imgg").setAttribute("src", response.url) || "No img found";
-	//   })
-	//   .catch(error => console.error("Error:", error));
 });
-
-// 		document.getElementById("insult").innerHTML = `${dat.insult}`;
-// 		document.getElementById("insultid").innerHTML = `${dat.number}`;
 
 // document.querySelector('button[id="buon"]').addEventListener("click", async () => {
 // const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10, {
@@ -298,10 +330,6 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 // 				}
 //  });
 // const apiUrl = "https://www.yomama-jokes.com/api/v1/jokes/random/";
-
-//	document.getElementById("insult").innerHTML = `${dat.insult}`;
-// document.getElementById("insultid").innerHTML = `${dat.number}`;
-// document.querySelector('button[id="ins"]').addEventListener("click", async () => {
 
 // insult api doesnt include cors header in their server, cors-anywhere for dev testing., unless u make own server including response with cors header this wont work
 // const api_Url = "https://cors-anywhere.herokuapp.com/https://evilinsult.com/generate_insult.php?lang=en&type=json";

@@ -16,7 +16,7 @@ exports.handler = async (event) => {
 	// const endpoin = { proxxy: "https://evilinsult.com/generate_insult.php?lang=en&type=json" };
 	// const endpoints = { pproxy: "https://picsum.photos/200/300" };
 
-	if (path === "proxy") {
+	if (path === "jokes") {
 		try {
 			// const response = await fetch(endpoint[path]);
 			// const data = await response.json();
@@ -35,7 +35,7 @@ exports.handler = async (event) => {
 				body: JSON.stringify({ error: "Failed fetching datax" + error }),
 			};
 		}
-	} else if (path === "proxxy") {
+	} else if (path === "insults") {
 		try {
 			// const response = await fetch(endpoin[path]);
 			// const data = await response.json();
@@ -54,7 +54,7 @@ exports.handler = async (event) => {
 				body: JSON.stringify({ error: "Failed fetching dataxx" + error }),
 			};
 		}
-	} else if (path === "pproxy") {
+	} else if (path === "images") {
 		try {
 			const { buffer, contentType } = await getData("image");
 
