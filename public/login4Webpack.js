@@ -33,7 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 });
 closeButton.addEventListener("click", () => modal.close());
-const SERVER_URL = "https://db-2-cards.vercel.app/api/login"; //https://db-2-cards.vercel.app //http://localhost:3000";
+const SERVER_URL = "https://db-2-cards.vercel.app/api/NetVercelLogin";
+// https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/NetVercelLogin
+//http://localhost:3000";
 
 async function signup() {
 	console.log("Signup function called");

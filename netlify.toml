@@ -39,5 +39,6 @@
   [headers.values]
     Access-Control-Allow-Origin = "*"
 
-# netlify/functions/api/hello.js becomes /.netlify/functions/api/hello.;
-# You can redirect URLs to /.netlify/functions/api...:;
+# https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/NetVercelLogin 
+
+# You can redirect URLs to /.netlify/functions/...:;  actually without /api/

@@ -279,7 +279,7 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 	// const apiUrl = "https://api.adviceslip.com/advice";
 
 	// "http://localhost:8888/api/proxy";
-	// "/.netlify/functions/api/proxxy";
+	// "/.netlify/functions/proxxy";
 	const apiUrl = "/api/vercel-proxy?type=joke";
 	const apiiUrl = "/.netlify/functions/net-proxy?path=insults";
 
