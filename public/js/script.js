@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		htmxButton.setAttribute("hx-get", "/.netlify/functions/htmx-joke");
 	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000")) {
 		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
+	} else {
+		console.error("Unknown URL, no API|(:8888 endpoint=/net) configured.");
 	}
 });
 
