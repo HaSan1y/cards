@@ -9,12 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	console.log("Current URL:", currentUrl);
 	if (currentUrl.includes("netlify.app")) {
 		htmxButton.setAttribute("hx-get", "/.netlify/functions/htmx-joke");
-	} else if (currentUrl.includes("vercel.app")) {
+	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000")) {
 		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
 	}
 });
 
-// import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 document.addEventListener("DOMContentLoaded", () => {
 	const repoSelectElements = document.getElementsByClassName("repoSelect");
 
