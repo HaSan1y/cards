@@ -40,14 +40,6 @@ module.exports = async (req, res) => {
 		],
 	});
 
-	// res.cookie(
-	// 	"authInfo",
-	// 	JSON.stringify({
-	// 		userId: user.id,
-	// 		challenge: options.challenge,
-	// 	}),
-	// 	{ httpOnly: true, maxAge: 60000, secure: true },
-	// );
 	res.setHeader(
 		"Access-Control-Allow-Origin",
 		CLIENT_URL,

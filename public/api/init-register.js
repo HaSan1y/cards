@@ -1,7 +1,7 @@
 const { generateRegistrationOptions } = require("@simplewebauthn/server");
 const { getUserByEmail, createUser } = require("./wds/db.js");
 
-const CLIENT_URL = "https://db-2-cards.vercel.app/api/init-register"; //| http://localhost:5500";| not127.0.0.1
+const CLIENT_URL = "https://db-2-cards.vercel.app"; //api/init-register"; //| http://localhost:5500";| not127.0.0.1
 const CLIENT_Netlify_URL = "https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/init-register";
 const RP_ID = "https://db-2-cards.vercel.app";
 const RP_NAME = "h451";
@@ -11,8 +11,6 @@ createUser("testuser2", "test2@example.com", {});
 
 //////////////////////////////////////////////////////////////////////////////////////////////verce
 module.exports = async (req, res) => {
-	console.log("Request received:", req.method, req.url);
-	console.log("Request headers:", req.headers);
 	if (req.headers.origin !== CLIENT_URL) {
 		return res.status(403).json({ error: "Invalid request origin", origin: req.headers.origin, expected: CLIENT_URL });
 	}
