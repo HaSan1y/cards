@@ -33,6 +33,7 @@
 
 	<script src="./js/client-crudfs2server.js" nonce="abc123" defer></script>
 	<script src="./js/with-indexdb.js" nonce="abc123" defer></script>
+	<script src="./js/with-local+session.js" nonce="abc123" defer></script>
 	<script type="module" src="./js/script.js" nonce="abc123"></script>
 	<script type="text/javascript" src="./js/select.js" nonce="abc123" defer></script>
 	<script src="https://unpkg.com/htmx.org" nonce="abc123" defer></script>
@@ -230,6 +231,9 @@
 							<option value="indexdb">IndexDB</option>
 							<option value="server">Server(local)</option>
 							<option data-url="https://github.com/HaSan1y/nextjs" value="htmx">HTMX</option>
+							<option value="sessiondb">Session storage?</option>
+							<option value="localdb">Local storage?</option>
+							<!-- <option value="Cache">Cache storage?</option> -->
 						</select>
 					</div>
 					<button nonce="abc123" type="button" class="btn-primary text-white" onclick="switchDatabase()"
@@ -255,6 +259,14 @@
 				<label for="tt2"> <input type="text" id="tt2" name="t2" placeholder="question" maxlength="12" required
 						autocomplete="off" /></label>
 				<label for="tt3"> <input type="text" id="tt3" name="t3" placeholder="solution" maxlength="12" required
+						autocomplete="off" /></label>
+			</form>
+			<form id="sessionbtn" style="display: none">
+				<label for="s1"> <input type="text" id="s1" name="s1" placeholder="title" maxlength="12" required
+						autocomplete="off" /></label>
+				<label for="s2"> <input type="text" id="s2" name="s2" placeholder="question" maxlength="12" required
+						autocomplete="off" /></label>
+				<label for="s3"> <input type="text" id="s3" name="s3" placeholder="solution" maxlength="12" required
 						autocomplete="off" /></label>
 			</form>
 		</div>
@@ -387,7 +399,7 @@
 				<!-- hx-trigger="click[ctrlKey]" hx-trigger="every 2s"-->
 
 				<!-- </picture> -->
-				<img id="imgg" src="" class="htmx-img" height="200" width="200" alt="Random Image" hidden />
+				<img id="imgg" src="" class="htmx-img" height="200" width="200" alt="Loading" hidden />
 			</div>
 		</div>
 		<!-- candle -->

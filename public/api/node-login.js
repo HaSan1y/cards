@@ -1,4 +1,6 @@
 //credits to @webdevsimplified https://www.youtube.com/watch?v=viZs1iVsLpA
+//https://www.freecodecamp.org/news/learn-rest-api-principles-by-building-an-express-app
+
 const { generateRegistrationOptions, verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } = require("@simplewebauthn/server");
 const express = require("express");
 const cors = require("cors");
@@ -25,8 +27,12 @@ createUser("testuser2", "test2@example.com", {
 console.log("Test users created:", USERS);
 
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
+
 // app.use((req, res, next) => {
-// 	res.header("Access-Control-Allow-Origin", "http://localhost:5500");
+// 	  if (!req.body.title || !req.body.genre || !req.body.year) {
+//       return res.status(400).send('Title, genre, and year are required');
+//   }
+// 	res.header("Access-Control-Allow-Origin", "CLIENT_URL");
 // 	res.header("Access-Control-Allow-Credentials", true);
 // 	next();
 // });

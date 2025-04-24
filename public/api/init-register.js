@@ -1,8 +1,8 @@
 const { generateRegistrationOptions } = require("@simplewebauthn/server");
 const { getUserByEmail, createUser } = require("./wds/db.js");
 
-const CLIENT_URL = "https://db-2-cards.vercel.app"; //| http://localhost:5500";| not127.0.0.1
-const RP_ID = "https://db-2-cards.vercel.app/api/login";
+const CLIENT_URL = "https://db-2-cards.vercel.app/api/init-register"; //| http://localhost:5500";| not127.0.0.1
+const RP_ID = "https://db-2-cards.vercel.app";
 const RP_NAME = "h451";
 
 createUser("testuser1", "test1@example.com", {});
@@ -10,8 +10,10 @@ createUser("testuser2", "test2@example.com", {});
 
 //////////////////////////////////////////////////////////////////////////////////////////////verce
 module.exports = async (req, res) => {
+	console.log("Request received:", req.method, req.url);
+	console.log("Request headers:", req.headers);
 	if (req.CLIENT_URL !== CLIENT_URL) {
-		return res.status(403).json({ error: "Invalid request origin" });
+		return res.status(403).json({ error: "Invalid request origin", origin: req.CLIENT_URL, expected: CLIENT_URL });
 	}
 
 	const email = req.query.email;
@@ -36,7 +38,6 @@ module.exports = async (req, res) => {
 		"true",
 		"Content-Type",
 		"application/json",
-		// "Set-Cookie",
 		"Set-Cookie",
 		`regInfo=${encodeURIComponent(
 			JSON.stringify({

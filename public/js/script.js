@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000")) {
 		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
 	} else {
-		console.error("Unknown URL, no API|(:8888 endpoint=/net) configured.");
+		console.log("Unknown URL, no API|(local:8888) configured.");
 	}
 });
 
@@ -171,7 +171,7 @@ window.switchDatabase = async function switchDatabase() {
 		};
 
 		const apiUrl = getApiUrl();
-		document.getElementById("imgg").setAttribute("src", "Loading...");
+		document.getElementById("imgg").setAttribute("src", "");
 		if (apiUrl) {
 			fetch(`${apiUrl}&random=${Date.now()}`, {
 				method: "GET",
@@ -211,6 +211,9 @@ window.switchDatabase = async function switchDatabase() {
 	}
 	const isServer = selectedValue === "server";
 	const isIndexDB = selectedValue === "indexdb";
+	const isSessionDB = selectedValue === "sessiondb";
+	const isLocalDB = selectedValue === "localdb";
+	// const isCacheDB = selectedValue === "cachedb";
 	if (isServer) {
 		console.log("Switching to server database");
 		const ssubmitButtonContainer = document.getElementById("dbbtn");
@@ -267,6 +270,48 @@ window.switchDatabase = async function switchDatabase() {
 		txtbtn.style.display = "flex";
 		ensureDatabaseConnection();
 		document.getElementById("txtbtn").addEventListener("submit", handleSubmit);
+	} else if (isSessionDB) {
+		console.log("Switching to SessionDB");
+		const sessionbtn = document.getElementById("sessionbtn");
+		const newsesSubmitButton = document.createElement("button");
+		newsesSubmitButton.textContent = "Add text to SessionDB";
+		newsesSubmitButton.type = "submit";
+		newsesSubmitButton.classList.add("btn-primary");
+		newsesSubmitButton.id = "sessiondbsubmitbtn";
+		sessionbtn.appendChild(newsesSubmitButton);
+		// const wipesesDBButton = document.createElement("button");
+		// wipesesDBButton.textContent = "wipe SessionDB";
+		// wipesesDBButton.type = "button";
+		// wipesesDBButton.id = "wipesessionDBButton";
+		// wipesesDBButton.setAttribute("onclick", "wipesessionData()");
+		// wipesesDBButton.classList.add("btn-primary");
+		// document.getElementById("buttons").appendChild(wipesesDBButton);
+		coco.style.display = "none";
+		txtbtn.style.display = "none";
+		dbbtn.style.display = "none";
+		sessionbtn.style.display = "block";
+		sessionbtn.addEventListener("submit", handleSessionSubmit);
+		sessionbtn.reset();
+
+		// sessionStorage.setItem("user", JSON.stringify(user);// Store data
+
+		// let value = JSON.parse(sessionStorage.getItem("user");// Retrieve data
+
+		// sessionStorage.removeItem("key");// Remove data
+
+		// sessionStorage.clear();// Clear all session storage data
+	} else if (isLocalDB) {
+		console.log("Switching to LocalDB");
+		localStorage.setItem("settings", JSON.stringify(settings)); // Store data
+		let value = JSON.parse(localStorage.getItem("settings")); // Retrieve data
+		localStorage.removeItem("key"); // Remove data
+		localStorage.clear(); // Clear all local storage data
+		console.log("Retrieved settings:", value);
+
+		// } else if (isCacheDB) {
+		// 	console.log("CacheDB is not implemented yet");
+		// } else {
+		// 	console.log("Invalid database selection");
 	}
 };
 window.switchDatabase = switchDatabase;
@@ -280,8 +325,8 @@ document.querySelector('button[id="buon"]').addEventListener("click", async () =
 
 	// "http://localhost:8888/api/proxy";
 	// "/.netlify/functions/proxxy";
-	const apiUrl = "/api/vercel-proxy?type=joke";
-	const apiiUrl = "/.netlify/functions/net-proxy?path=insults";
+	const apiUrl = window.location.origin === "https://db-2-cards.vercel.app" ? "/api/vercel-proxy?type=joke" : "/.netlify/functions/net-proxy?path=jokes";
+	const apiiUrl = window.location.origin === "https://elegant-bubblegum-a62895.netlify.app" ? "/.netlify/functions/net-proxy?path=insults" : "/api/vercel-proxy?type=insult";
 
 	fetch(apiUrl)
 		.then((response) => response.json())

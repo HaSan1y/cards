@@ -42,7 +42,6 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", "Georgia", sans-serif;
-  font-display: swap;
   font-size: 0.9rem;
   line-height: 1.5;
   opacity: 1;
@@ -151,8 +150,6 @@ footer {
   margin-top: 16px;
   display: flex;
   align-items: center;
-  -moz-column-gap: 15px;
-  column-gap: 15px;
 }
 
 .wrapper .button:hover,
@@ -376,6 +373,8 @@ footer .footer-menu a:hover {
   font-size: small;
   border-radius: 4px;
   transition: 0.5s;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .links:hover {
@@ -686,7 +685,7 @@ input:not(#email) {
   max-width: 400px;
 }
 
-input::-moz-placeholder option::-moz-placeholder {
+input::-moz-placeholder, option::-moz-placeholder {
   color: #000000;
   opacity: 0.5;
   font-size: 12px;
@@ -694,7 +693,8 @@ input::-moz-placeholder option::-moz-placeholder {
   text-align: center;
 }
 
-input::placeholder option::placeholder,
+input::placeholder,
+option::placeholder,
 select {
   color: #000000;
   opacity: 0.5;
@@ -1137,8 +1137,8 @@ fieldset {
     max-width: 700px;
   }
   .links {
-    -moz-columns: 2;
-         columns: 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
   nav {
     display: block;
@@ -1186,12 +1186,6 @@ fieldset {
   .yourbanner,
   .color-picker {
     max-width: 800px;
-  }
-  .links {
-    -moz-columns: 4 180px;
-         columns: 4 180px;
-    -moz-column-gap: 1px;
-         column-gap: 1px;
   }
   .navbar .nav-item .dropdown-menu {
     display: block;

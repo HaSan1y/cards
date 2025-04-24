@@ -1,8 +1,8 @@
 const { verifyRegistrationResponse } = require("@simplewebauthn/server");
 const { createUser } = require("./wds/db.js");
 
-const CLIENT_URL = "https://db-2-cards.vercel.app"; //| http://localhost:5500";| not127.0.0.1
-const RP_ID = "https://db-2-cards.vercel.app/api/login";
+const CLIENT_URL = "https://db-2-cards.vercel.app/api/verify-register"; //| http://localhost:5500";| not127.0.0.1
+const RP_ID = "https://db-2-cards.vercel.app";
 
 createUser("testuser1", "test1@example.com", {});
 createUser("testuser2", "test2@example.com", {});
