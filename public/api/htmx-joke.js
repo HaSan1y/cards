@@ -42,7 +42,6 @@ exports.handler = async (event) => {
 			body: joke,
 		};
 	} catch (error) {
-		console.error("Error fetching joke:", error);
 		return {
 			statusCode: 500,
 			headers: {
@@ -51,6 +50,7 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Credentials": "true",
 			},
 			body: "Error fetching joke",
+			error: error.message,
 		};
 	}
 };
