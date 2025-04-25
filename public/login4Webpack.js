@@ -39,7 +39,7 @@ const SERVER_URL =
 		: window.location.origin === "http://localhost:3000"
 		? "http://localhost:3000/api"
 		: window.location.origin === "https://elegant-bubblegum-a62895.netlify.app"
-		? "https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/api"
+		? "https://elegant-bubblegum-a62895.netlify.app/.netlify/functions"
 		: "http://localhost:3000/api"; // Default to localhost if no match
 
 async function signup() {

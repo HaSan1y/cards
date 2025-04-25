@@ -1,24 +1,17 @@
 # conflicts _redirects?;
 
 # [[redirects]]
-#  from = "/*"
-#  to = "/index.html"
-#  status = 200               # 200 = rewrite ( /=/  no URL change), 301= /=/something
-#  force = true
-
-
-# [[redirects]]
 #  from = "/api/*"
 #  to = "/.netlify/functions/api/:splat"
-#  status = 200
+#  status = 200              # 200 = rewrite (no URL change), 301= some url change
+#  force = true
 
 
 # Move api/ into netlify/functions OR;
 [build]
   command = "npm run build"  # or your build command (e.g., `webpack`)
   publish = "public"         # Webpack's output folder
-  functions = "public/api"
-# functions = "netlify/functions"          # Only if `api/` contains serverless functions;
+  functions = "public/api"   # "netlify/functions" # if `api/` serverless;
 
 
 [[headers]]
@@ -34,11 +27,6 @@
 	    no-store,
 	    must-revalidate'''
 
-[[headers]]
-  for = "/api/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
 
-# https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/NetVercelLogin 
-
+# https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/Login 
 # You can redirect URLs to /.netlify/functions/...:;  actually without /api/

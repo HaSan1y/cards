@@ -41,6 +41,7 @@ if (getUserByEmail("test1@example.com") == null) {
 module.exports = async (req, res) => {
 	const origin = req.headers.origin;
 	const host = req.headers.host; // e.g., 'localhost:3000'
+	console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
 	let isAllowed = false;
 	let effectiveOrigin = origin; // Will store the origin to use in response headers
 

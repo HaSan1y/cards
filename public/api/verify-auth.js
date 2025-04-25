@@ -116,7 +116,7 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Origin": CLIENT_Netlify_URL,
 				"Access-Control-Allow-Credentials": "true",
 				"Content-Type": "application/json",
-				"Set-Cookie": "authInfo=; HttpOnly; Path=/; Max-Age=0; Secure",
+				"Set-Cookie": "authInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None",
 			},
 			body: JSON.stringify({ verified: verification.verified }),
 		};
