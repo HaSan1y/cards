@@ -1,18 +1,26 @@
 const { verifyRegistrationResponse } = require("@simplewebauthn/server");
 const { createUser } = require("./wds/db.js");
+const ALLOWED_ORIGINS = [
+	"http://localhost:3000", // Local development
+	"https://db-2-cards.vercel.app", // Vercel deployment
+	"https://elegant-bubblegum-a62895.netlify.app", // Netlify deployment (if used)
+];
 
-const CLIENT_URL = "https://db-2-cards.vercel.app/api/verify-register"; //| http://localhost:5500";| not127.0.0.1
-const CLIENT_Netlify_URL = "https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/verify-register";
-const RP_ID = "[https://db-2-cards.vercel.app](https://db-2-cards.vercel.app)"; //rp_id like cors
-const Net_RP_ID = "[https://elegant-bubblegum-a62895.netlify.app](https://elegant-bubblegum-a62895.netlify.app)";
-
-// test0 pw empty, test1
-createUser("testuser0", "test0@example.com", {
-	id: "some-id",
-	transports: ["some-transport"],
-});
-createUser("testuser1", "test1@example.com", {});
-createUser("testuser2", "test2@example.com", {});
+// Relying Party configuration based on the origin
+const RP_CONFIG = {
+	"http://localhost:3000": {
+		rpId: "localhost", // RP ID for local development MUST be 'localhost'
+		rpName: "Local Dev h451",
+	},
+	"https://db-2-cards.vercel.app": {
+		rpId: "db-2-cards.vercel.app", // RP ID for Vercel MUST match the domain
+		rpName: "Vercel h451",
+	},
+	"https://elegant-bubblegum-a62895.netlify.app": {
+		rpId: "elegant-bubblegum-a62895.netlify.app", // RP ID for Netlify MUST match the domain
+		rpName: "Netlify h451",
+	},
+};
 function parseCookies(cookieHeader) {
 	const cookies = {};
 	if (!cookieHeader) return cookies;
@@ -23,99 +31,183 @@ function parseCookies(cookieHeader) {
 	return cookies;
 }
 module.exports = async (req, res) => {
-	const regInfo = req.cookies && req.cookies.regInfo ? JSON.parse(req.cookies.regInfo) : null;
+	const origin = req.headers.origin;
+	const host = req.headers.host; // e.g., 'localhost:3000'
+	console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
+	let isAllowed = false;
+	let effectiveOrigin = origin; // Will store the origin to use in response headers
 
-	if (!regInfo) {
-		res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-		res.setHeader("Access-Control-Allow-Credentials", "true");
-		res.setHeader("Content-Type", "application/json");
-		return res.status(400).json({ error: "Registration info not found" });
+	// Check 1: Standard CORS check (Origin header is present and allowed)
+	if (origin && ALLOWED_ORIGINS.includes(origin)) {
+		isAllowed = true;
+		effectiveOrigin = origin;
+	}
+	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
+	else if (!origin && host === "localhost:3000") {
+		// This assumes your local dev server runs on port 3000
+		isAllowed = true;
+		// For the response header, reconstruct the expected local origin
+		effectiveOrigin = "http://localhost:3000";
+		console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
 	}
 
-	const verification = await verifyRegistrationResponse({
-		response: req.body,
-		expectedChallenge: regInfo.challenge,
-		expectedOrigin: CLIENT_URL,
-		expectedRPID: RP_ID,
-	});
+	// --- CORS Preflight Handling (OPTIONS request) ---
+	if (req.method === "OPTIONS") {
+		if (isAllowed) {
+			res.setHeader("Access-Control-Allow-Origin", effectiveOrigin); // Use effectiveOrigin
+			res.setHeader("Access-Control-Allow-Credentials", "true");
+			res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+			res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+			return res.status(204).end();
+		} else {
+			console.error(`OPTIONS request blocked: Origin='${origin}', Host='${host}'`);
+			return res.status(403).json({ error: "Origin not allowed" });
+		}
+	}
 
-	if (verification.verified) {
-		createUser(regInfo.userId, regInfo.email, {
-			id: verification.registrationInfo.credentialID,
-			publicKey: verification.registrationInfo.credentialPublicKey,
-			counter: verification.registrationInfo.counter,
-			deviceType: verification.registrationInfo.credentialDeviceType,
-			backedUp: verification.registrationInfo.credentialBackedUp,
-			transport: req.body.transports,
+	// --- Actual Request Handling ---
+	if (!isAllowed) {
+		console.error(`Request blocked: Origin='${origin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
+		return res.status(403).json({ error: "Invalid request origin/host" });
+	}
+	res.setHeader("Access-Control-Allow-Origin", effectiveOrigin); // Crucial: Allow the specific valid origin
+	res.setHeader("Access-Control-Allow-Credentials", "true");
+	res.setHeader("Content-Type", "application/json"); // Set common headers
+	const currentRpConfig = RP_CONFIG[effectiveOrigin];
+	if (!currentRpConfig) {
+		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
+		return res.status(500).json({ error: "Server configuration error for origin" });
+	}
+	const cookies = parseCookies(req.headers.cookie);
+	const regInfo = cookies.regInfo ? JSON.parse(cookies.regInfo) : null;
+
+	if (!regInfo) {
+		return res.status(400).json({ error: "Registration info not found" });
+	}
+	try {
+		const verification = await verifyRegistrationResponse({
+			response: req.body,
+			expectedChallenge: regInfo.challenge,
+			expectedOrigin: effectiveOrigin,
+			expectedRPID: currentRpConfig.rpId,
 		});
-		res.clearCookie("regInfo");
-		res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-		res.setHeader("Access-Control-Allow-Credentials", "true");
-		res.setHeader("Content-Type", "application/json");
-		return res.json({ verified: verification.verified });
-	} else {
-		res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-		res.setHeader("Access-Control-Allow-Credentials", "true");
-		res.setHeader("Content-Type", "application/json");
-		return res.status(400).json({ verified: false, error: "Verification failed" });
+
+		if (verification.verified) {
+			createUser(regInfo.userId, regInfo.email, {
+				id: verification.registrationInfo.credentialID,
+				publicKey: verification.registrationInfo.credentialPublicKey,
+				counter: verification.registrationInfo.counter,
+				deviceType: verification.registrationInfo.credentialDeviceType,
+				backedUp: verification.registrationInfo.credentialBackedUp,
+				transport: req.body.transports,
+			});
+			res.setHeader("Set-Cookie", `regInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None`);
+			return res.status(200).json({ verified: verification.verified });
+		} else {
+			return res.status(400).json({ verified: false, error: "Verification failed" });
+		}
+	} catch (error) {
+		console.error("Error verifying registration response:", error);
+		return res.status(500).json({ error: "Internal server error" });
 	}
 };
 exports.handler = async (event) => {
+	const origin = event.headers.origin;
+	const httpMethod = event.httpMethod;
+	if (httpMethod === "OPTIONS") {
+		if (ALLOWED_ORIGINS.includes(origin)) {
+			return {
+				statusCode: 204, // No Content
+				headers: {
+					"Access-Control-Allow-Origin": origin, // Echo back the allowed origin
+					"Access-Control-Allow-Credentials": "true",
+					"Access-Control-Allow-Methods": "GET, POST, OPTIONS", // Adjust methods as needed
+					"Access-Control-Allow-Headers": "Content-Type", // Adjust headers as needed
+				},
+				body: "", // No body needed for preflight
+			};
+		} else {
+			// Origin not allowed for preflight
+			return {
+				statusCode: 403,
+				headers: {
+					"Content-Type": "application/json",
+					// Do NOT send Allow-Origin header if the origin is truly disallowed
+				},
+				body: JSON.stringify({ error: "Origin not allowed" }),
+			};
+		}
+	}
+
+	const commonHeaders = {
+		"Access-Control-Allow-Origin": origin, // CRUCIAL: Use the specific validated origin
+		"Access-Control-Allow-Credentials": "true",
+		"Content-Type": "application/json",
+	};
+
+	// 3. Get RP Config for this origin
+	const currentRpConfig = RP_CONFIG[origin];
+	if (!currentRpConfig) {
+		console.error(`No RP config found for allowed origin: ${origin}`);
+		return {
+			statusCode: 500,
+			headers: commonHeaders, // Include CORS headers even for server errors if origin was initially allowed
+			body: JSON.stringify({ error: "Server configuration error for origin" }),
+		};
+	}
 	const cookies = parseCookies(event.headers.cookie);
 	const regInfo = cookies.regInfo ? JSON.parse(cookies.regInfo) : null;
 
 	if (!regInfo) {
 		return {
 			statusCode: 400,
-			headers: {
-				"Access-Control-Allow-Origin": CLIENT_Netlify_URL,
-				"Access-Control-Allow-Credentials": "true",
-				"Content-Type": "application/json",
-				"Access-Control-Allow-Headers": "Content-Type",
-			},
+			headers: commonHeaders,
 			body: JSON.stringify({ error: "Registration info not found" }),
 		};
 	}
 	const body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
-
-	const verification = await verifyRegistrationResponse({
-		response: body,
-		expectedChallenge: regInfo.challenge,
-		expectedOrigin: CLIENT_Netlify_URL,
-		expectedRPID: Net_RP_ID,
-	});
-
-	if (verification.verified) {
-		createUser(regInfo.userId, regInfo.email, {
-			id: verification.registrationInfo.credentialID,
-			publicKey: verification.registrationInfo.credentialPublicKey,
-			counter: verification.registrationInfo.counter,
-			deviceType: verification.registrationInfo.credentialDeviceType,
-			backedUp: verification.registrationInfo.credentialBackedUp,
-			transport: body.transports,
+	try {
+		const verification = await verifyRegistrationResponse({
+			response: body,
+			expectedChallenge: regInfo.challenge,
+			expectedOrigin: origin,
+			expectedRPID: currentRpConfig.rpId,
 		});
 
+		if (verification.verified) {
+			createUser(regInfo.userId, regInfo.email, {
+				id: verification.registrationInfo.credentialID,
+				publicKey: verification.registrationInfo.credentialPublicKey,
+				counter: verification.registrationInfo.counter,
+				deviceType: verification.registrationInfo.credentialDeviceType,
+				backedUp: verification.registrationInfo.credentialBackedUp,
+			});
+
+			return {
+				statusCode: 200,
+				headers: {
+					...commonHeaders,
+					"Set-Cookie": `regInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None`,
+				},
+				body: JSON.stringify({ verified: verification.verified }),
+			};
+		} else {
+			return {
+				statusCode: 400,
+				headers: {
+					...commonHeaders,
+				},
+				body: JSON.stringify({ verified: false, error: "Verification failed" }),
+			};
+		}
+	} catch (error) {
+		console.error("Error verifying registration response:", error);
 		return {
-			statusCode: 200,
+			statusCode: 500,
 			headers: {
-				"Access-Control-Allow-Origin": CLIENT_Netlify_URL,
-				"Access-Control-Allow-Credentials": "true",
-				"Content-Type": "application/json",
-				"Set-Cookie": `regInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None`,
-				"Access-Control-Allow-Headers": "Content-Type",
+				...commonHeaders,
 			},
-			body: JSON.stringify({ verified: verification.verified }),
-		};
-	} else {
-		return {
-			statusCode: 400,
-			headers: {
-				"Access-Control-Allow-Origin": CLIENT_Netlify_URL,
-				"Access-Control-Allow-Credentials": "true",
-				"Content-Type": "application/json",
-				"Access-Control-Allow-Headers": "Content-Type",
-			},
-			body: JSON.stringify({ verified: false, error: "Verification failed" }),
+			body: JSON.stringify({ error: "Internal server error" }),
 		};
 	}
 };
