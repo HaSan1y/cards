@@ -1,5 +1,6 @@
 const { verifyRegistrationResponse } = require("@simplewebauthn/server");
-const { createUser } = require("./wds/db.js");
+const { createUser } = require("./db/wds-basicDB.js");
+// const { createUser } = require("./db/vercelDB.js");
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
 	"https://db-2-cards.vercel.app", // Vercel deployment

@@ -1,5 +1,6 @@
 const { verifyAuthenticationResponse } = require("@simplewebauthn/server");
-const { updateUserCounter, getUserById } = require("./wds/db.js");
+const { updateUserCounter, getUserById } = require("./db/wds-basicDB.js");
+// const { updateUserCounter, getUserById } = require("./db/vercelDB.js");
 
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development

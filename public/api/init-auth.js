@@ -1,5 +1,6 @@
 const { generateAuthenticationOptions } = require("@simplewebauthn/server");
-const { getUserByUsername } = require("./wds/db.js");
+const { getUserByUsername } = require("./db/wds-basicDB.js");
+// const { getUserByUsername, getUserByEmail } = require("./db/vercelDB.js");
 
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
@@ -25,15 +26,15 @@ const RP_CONFIG = {
 // test0 pw empty, test1
 // --- Test User Creation (Keep for testing if needed) ---
 // It's generally better to have a proper database, but for testing:
-if (getUserByEmail("test0@example.com") == null) {
-	createUser("testuser0", "test0@example.com", {
-		id: "some-id", // This needs to be a valid Base64URL encoded ID for actual testing
-		transports: ["internal"], // Example transport
-	});
-}
-if (getUserByEmail("test1@example.com") == null) {
-	createUser("testuser1", "test1@example.com", {});
-}
+// if (getUserByEmail("test0@example.com") == null) {
+// 	createUser("testuser0", "test0@example.com", {
+// 		id: "some-id", // This needs to be a valid Base64URL encoded ID for actual testing
+// 		transports: ["internal"], // Example transport
+// 	});
+// }
+// if (getUserByEmail("test1@example.com") == null) {
+// 	createUser("testuser1", "test1@example.com", {});
+// }
 // createUser("testuser1", "test1@example.com", {});
 // --- End Test User Creation ---
 module.exports = async (req, res) => {

@@ -30,13 +30,15 @@ module.exports = async (req, res) => {
 
 // Netlify handler
 exports.handler = async (event) => {
+	const { headers } = event;
+	const origin = headers.origin || headers.Origin || "*";
 	try {
 		const joke = await getJoke();
 		return {
 			statusCode: 200,
 			headers: {
 				"Content-Type": "text/plain",
-				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Origin": origin,
 				"Access-Control-Allow-Credentials": "true",
 			},
 			body: joke,
@@ -46,7 +48,7 @@ exports.handler = async (event) => {
 			statusCode: 500,
 			headers: {
 				"Content-Type": "text/plain",
-				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Origin": origin,
 				"Access-Control-Allow-Credentials": "true",
 			},
 			body: "Error fetching joke",
