@@ -43,13 +43,32 @@ module.exports = async (req, res) => {
 	console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
 	let isAllowed = false;
 	let effectiveOrigin = origin;
+	const vercelHost = "db-2-cards.vercel.app";
+	const vercelOrigin = "https://db-2-cards.vercel.app";
+	const netlifyHost = "elegant-bubblegum-a62895.netlify.app"; // Make sure this is the correct host header value for Netlify
+	const netlifyOrigin = "https://elegant-bubblegum-a62895.netlify.app";
+	const localhostHost = "localhost:3000";
+	const localhostOrigin = "http://localhost:3000";
+	// Check 1: Standard CORS check (Origin header is present and allowed)
 	if (origin && ALLOWED_ORIGINS.includes(origin)) {
 		isAllowed = true;
 		effectiveOrigin = origin;
-	} else if (!origin && host === "localhost:3000") {
+	}
+	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
+	else if (!origin && host === localhostHost) {
+		// This assumes your local dev server runs on port 3000
 		isAllowed = true;
-		effectiveOrigin = "http://localhost:3000";
+		// For the response header, reconstruct the expected local origin
+		effectiveOrigin = localhostOrigin;
 		console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
+	} else if (!origin && host === vercelHost) {
+		isAllowed = true;
+		effectiveOrigin = vercelOrigin; // Use the standard Vercel origin for response headers
+		console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
+	} else if (!origin && host === netlifyHost) {
+		isAllowed = true;
+		effectiveOrigin = netlifyOrigin; // Use the standard Netlify origin for response headers
+		console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
 	}
 	if (req.method === "OPTIONS") {
 		if (isAllowed) {
