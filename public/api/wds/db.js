@@ -18,7 +18,15 @@ function getUserById(id) {
 
 function createUser(userId, email, passKey) {
 	const username = email.split("@")[0]; // Create a username from the email
-	const user = { id: userId, email, username, passKey };
+	const user = {
+		id: userId,
+		email,
+		username,
+		passKey: {
+			id: passKey.id,
+			transports: passKey.transports,
+		},
+	};
 	USERS.push(user);
 	return user;
 }

@@ -3,8 +3,14 @@ const { createUser } = require("./wds/db.js");
 
 const CLIENT_URL = "https://db-2-cards.vercel.app/api/verify-register"; //| http://localhost:5500";| not127.0.0.1
 const CLIENT_Netlify_URL = "https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/verify-register";
-const RP_ID = "https://db-2-cards.vercel.app";
+const RP_ID = "[https://db-2-cards.vercel.app](https://db-2-cards.vercel.app)"; //rp_id like cors
+const Net_RP_ID = "[https://elegant-bubblegum-a62895.netlify.app](https://elegant-bubblegum-a62895.netlify.app)";
 
+// test0 pw empty, test1
+createUser("testuser0", "test0@example.com", {
+	id: "some-id",
+	transports: ["some-transport"],
+});
 createUser("testuser1", "test1@example.com", {});
 createUser("testuser2", "test2@example.com", {});
 function parseCookies(cookieHeader) {
@@ -76,7 +82,7 @@ exports.handler = async (event) => {
 		response: body,
 		expectedChallenge: regInfo.challenge,
 		expectedOrigin: CLIENT_Netlify_URL,
-		expectedRPID: RP_ID,
+		expectedRPID: Net_RP_ID,
 	});
 
 	if (verification.verified) {
