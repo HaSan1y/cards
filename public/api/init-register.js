@@ -143,6 +143,37 @@ exports.handler = async (event) => {
 	// const params = new URLSearchParams(event.queryStringParameters);
 	// const email = params.get("email");
 	const origin = event.headers.origin;
+	const host = req.headers.host; // e.g., 'localhost:3000'
+	console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
+	let isAllowed = false;
+	let effectiveOrigin = origin; // Will store the origin to use in response headers
+	const vercelHost = "db-2-cards.vercel.app";
+	const vercelOrigin = "https://db-2-cards.vercel.app";
+	const netlifyHost = "elegant-bubblegum-a62895.netlify.app"; // Make sure this is the correct host header value for Netlify
+	const netlifyOrigin = "https://elegant-bubblegum-a62895.netlify.app";
+	const localhostHost = "localhost:8888";
+	const localhostOrigin = "http://localhost:8888";
+	// Check 1: Standard CORS check (Origin header is present and allowed)
+	if (origin && ALLOWED_ORIGINS.includes(origin)) {
+		isAllowed = true;
+		effectiveOrigin = origin;
+	}
+	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
+	else if (!origin && host === localhostHost) {
+		// This assumes your local dev server runs on port 8888
+		isAllowed = true;
+		// For the response header, reconstruct the expected local origin
+		effectiveOrigin = localhostOrigin;
+		console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
+	} else if (!origin && host === vercelHost) {
+		isAllowed = true;
+		effectiveOrigin = vercelOrigin; // Use the standard Vercel origin for response headers
+		console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
+	} else if (!origin && host === netlifyHost) {
+		isAllowed = true;
+		effectiveOrigin = netlifyOrigin; // Use the standard Netlify origin for response headers
+		console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+	}
 	const httpMethod = event.httpMethod;
 	if (httpMethod === "OPTIONS") {
 		if (ALLOWED_ORIGINS.includes(origin)) {
