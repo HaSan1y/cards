@@ -22,6 +22,10 @@ const RP_CONFIG = {
 		rpId: "elegant-bubblegum-a62895.netlify.app", // RP ID for Netlify MUST match the domain
 		rpName: "Netlify h451",
 	},
+	"http://localhost:8888": {
+		rpId: "localhost",
+		rpName: "Local Netlify Dev h451",
+	},
 };
 function parseCookies(cookieHeader) {
 	const cookies = {};
@@ -137,8 +141,8 @@ module.exports = async (req, res) => {
 
 exports.handler = async (event) => {
 	const origin = event.headers.origin;
-	const host = req.headers.host; // e.g., 'localhost:3000'
-	console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
+	const host = event.headers.host; // e.g., 'localhost:3000'
+	console.log(`[Vercel Init-Register] Received Request: Method=${event.httpMethod}, Origin='${origin}', Host='${host}'`);
 	let isAllowed = false;
 	let effectiveOrigin = origin; // Will store the origin to use in response headers
 
