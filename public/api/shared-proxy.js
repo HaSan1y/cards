@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+//const fetch = require("node-fetch");
 
 module.exports = async function getData(type) {
 	//console.log(`Incoming ${type} request`);
