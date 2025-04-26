@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	const htmxButton = document.getElementById("htmx-proxy");
 	const currentUrl = window.location.origin;
 	console.log("Current URL:", currentUrl);
-	if (currentUrl.includes("netlify.app") || currentUrl.includes("localhost:8888")) {
-		htmxButton.setAttribute("hx-get", "/.netlify/functions/Nhtmx-joke");
-	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000")) {
-		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
+	if (currentUrl.includes("netlify.app")) {
+		htmxButton.setAttribute("hx-get", "/.netlify/functions/Uhtmx-joke");
+	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000") || currentUrl.includes("localhost:8888")) {
+		htmxButton.setAttribute("hx-get", "/api/Uhtmx-joke");
 	} else {
 		console.log("Unknown URL, no API endpoint configured.");
 	}
