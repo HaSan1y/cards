@@ -1,142 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/png" sizes="16x16" href="./image/favicon-16x16.png" />
-		<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-32x32.png" />
-		<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/apple-touch-icon.png" />
-		<link rel="manifest" href="./image/site.webmanifest" />
-		<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://unpkg.com 'unsafe-eval';" /> -->
-		<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://vercel.live/; script-src https://vercel.live/;" /> -->
-		<!-- <meta X-Content-Security-Policy: default-src *; img-src *; child-src *; media-src *;  style-src *; font-src *; connect-src *; form-action *; frame-ancestors *; sandbox * script-src-elem unsafe-inline;">-->
 
-		<title>Login/Register Page</title>
-		<link rel="stylesheet" href="./css/login.css" type="text/css" />
-	</head>
-	<body>
-		<div class="container">
-			<div class="card">
-				<div class="card-header">
-					<h2 id="formTitle">Login</h2>
-					<p id="formDescription">Welcome back! Please login to your account.</p>
-				</div>
-				<div class="card-content">
-					<form id="authForm">
-						<div class="form-group">
-							<label for="username">Username</label>
-							<input type="text" id="username" name="username" required />
-						</div>
-						<div class="form-group" id="emailGroup" style="display: none">
-							<label for="email">Email</label>
-							<input data-email type="email" id="email" name="email" />
-						</div>
-						<div class="form-group">
-							<label for="password">Password</label>
-							<input type="password" id="password" name="password" required />
-						</div>
-						<div id="errorMessage" class="error-message" role="alert"></div>
-						<div id="successMessage" class="success-message" role="alert"></div>
-						<button type="button" id="submitButton" data-login>Login</button>
-					</form>
-				</div>
-				<div class="card-footer">
-					<label for="toggleMode" id="toggleLabel">Need an account?</label>
-					<div class="toggle-switch">
-						<input type="checkbox" id="toggleMode" />
-						<label for="toggleMode" class="slider" style="background-color: grey"></label>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" type="image/png" sizes="16x16" href="./image/favicon-16x16.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-32x32.png" />
+	<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/apple-touch-icon.png" />
+	<link rel="manifest" href="./image/site.webmanifest" />
+	<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://unpkg.com 'unsafe-eval';" /> -->
+	<!-- <meta http-equiv="Content-Security-Policy" content="frame-src https://vercel.live/; script-src https://vercel.live/;" /> -->
+	<!-- <meta X-Content-Security-Policy: default-src *; img-src *; child-src *; media-src *;  style-src *; font-src *; connect-src *; form-action *; frame-ancestors *; sandbox * script-src-elem unsafe-inline;">-->
+
+	<title>Login/Register Page</title>
+	<link rel="stylesheet" href="./css/login.css" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="card">
+			<div class="card-header">
+				<h2 id="formTitle">Login</h2>
+				<p id="formDescription">Welcome back! Please login to your account.</p>
+			</div>
+			<div class="card-content">
+				<form id="authForm">
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input type="text" id="username" name="username" required />
 					</div>
-				</div>
-				<dialog data-modal style="font-size: 3rem">
-					<button data-close style="font-size: 2rem; position: absolute; top: 0; right: 0">&times;#######</button>
-					<div data-content></div>
-				</dialog>
-				<div class="back">
-					<a href="./index.html">back</a>
+					<div class="form-group" id="emailGroup" style="display: none">
+						<label for="email">Email</label>
+						<input data-email type="email" id="email" name="email" required />
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" id="password" name="password" required />
+					</div>
+					<div id="errorMessage" class="error-message" role="alert"></div>
+					<div id="successMessage" class="success-message" role="alert"></div>
+					<button type="button" id="submitButton" data-login>Login</button>
+				</form>
+			</div>
+			<div class="card-footer">
+				<label for="toggleMode" id="toggleLabel">Need an account?</label>
+				<div class="toggle-switch">
+					<input type="checkbox" id="toggleMode" />
+					<label for="toggleMode" class="slider" style="background-color: grey"></label>
 				</div>
 			</div>
+			<dialog data-modal style="font-size: 3rem">
+				<button data-close style="font-size: 2rem; position: absolute; top: 0; right: 0">&times;#######</button>
+				<div data-content></div>
+			</dialog>
+			<div class="back">
+				<a href="./index.html">back</a>
+			</div>
 		</div>
-		<!-- dom elements -->
-		<script crossorigin="anonymous" type="text/javascript">
-			document.addEventListener("DOMContentLoaded", function () {
-				const form = document.getElementById("authForm");
-				const formTitle = document.getElementById("formTitle");
-				const formDescription = document.getElementById("formDescription");
-				const emailGroup = document.getElementById("emailGroup");
-				const submitButton = document.getElementById("submitButton");
-				const toggleMode = document.getElementById("toggleMode");
-				const toggleLabel = document.getElementById("toggleLabel");
-				const errorMessage = document.getElementById("errorMessage");
-				const successMessage = document.getElementById("successMessage");
+	</div>
+	<!-- dom elements -->
+	<script crossorigin="anonymous" type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			const form = document.getElementById("authForm");
+			const formTitle = document.getElementById("formTitle");
+			const formDescription = document.getElementById("formDescription");
+			const emailGroup = document.getElementById("emailGroup");
+			const submitButton = document.getElementById("submitButton");
+			const toggleMode = document.getElementById("toggleMode");
+			const toggleLabel = document.getElementById("toggleLabel");
+			const errorMessage = document.getElementById("errorMessage");
+			const successMessage = document.getElementById("successMessage");
 
-				let isLoginMode = true;
+			let isLoginMode = true;
 
-				toggleMode.addEventListener("change", function () {
-					isLoginMode = !isLoginMode;
-					updateFormMode();
-				});
+			toggleMode.addEventListener("change", function () {
+				isLoginMode = !isLoginMode;
+				updateFormMode();
+			});
 
-				function updateFormMode() {
-					if (isLoginMode) {
-						formTitle.textContent = "Login";
-						formDescription.textContent = "Welcome back! Please login to your account.";
-						emailGroup.style.display = "none";
-						submitButton.textContent = "Login";
-						submitButton.removeAttribute("data-signup");
-						submitButton.setAttribute("data-login", "");
-						toggleLabel.textContent = "Need an account?";
-					} else {
-						formTitle.textContent = "Register";
-						formDescription.textContent = "Create a new account to get started.";
-						emailGroup.style.display = "block";
-						submitButton.textContent = "Register";
-						submitButton.removeAttribute("data-login");
-						submitButton.setAttribute("data-signup", "");
-						toggleLabel.textContent = "Already have an account?";
-					}
-					errorMessage.textContent = "";
-					successMessage.textContent = "";
+			function updateFormMode() {
+				if (isLoginMode) {
+					formTitle.textContent = "Login";
+					formDescription.textContent = "Welcome back! Please login to your account.";
+					emailGroup.style.display = "none";
+					submitButton.textContent = "Login";
+					submitButton.removeAttribute("data-signup");
+					submitButton.setAttribute("data-login", "");
+					toggleLabel.textContent = "Need an account?";
+				} else {
+					formTitle.textContent = "Register";
+					formDescription.textContent = "Create a new account to get started.";
+					emailGroup.style.display = "block";
+					submitButton.textContent = "Register";
+					submitButton.removeAttribute("data-login");
+					submitButton.setAttribute("data-signup", "");
+					toggleLabel.textContent = "Already have an account?";
+				}
+				errorMessage.textContent = "";
+				successMessage.textContent = "";
+			}
+
+			form.addEventListener("submit", function (e) {
+				e.preventDefault();
+
+				const username = document.getElementById("username").value.trim();
+				const emailInput = document.getElementById("email");
+				const email = emailInput.value.trim();
+				const password = document.getElementById("password").value;
+
+				errorMessage.textContent = "";
+				successMessage.textContent = "";
+
+				if (!username) {
+					errorMessage.textContent = "Username is required.";
+					return;
 				}
 
-				form.addEventListener("submit", function (e) {
-					e.preventDefault();
+				// 2. Check Password (Required always)
+				if (!password) {
+					errorMessage.textContent = "Password is required.";
+					// You might add password complexity checks here later
+					return;
+				}
 
-					const username = document.getElementById("username").value;
-					const email = document.getElementById("email").value;
-					const password = document.getElementById("password").value;
-
-					errorMessage.textContent = "";
-					successMessage.textContent = "";
-
-					if (!username || !password || (!isLoginMode && !email)) {
-						errorMessage.textContent = "Please fill in all fields";
+				// 3. Check Email (Required and Valid only in Register mode)
+				if (!isLoginMode) { // These checks only apply when registering
+					if (!email) {
+						errorMessage.textContent = "Email is required for registration.";
 						return;
 					}
-
-					if (!isLoginMode && !isValidEmail(email)) {
-						errorMessage.textContent = "Please enter a valid email address";
+					if (!isValidEmail(email)) {
+						errorMessage.textContent = "Please enter a valid email address.";
 						return;
 					}
+				}
+				console.log("Validation passed. Proceeding with", isLoginMode ? "Login" : "Registration");
 
-					// Simulate API call
-					setTimeout(() => {
+				// Disable button to prevent multiple submissions
+				submitButton.disabled = true;
+				submitButton.textContent = isLoginMode ? 'Logging in...' : 'Registering...';
+
+				// Simulate API call
+				setTimeout(() => {
+					const isSuccess = Math.random() > 0.2; // 80% chance of success for demo
+
+					if (isSuccess) {
 						successMessage.textContent = isLoginMode ? "Login successful!" : "Registration successful!";
 						form.reset();
-					}, 1000);
-				});
+						// Optionally switch back to login mode after successful registration
+						// if (!isLoginMode) {
+						//     toggleMode.checked = false; // Uncheck the toggle
+						//     isLoginMode = true;
+						//     updateFormMode();
+						// }
+					} else {
+						errorMessage.textContent = isLoginMode ? "Login failed: Invalid username or password." : "Registration failed: Username or email might already exist.";
+					}
 
-				function isValidEmail(email) {
-					const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-					return emailRegex.test(email);
-				}
+					// Re-enable button and reset text *after* API call simulation
+					submitButton.disabled = false;
+					// Use the current mode to set the text correctly, in case it changed
+					submitButton.textContent = isLoginMode ? 'Login' : 'Register';
+
+				}, 1000);
 			});
-		</script>
 
-		<!-- <script src="https://www.jsdelivr.com/package/npm/@simplewebauthn/browser"></script> -->
-		<!-- <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script> -->
-		<script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@13.1.0/dist/bundle/index.umd.min.js" crossorigin="anonymous" type="module"></script>
-		<!-- webpack -->
-		<script src="/main.js" crossorigin="anonymous" type="module"></script>
-		<!-- <script src="/main.js" type="module"></script>  -->
-	</body>
+			function isValidEmail(email) {
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				return emailRegex.test(email);
+			}
+			updateFormMode();
+		});
+	</script>
+
+	<!-- <script src="https://www.jsdelivr.com/package/npm/@simplewebauthn/browser"></script> -->
+	<!-- <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@13.1.0/dist/bundle/index.umd.min.js"
+		crossorigin="anonymous" type="module"></script>
+	<!-- webpack -->
+	<script src="/main.js" crossorigin="anonymous" type="module"></script>
+</body>
+
 </html>

@@ -13,7 +13,15 @@ loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
 		width: 400,
 		height: 200,
 		channel: x,
-		quality: "160p",
+		theme: "dark",
+		layout: "video",
+		muted: false,
+		autoplay: false, // Set to true if you want the video to autoplay
+		parent: [location.hostname, "localhost", "db-2-cards.vercel.app", "elegant-bubblegum-a62895.netlify.app"],
+		quality: "low",
+		setChannel: x,
+		arguments: [x],
+		// Set the channel to the initial value of x
 	};
 
 	if (typeof Twitch !== "undefined") {
@@ -55,22 +63,22 @@ loadScript("https://player.twitch.tv/js/embed/v1.js", function () {
 		const selectedRadio = document.querySelector('input[name="hopping"]:checked');
 
 		switch (selectedRadio.value) {
-			case "a":
+			case "c":
 				buttonx.value = "cerbervt";
 				break;
-			case "b":
+			case "p":
 				buttonx.value = "plush";
 				break;
 			case "tb":
 				buttonx.value = "thinkerbella";
 				break;
-			case "w":
-				buttonx.value = "spwooqi";
+			case "y":
+				buttonx.value = "yugioh_official";
 				break;
 			case "s":
 				buttonx.value = "shonzo";
 				break;
-			case "c":
+			case "t":
 				buttonx.value = "trumporbiden2028";
 				break;
 		}
@@ -152,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				width: 480,
 				height: 260,
 				theme: "dark",
-				channel: "trumporkamala2024",
+				channel: "trumporbiden2028",
 				layout: "video",
 				//autoplay: true,
 				muted: false,

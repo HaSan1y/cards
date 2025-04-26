@@ -1,6 +1,19 @@
 const USERS = [];
 console.log("DB module loaded");
-
+// test0 pw empty, test1
+// --- Test User Creation (Keep for testing if needed) ---
+// It's generally better to have a proper database, but for testing:
+// if (getUserByEmail("test0@example.com") == null) {
+// 	createUser("testuser0", "test0@example.com", {
+// 		id: "aGg=", // This needs to be a valid Base64URL encoded ID for actual testing, aGg= hh
+// 		transports: ["internal"], // Example transport
+// 	});
+// }
+// if (getUserByEmail("test1@example.com") == null) {
+// 	createUser("testuser1", "test1@example.com", {});
+// }
+// createUser("testuser1", "test1@example.com", {});
+// --- End Test User Creation ---
 function getUserByUsername(username) {
 	console.log("Searching for user with username:", username);
 	console.log("Current USERS array:", USERS);

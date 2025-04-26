@@ -63,8 +63,7 @@ async function updateUserCounter(userId, newCounter) {
 }
 async function getUserPassKeyForVerification(userId) {
 	console.log(`KV: Getting passkey for verification for user ID: ${userId}`); // Added logging
-	const user = await getUserById(userId); // <--- Add await
-	// Now 'user' will be the actual user object or null
+	const user = await getUserById(userId);
 	if (!user) {
 		console.error(`KV: User not found for verification: ${userId}`);
 		return null;

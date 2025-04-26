@@ -74,20 +74,20 @@ module.exports = async (req, res) => {
 	// --- CORS Preflight Handling (OPTIONS request) ---
 	if (req.method === "OPTIONS") {
 		if (isAllowed) {
-			res.setHeader("Access-Control-Allow-Origin", effectiveOrigin); // Use effectiveOrigin
+			res.setHeader("Access-Control-Allow-Origin", effectiveOrigin);
 			res.setHeader("Access-Control-Allow-Credentials", "true");
 			res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 			res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 			return res.status(204).end();
 		} else {
-			console.error(`OPTIONS request blocked: Origin='${origin}', Host='${host}'`);
+			console.error(`OPTIONS request blocked: Origin='${origin}', effectiveOrigin='${effectiveOrigin}' , Host='${host}'`);
 			return res.status(403).json({ error: "Origin not allowed" });
 		}
 	}
 
 	// --- Actual Request Handling ---
 	if (!isAllowed) {
-		console.error(`Request blocked: Origin='${origin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
+		console.error(`Request blocked: Origin='${origin}', effectiveOrigin='${effectiveOrigin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
 		return res.status(403).json({ error: "Invalid request origin/host" });
 	}
 	res.setHeader("Access-Control-Allow-Origin", effectiveOrigin); // Crucial: Allow the specific valid origin
@@ -132,146 +132,5 @@ module.exports = async (req, res) => {
 	} catch (error) {
 		console.error("Error verifying authentication response:", error);
 		return res.status(500).json({ error: "Internal server error" });
-	}
-};
-
-exports.handler = async (event) => {
-	const origin = event.headers.origin;
-	const host = event.headers.host; // e.g., 'localhost:3000'
-	console.log(`[Vercel Init-Register] Received Request: Method=${event.httpMethod}, Origin='${origin}', Host='${host}'`);
-	let isAllowed = false;
-	let effectiveOrigin = origin; // Will store the origin to use in response headers
-
-	const vercelHost = "db-2-cards.vercel.app";
-	const vercelOrigin = "https://db-2-cards.vercel.app";
-	const netlifyHost = "elegant-bubblegum-a62895.netlify.app"; // Make sure this is the correct host header value for Netlify
-	const netlifyOrigin = "https://elegant-bubblegum-a62895.netlify.app";
-	const localhostHost = "localhost:3000";
-	const localhostOrigin = "http://localhost:3000";
-	// Check 1: Standard CORS check (Origin header is present and allowed)
-	if (origin && ALLOWED_ORIGINS.includes(origin)) {
-		isAllowed = true;
-		effectiveOrigin = origin;
-	}
-	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
-	else if (!origin && host === localhostHost) {
-		// This assumes your local dev server runs on port 3000
-		isAllowed = true;
-		// For the response header, reconstruct the expected local origin
-		effectiveOrigin = localhostOrigin;
-		console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
-	} else if (!origin && host === vercelHost) {
-		isAllowed = true;
-		effectiveOrigin = vercelOrigin; // Use the standard Vercel origin for response headers
-		console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
-	} else if (!origin && host === netlifyHost) {
-		isAllowed = true;
-		effectiveOrigin = netlifyOrigin; // Use the standard Netlify origin for response headers
-		console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
-	}
-	const httpMethod = event.httpMethod;
-	if (httpMethod === "OPTIONS") {
-		if (ALLOWED_ORIGINS.includes(origin)) {
-			return {
-				statusCode: 204, // No Content
-				headers: {
-					"Access-Control-Allow-Origin": origin, // Echo back the allowed origin
-					"Access-Control-Allow-Credentials": "true",
-					"Access-Control-Allow-Methods": "GET, POST, OPTIONS", // Adjust methods as needed
-					"Access-Control-Allow-Headers": "Content-Type", // Adjust headers as needed
-				},
-				body: "", // No body needed for preflight
-			};
-		} else {
-			// Origin not allowed for preflight
-			return {
-				statusCode: 403,
-				headers: {
-					"Content-Type": "application/json",
-					// Do NOT send Allow-Origin header if the origin is truly disallowed
-				},
-				body: JSON.stringify({ error: "Origin not allowed" }),
-			};
-		}
-	}
-
-	const commonHeaders = {
-		"Access-Control-Allow-Origin": origin, // CRUCIAL: Use the specific validated origin
-		"Access-Control-Allow-Credentials": "true",
-		"Content-Type": "application/json",
-	};
-
-	// 3. Get RP Config for this origin
-	const currentRpConfig = RP_CONFIG[origin];
-	if (!currentRpConfig) {
-		console.error(`No RP config found for allowed origin: ${origin}`);
-		return {
-			statusCode: 500,
-			headers: commonHeaders, // Include CORS headers even for server errors if origin was initially allowed
-			body: JSON.stringify({ error: "Server configuration error for origin" }),
-		};
-	}
-	const cookies = parseCookies(event.headers.cookie);
-	const authInfo = cookies.authInfo ? JSON.parse(cookies.authInfo) : null;
-
-	if (!authInfo) {
-		return {
-			statusCode: 400,
-			headers: commonHeaders,
-			body: JSON.stringify({ error: "Authentication info not found" }),
-		};
-	}
-	const body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
-
-	const authenticatorData = await getUserPassKeyForVerification(authInfo.userId); // Use the function
-
-	if (!authenticatorData) {
-		// Check the result of the function call
-		console.error(`User validation failed for verification: User ID ${authInfo.userId}`);
-		return {
-			statusCode: 400,
-			headers: commonHeaders,
-			body: JSON.stringify({ error: "User not found or no passkey registered/retrievable for user." }),
-		};
-	}
-	try {
-		const verification = await verifyAuthenticationResponse({
-			response: body,
-			expectedChallenge: authInfo.challenge,
-			expectedOrigin: effectiveOrigin,
-			expectedRPID: currentRpConfig.rpId,
-			authenticator: authenticatorData,
-		});
-
-		if (verification.verified) {
-			updateUserCounter(authInfo.userId, verification.authenticationInfo.newCounter);
-			// event.context.clearCookie("authInfo");
-			// Save user in a session cookie
-			return {
-				statusCode: 200,
-				headers: {
-					...commonHeaders,
-					"Set-Cookie": "authInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None",
-				},
-				body: JSON.stringify({ verified: verification.verified }),
-			};
-		} else {
-			return {
-				statusCode: 400,
-				headers: {
-					...commonHeaders,
-				},
-				body: JSON.stringify({ verified: false, error: "Verification failed" }),
-			};
-		}
-	} catch (error) {
-		console.error("Error verifying authentication response:", error);
-		return {
-			statusCode: 500,
-			headers: {
-				...commonHeaders,
-			},
-			body: JSON.stringify({ error: "Internal server error" }),
-		};
 	}
 };

@@ -1,18 +1,15 @@
-// dotenv
-// import dotenv from "./dotenv";
-// dotenv.config();
 // import "htmx.org";
 // import "/initiate-htmx.js";
 document.addEventListener("DOMContentLoaded", () => {
 	const htmxButton = document.getElementById("htmx-proxy");
 	const currentUrl = window.location.origin;
 	console.log("Current URL:", currentUrl);
-	if (currentUrl.includes("netlify.app")) {
-		htmxButton.setAttribute("hx-get", "/.netlify/functions/htmx-joke");
+	if (currentUrl.includes("netlify.app") || currentUrl.includes("localhost:8888")) {
+		htmxButton.setAttribute("hx-get", "/.netlify/functions/Nhtmx-joke");
 	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000")) {
 		htmxButton.setAttribute("hx-get", "/api/htmx-joke");
 	} else {
-		console.log("Unknown URL, no API|(local:8888) configured.");
+		console.log("Unknown URL, no API endpoint configured.");
 	}
 });
 
@@ -48,22 +45,22 @@ const executeCodes = () => {
 			});
 		});
 	}
-	//terms disabled && 1 == 0
-	if (!document.cookie.includes("terms-accepted") && 1 == 0) {
-		closeDisclaimerModal.addEventListener("click", () => {
-			if (acknowledgeDisclaimer.checked) {
-				document.cookie = "acpttermsBy= ${terms-accepted}; SameSite=Strict; max-age= " + 60 * 60 * 24 * 30;
-				document.body.style.overflow = "auto";
-				disc.remove();
-			} else {
-				body.classList.add("hide");
-				document.body.style.overflow = "hidden";
-			}
-		});
-	} else {
-		document.body.style.overflow = "auto";
-		disc.remove();
-	}
+	//terms disabled
+	// if (!document.cookie.includes("terms-accepted") ) {
+	// 	closeDisclaimerModal.addEventListener("click", () => {
+	// 		if (acknowledgeDisclaimer.checked) {
+	// 			document.cookie = "acpttermsBy= ${terms-accepted}; SameSite=Strict; max-age= " + 60 * 60 * 24 * 30;
+	// 			document.body.style.overflow = "auto";
+	// 			disc.remove();
+	// 		} else {
+	// 			body.classList.add("hide");
+	// 			document.body.style.overflow = "hidden";
+	// 		}
+	// 	});
+	// } else {
+	// 	document.body.style.overflow = "auto";
+	// 	disc.remove();
+	// }
 };
 
 //3state slider//////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +130,7 @@ setTheme();
 //   e.preventDefault(); ///
 //   const files = document.getElementById("files");
 //   const formData = new FormData();
-//   // // formData.append("name", name.value);
+//   //  formData.append("name", name.value);
 //   for (let i = 0; i < files.files.length; i++) {
 //     formData.append("files", files.files[i]);
 //   }
@@ -161,9 +158,9 @@ window.switchDatabase = async function switchDatabase() {
 			const currentUrl = window.location.origin;
 
 			if (currentUrl === "https://db-2-cards.vercel.app" || currentUrl === "http://localhost:3000") {
-				return "/api/vercel-proxy?type=image"; // Vercel API endpoint
+				return "/api/vercel-proxy?type=image";
 			} else if (currentUrl === "https://elegant-bubblegum-a62895.netlify.app" || currentUrl === "http://localhost:8888") {
-				return "/.netlify/functions/net-proxy?path=images"; // Netlify API endpoint
+				return "/.netlify/functions/net-proxy?path=images";
 			} else {
 				console.error("Unknown URL, no API endpoint configured.");
 				return null;
@@ -294,18 +291,15 @@ window.switchDatabase = async function switchDatabase() {
 		sessionbtn.reset();
 
 		// sessionStorage.setItem("user", JSON.stringify(user);// Store data
-
 		// let value = JSON.parse(sessionStorage.getItem("user");// Retrieve data
-
 		// sessionStorage.removeItem("key");// Remove data
-
 		// sessionStorage.clear();// Clear all session storage data
 	} else if (isLocalDB) {
 		console.log("Switching to LocalDB");
-		localStorage.setItem("settings", JSON.stringify(settings)); // Store data
-		let value = JSON.parse(localStorage.getItem("settings")); // Retrieve data
-		localStorage.removeItem("key"); // Remove data
-		localStorage.clear(); // Clear all local storage data
+		localStorage.setItem("settings", JSON.stringify(settings));
+		let value = JSON.parse(localStorage.getItem("settings"));
+		localStorage.removeItem("key");
+		localStorage.clear();
 		console.log("Retrieved settings:", value);
 
 		// } else if (isCacheDB) {
@@ -315,65 +309,90 @@ window.switchDatabase = async function switchDatabase() {
 	}
 };
 window.switchDatabase = switchDatabase;
-document.querySelector('button[id="buon"]').addEventListener("click", async () => {
-	// 	const apiUrl = process.env.NODE_ENV === 'development'
-	// 	  ? 'http://localhost:8888/api/proxy'  // Netlify Dev
-	//   : '/api/proxy';                      // Production
+const apiEndpoints = {
+	"https://db-2-cards.vercel.app": {
+		joke: "/api/vercel-proxy?type=joke",
+		insult: "/api/vercel-proxy?type=insult",
+	},
+	"http://localhost:8888": {
+		joke: "/.netlify/functions/net-proxy?path=jokes",
+		insult: "/.netlify/functions/net-proxy?path=insults",
+	},
+	"http://localhost:3000": {
+		joke: "/api/vercel-proxy?type=joke",
+		insult: "/api/vercel-proxy?type=insult",
+	},
+	"https://elegant-bubblegum-a62895.netlify.app": {
+		joke: "/.netlify/functions/net-proxy?path=jokes",
+		insult: "/.netlify/functions/net-proxy?path=insults",
+	},
+};
 
+function getApiUrl(type) {
+	const origin = window.location.origin;
+	console.log("Current Origin for API lookup:", origin);
+	const endpointConfig = apiEndpoints[origin];
+
+	if (endpointConfig && endpointConfig[type]) {
+		console.log(`Using endpoint for ${origin} [${type}]: ${endpointConfig[type]}`);
+		return endpointConfig[type];
+	} else {
+		// Fallback if origin or type not found
+		const fallbackUrl = `/api/vercel-proxy?type=${type}`; // Defaulting to Vercel proxy
+		console.warn(`Origin '${origin}' or type '${type}' not found in apiEndpoints config. Using fallback: ${fallbackUrl}`);
+		return fallbackUrl;
+	}
+}
+document.querySelector('button[id="buon"]').addEventListener("click", async () => {
+	const apiUrl = getApiUrl("joke");
+	const apiiUrl = getApiUrl("insult");
+	// const apiUrl = process.env.NODE_ENV === 'development'
 	// const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 	// const apiUrl = "https://api.adviceslip.com/advice";
 
-	// "http://localhost:8888/api/proxy";
-	// "/.netlify/functions/proxxy";
-	const apiUrl = window.location.origin === "https://db-2-cards.vercel.app" ? "/api/vercel-proxy?type=joke" : "/.netlify/functions/net-proxy?path=jokes";
-	const apiiUrl = window.location.origin === "https://elegant-bubblegum-a62895.netlify.app" ? "/.netlify/functions/net-proxy?path=insults" : "/api/vercel-proxy?type=insult";
-
+	//console.log("Fetching joke from:", apiUrl); // Log the determined URL
 	fetch(apiUrl)
-		.then((response) => response.json())
-		.then((data) => {
-			//   console.log(data);
-			document.getElementById("adviceid").innerHTML = data.joke || "No joke found v";
+		.then((response) => {
+			if (!response.ok) throw new Error(`Joke fetch failed: ${response.statusText}`);
+			return response.json();
 		})
-		.catch((error) => console.error("Error:", error));
+		.then((data) => {
+			document.getElementById("adviceid").innerHTML = data.joke || "No joke found (YoMama API)";
+		})
+		.catch((error) => {
+			console.error("Error fetching joke:", error);
+			document.getElementById("adviceid").innerHTML = `Error: ${error.message}`;
+		});
 
+	// This one doesn't depend on your logic, but keep it if you want it
 	fetch("https://icanhazdadjoke.com/", {
 		headers: { Accept: "application/json" },
 	})
-		.then((response) => response.json())
-		.then((data) => (document.getElementById("advice").innerHTML = `${data.joke}`))
-		.catch((error) => console.error("Error:", error));
-
-	fetch(apiiUrl)
-		.then((response) => response.json())
-		.then((data) => {
-			//	console.log(data);
-			document.getElementById("insult").innerHTML = data.insult || "No joke found n";
+		.then((response) => {
+			if (!response.ok) throw new Error(`Dad joke fetch failed: ${response.statusText}`);
+			return response.json();
 		})
-		.catch((error) => console.error("Error:", error));
+		.then((data) => (document.getElementById("advice").innerHTML = `${data.joke}`))
+		.catch((error) => {
+			console.error("Error fetching dad joke:", error);
+			document.getElementById("advice").innerHTML = `Error: ${error.message}`;
+		});
+
+	//console.log("Fetching insult from:", apiiUrl); // Log the determined URL
+	fetch(apiiUrl)
+		.then((response) => {
+			if (!response.ok) throw new Error(`Insult fetch failed: ${response.statusText}`);
+			return response.json();
+		})
+		.then((data) => {
+			document.getElementById("insult").innerHTML = data.insult || "No insult found (EvilInsult API)";
+		})
+		.catch((error) => {
+			console.error("Error fetching insult:", error);
+			document.getElementById("insult").innerHTML = `Error: ${error.message}`;
+		});
 });
 
-// document.querySelector('button[id="buon"]').addEventListener("click", async () => {
-// const response = await fetch(apiUrl + "?" + Math.floor(Math.random() * 10, {
-// 	const response = await fetch(proxyUrl +apiUrl, {
-// 		cache: "no-cache",
-// 		method: "GET",
-// 		headers: {
-// 			accept: "application/json",
-// 			"Content-Type": "application/json",
-// 		},
-// 	});
-// 		if (response.status != 200) {
-// 					document.getElementById("err").style.display = "block";
-// 					document.getElementById("span").innerHTML = `${response.status}`;
-// 				} else {
-// 					var data = await response.json();
-// 					document.querySelector("#err").style.display = "none";
-// 					console.log("data:" + JSON.stringify(data));
-// 					document.getElementById("advice").innerHTML = `${data.joke}`;
-// 					 document.getElementById("advice").innerHTML = `${data.slip.advice}`;
-// 					 document.getElementById("adviceid").innerHTML = `${data.slip.id}`;
-// 				}
-//  });
 // const apiUrl = "https://www.yomama-jokes.com/api/v1/jokes/random/";
 
 // insult api doesnt include cors header in their server, cors-anywhere for dev testing., unless u make own server including response with cors header this wont work

@@ -1,5 +1,3 @@
-// const fetch = require("node-fetch");
-
 // Common logic
 async function getJoke() {
 	const response = await fetch("https://icanhazdadjoke.com/", {
@@ -28,34 +26,5 @@ module.exports = async (req, res) => {
 		//res.setHeader("Access-Control-Allow-Credentials", "true");// Avoid credentials:true with wildcard origin
 		res.setHeader("Content-Type", "text/plain");
 		res.status(500).send("Error fetching joke");
-	}
-};
-
-// Netlify handler
-exports.handler = async (event) => {
-	const { headers } = event;
-	const origin = headers.origin || headers.Origin || "*"; // Default to "*"
-	try {
-		const joke = await getJoke();
-		return {
-			statusCode: 200,
-			headers: {
-				"Content-Type": "text/plain",
-				"Access-Control-Allow-Origin": origin,
-				//"Access-Control-Allow-Credentials": "true",
-			},
-			body: joke,
-		};
-	} catch (error) {
-		console.error("Error fetching joke:", error);
-		return {
-			statusCode: 500,
-			headers: {
-				"Content-Type": "text/plain",
-				"Access-Control-Allow-Origin": origin,
-				//"Access-Control-Allow-Credentials": "true",
-			},
-			body: `Error fetching joke: ${error.message}`,
-		};
 	}
 };

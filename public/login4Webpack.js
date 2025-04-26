@@ -35,12 +35,12 @@ document.addEventListener("DOMContentLoaded", function () {
 closeButton.addEventListener("click", () => modal.close());
 const SERVER_URL =
 	window.location.origin === "https://db-2-cards.vercel.app"
-		? "https://db-2-cards.vercel.app/api"
-		: window.location.origin === "http://localhost:3000"
-		? "http://localhost:3000/api"
+		? "https://db-2-cards.vercel.app/api/"
+		: window.location.origin === "http://localhost:8888"
+		? "http://localhost:8888/.netlify/functions/N"
 		: window.location.origin === "https://elegant-bubblegum-a62895.netlify.app"
-		? "https://elegant-bubblegum-a62895.netlify.app/.netlify/functions"
-		: "http://localhost:3000/api"; // Default to localhost if no match
+		? "https://elegant-bubblegum-a62895.netlify.app/.netlify/functions/N"
+		: "http://localhost:3000/api/"; // Default to localhost if no match
 
 async function signup() {
 	console.log("Signup function called");
@@ -49,7 +49,7 @@ async function signup() {
 		console.log("Registering with email:", email);
 
 		// 1. Get challenge from server
-		const initResponse = await fetch(`${SERVER_URL}/init-register?email=${email}`, { credentials: "include" });
+		const initResponse = await fetch(`${SERVER_URL}init-register?email=${email}`, { credentials: "include" });
 		if (!initResponse.ok) {
 			throw new Error(`HTTP error! status: ${initResponse.status}`);
 			// showModalText(options.error);
@@ -58,10 +58,10 @@ async function signup() {
 		console.log("Server response:", options);
 		// 2. Create passkey
 		const registrationJSON = await startRegistration(options);
-		console.log("Registration JSON:", registrationJSON);
+		// console.log("Registration JSON:", registrationJSON);
 
 		// 3. Save passkey in DB
-		const verifyResponse = await fetch(`${SERVER_URL}/verify-register`, {
+		const verifyResponse = await fetch(`${SERVER_URL}verify-register`, {
 			credentials: "include",
 			method: "POST",
 			headers: {
@@ -81,7 +81,7 @@ async function signup() {
 		}
 	} catch (error) {
 		if (error.name === "NotAllowedError") {
-		// if (error instanceof NotAllowedError) {
+			// if (error instanceof NotAllowedError) {
 			showModalText("Signup not allowed: " + error.message);
 		} else if (error instanceof Error) {
 			showModalText(error.message);
@@ -104,7 +104,7 @@ async function login() {
 		}
 
 		// 1. Get challenge from server
-		const initResponse = await fetch(`${SERVER_URL}/init-auth?username=${username}`, {
+		const initResponse = await fetch(`${SERVER_URL}init-auth?username=${username}`, {
 			credentials: "include",
 		});
 		if (!initResponse.ok) {
@@ -114,12 +114,12 @@ async function login() {
 			// showModalText(options.error);
 		}
 		const options = await initResponse.json();
-		console.log("Received options from /init-auth:", JSON.stringify(options, null, 2));
+		// console.log("Received options from /init-auth:", JSON.stringify(options, null, 2));
 		// 2. Get passkey
 		const authJSON = await startAuthentication(options);
 
 		// 3. Verify passkey with DB
-		const verifyResponse = await fetch(`${SERVER_URL}/verify-auth`, {
+		const verifyResponse = await fetch(`${SERVER_URL}verify-auth`, {
 			credentials: "include",
 			method: "POST",
 			headers: {
