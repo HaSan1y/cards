@@ -2,6 +2,7 @@ git config core.ignorecase false
 
 node_modules
 *.env
+*.env.*
 
 how
 public/test2.html

@@ -1,6 +1,6 @@
 const { generateAuthenticationOptions } = require("@simplewebauthn/server");
-const { getUserByUsername } = require("./db/wds-basicDB.js");
-// const { getUserByUsername, getUserByEmail } = require("./db/vercelDB.js");
+// const { getUserByUsername } = require("./db/wds-basicDB.js");
+const { getUserByUsername } = require("./db/vercelDB.js");
 
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
@@ -32,7 +32,7 @@ const RP_CONFIG = {
 // It's generally better to have a proper database, but for testing:
 // if (getUserByEmail("test0@example.com") == null) {
 // 	createUser("testuser0", "test0@example.com", {
-// 		id: "some-id", // This needs to be a valid Base64URL encoded ID for actual testing
+// 		id: "aGg=", // This needs to be a valid Base64URL encoded ID for actual testing, aGg= hh
 // 		transports: ["internal"], // Example transport
 // 	});
 // }
@@ -104,7 +104,7 @@ module.exports = async (req, res) => {
 		return res.status(400).json({ error: "Username is required" });
 	}
 
-	const user = getUserByUsername(username);
+	const user = await getUserByUsername(username);
 	console.log("User found:", user);
 	if (!user) {
 		return res.status(400).json({ error: "No user for this username" });
@@ -112,15 +112,21 @@ module.exports = async (req, res) => {
 	try {
 		const options = await generateAuthenticationOptions({
 			rpID: currentRpConfig.rpId,
-			allowCredentials: [
-				{
-					id: user.passKey.id,
-					type: "public-key",
-					transports: user.passKey.transports,
-				},
-			],
+			allowCredentials: user.passKey
+				? [
+						{
+							id: user.passKey.id,
+							type: "public-key",
+							transports: user.passKey.transports,
+						},
+				  ]
+				: [],
 		});
 
+		if (!user.passKey || options.allowCredentials.length === 0) {
+			console.warn(`User ${username} has no registered passkeys.`);
+			return res.status(400).json({ error: "No passkeys registered for this user." });
+		}
 		res.setHeader(
 			"Set-Cookie",
 			`authInfo=${encodeURIComponent(
@@ -222,7 +228,7 @@ exports.handler = async (event) => {
 		};
 	}
 
-	const user = getUserByUsername(username);
+	const user = await getUserByUsername(username);
 
 	if (!user) {
 		return {

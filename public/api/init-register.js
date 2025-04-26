@@ -1,6 +1,6 @@
 const { generateRegistrationOptions } = require("@simplewebauthn/server");
-const { getUserByEmail } = require("./db/wds-basicDB.js");
-// const { getUserByEmail, createUser } = require("./db/vercelDB.js");
+// const { getUserByEmail } = require("./db/wds-basicDB.js");
+const { getUserByEmail } = require("./db/vercelDB.js");
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
 	"https://db-2-cards.vercel.app", // Vercel deployment
@@ -109,7 +109,7 @@ module.exports = async (req, res) => {
 		return res.status(400).json({ error: "Email is required" });
 	}
 
-	if (getUserByEmail(email) != null) {
+	if ((await getUserByEmail(email)) != null) {
 		return res.status(400).json({ error: "User already exists" });
 	}
 	try {
@@ -248,7 +248,7 @@ exports.handler = async (event) => {
 			headers: commonHeaders,
 			body: JSON.stringify({ error: "Email is required" }),
 		};
-	const existingUser = getUserByEmail(email); // Assuming this returns the user or null/undefined
+	const existingUser = await getUserByEmail(email); // Assuming this returns the user or null/undefined
 	if (existingUser != null) {
 		return {
 			statusCode: 400,

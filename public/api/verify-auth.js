@@ -1,6 +1,6 @@
 const { verifyAuthenticationResponse } = require("@simplewebauthn/server");
-const { updateUserCounter, getUserById } = require("./db/wds-basicDB.js");
-// const { updateUserCounter, getUserById } = require("./db/vercelDB.js");
+// const { updateUserCounter, getUserById } = require("./db/wds-basicDB.js");
+const { updateUserCounter, getUserById, getUserPassKeyForVerification } = require("./db/vercelDB.js");
 
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
@@ -105,10 +105,11 @@ module.exports = async (req, res) => {
 		return res.status(400).json({ error: "Authentication info not found" });
 	}
 
-	const user = getUserById(authInfo.userId);
-	if (user == null || !user.passKey) {
+	const user = await getUserById(authInfo.userId);
+	const authenticatorData = await getUserPassKeyForVerification(authInfo.userId);
+	if (!authenticatorData) {
 		// Check if user exists and has a passKey object
-		console.error(`User validation failed: User found: ${!!user}, PassKey exists: ${!!user?.passKey}`);
+		console.error(`User validation failed for verification: User ID ${authInfo.userId}`);
 		return res.status(400).json({ error: "User not found or no passkey registered for user." });
 	}
 	try {
@@ -117,12 +118,7 @@ module.exports = async (req, res) => {
 			expectedChallenge: authInfo.challenge,
 			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,
-			authenticator: {
-				credentialID: user.passKey.id,
-				credentialPublicKey: user.passKey.publicKey,
-				counter: user.passKey.counter,
-				transports: user.passKey.transports,
-			},
+			authenticator: authenticatorData,
 		});
 
 		if (verification.verified) {
@@ -227,32 +223,28 @@ exports.handler = async (event) => {
 	}
 	const body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
 
-	const user = getUserById(authInfo.userId);
-	if (user == null || !user.passKey) {
-		// Check if user exists and has a passKey object
-		console.error(`User validation failed: User found: ${!!user}, PassKey exists: ${!!user?.passKey}`);
+	const authenticatorData = await getUserPassKeyForVerification(authInfo.userId); // Use the function
+
+	if (!authenticatorData) {
+		// Check the result of the function call
+		console.error(`User validation failed for verification: User ID ${authInfo.userId}`);
 		return {
 			statusCode: 400,
 			headers: commonHeaders,
-			body: JSON.stringify({ error: "User not found or no passkey registered for user." }),
+			body: JSON.stringify({ error: "User not found or no passkey registered/retrievable for user." }),
 		};
 	}
 	try {
 		const verification = await verifyAuthenticationResponse({
 			response: body,
 			expectedChallenge: authInfo.challenge,
-			expectedOrigin: origin,
+			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,
-			authenticator: {
-				credentialID: user.passKey.id,
-				credentialPublicKey: user.passKey.publicKey,
-				counter: user.passKey.counter,
-				transports: user.passKey.transports,
-			},
+			authenticator: authenticatorData,
 		});
 
 		if (verification.verified) {
-			updateUserCounter(user.id, verification.authenticationInfo.newCounter);
+			updateUserCounter(authInfo.userId, verification.authenticationInfo.newCounter);
 			// event.context.clearCookie("authInfo");
 			// Save user in a session cookie
 			return {

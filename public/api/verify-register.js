@@ -1,6 +1,6 @@
 const { verifyRegistrationResponse } = require("@simplewebauthn/server");
-const { createUser } = require("./db/wds-basicDB.js");
-// const { createUser } = require("./db/vercelDB.js");
+// const { createUser } = require("./db/wds-basicDB.js");
+const { createUser } = require("./db/vercelDB.js");
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
 	"https://db-2-cards.vercel.app", // Vercel deployment
@@ -26,6 +26,7 @@ const RP_CONFIG = {
 		rpName: "Local Netlify Dev h451",
 	},
 };
+
 function parseCookies(cookieHeader) {
 	const cookies = {};
 	if (!cookieHeader) return cookies;
@@ -111,15 +112,20 @@ module.exports = async (req, res) => {
 			expectedRPID: currentRpConfig.rpId,
 		});
 
-		if (verification.verified) {
-			createUser(regInfo.userId, regInfo.email, {
-				id: verification.registrationInfo.credentialID,
-				publicKey: verification.registrationInfo.credentialPublicKey,
-				counter: verification.registrationInfo.counter,
-				deviceType: verification.registrationInfo.credentialDeviceType,
-				backedUp: verification.registrationInfo.credentialBackedUp,
-				transport: req.body.transports,
-			});
+		if (verification.verified && verification.registrationInfo) {
+			const regInfoData = verification.registrationInfo;
+			const username = regInfo.email.split("@")[0];
+			// --- Convert binary data to Base64 before storing ---
+			const passKeyDataForStorage = {
+				id: regInfoData.credentialID,
+				publicKey: Buffer.from(regInfoData.credentialPublicKey).toString("base64"), // <--- CONVERT TO BASE64
+				counter: regInfoData.counter,
+				deviceType: regInfoData.credentialDeviceType,
+				backedUp: regInfoData.credentialBackedUp,
+
+				transports: req?.body?.response?.transports,
+			};
+			await createUser(regInfo.userId, username, regInfo.email, passKeyDataForStorage);
 			res.setHeader("Set-Cookie", `regInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None`);
 			return res.status(200).json({ verified: verification.verified });
 		} else {
@@ -226,7 +232,7 @@ exports.handler = async (event) => {
 		});
 
 		if (verification.verified) {
-			createUser(regInfo.userId, regInfo.email, {
+			await createUser(regInfo.userId, regInfo.email, {
 				id: verification.registrationInfo.credentialID,
 				publicKey: verification.registrationInfo.credentialPublicKey,
 				counter: verification.registrationInfo.counter,

@@ -80,6 +80,14 @@ async function signup() {
 			showModalText(`Failed to register`);
 		}
 	} catch (error) {
+		if (error.name === "NotAllowedError") {
+		// if (error instanceof NotAllowedError) {
+			showModalText("Signup not allowed: " + error.message);
+		} else if (error instanceof Error) {
+			showModalText(error.message);
+		} else {
+			showModalText("An unknown error occurred");
+		}
 		console.error("Signup error:", error);
 	}
 }
@@ -106,7 +114,7 @@ async function login() {
 			// showModalText(options.error);
 		}
 		const options = await initResponse.json();
-
+		console.log("Received options from /init-auth:", JSON.stringify(options, null, 2));
 		// 2. Get passkey
 		const authJSON = await startAuthentication(options);
 
@@ -132,7 +140,16 @@ async function login() {
 		}
 	} catch (error) {
 		console.error("Login error:", error);
-		// showModalText(error.message);
+		if (error instanceof DOMException && error.name === "NotAllowedError") {
+			// User cancelled the prompt - this is expected, don't show a scary error
+			showModalText("Login cancelled."); // Or just close the modal, or do nothing
+		} else if (error instanceof Error) {
+			// Handle other errors (network, server errors caught earlier, etc.)
+			showModalText(error.message || "An unknown login error occurred.");
+		} else {
+			// Fallback for unexpected error types
+			showModalText("An unexpected error occurred during login.");
+		}
 	}
 }
 
