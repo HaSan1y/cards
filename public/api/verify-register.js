@@ -1,6 +1,10 @@
-const { verifyRegistrationResponse } = require("@simplewebauthn/server");
+const { generateRegistrationOptions, verifyRegistrationResponse } = require("@simplewebauthn/server");
 // const { createUser } = require("./db/wds-basicDB.js");
-const { createUser } = require("./db/vercelDB.js");
+const { createUser, getUserByUsername, getUserByEmail } = require("./db/vercelDB.js");
+const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
+const saltRounds = 10;
+
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
 	"https://db-2-cards.vercel.app", // Vercel deployment
@@ -98,15 +102,47 @@ module.exports = async (req, res) => {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
 		return res.status(500).json({ error: "Server configuration error for origin" });
 	}
+	const { username, email, password, ...webAuthnResponse } = req.body; // Extract username, email, and password from request body
+
 	const cookies = parseCookies(req.headers.cookie);
 	const regInfo = cookies.regInfo ? JSON.parse(cookies.regInfo) : null;
 
-	if (!regInfo) {
-		return res.status(400).json({ error: "Registration info not found" });
+	if (!username || !email || !password) {
+		console.error("Missing username, email, or password in request body for /verify-register");
+		return res.status(400).json({ error: "Missing required registration fields (username, email, password)." });
 	}
+	if (!regInfo) {
+		return res.status(400).json({ error: "Registration session info not found (cookie missing or expired)." });
+	}
+	// Optional: Check if email from body matches email from cookie for extra safety
+	if (email !== regInfo.email) {
+		console.error(`Email mismatch: Body='${email}', Cookie='${regInfo.email}'`);
+		return res.status(400).json({ error: "Email mismatch during registration." });
+	}
+	const existingUserByUsername = await getUserByUsername(username);
+	if (existingUserByUsername) {
+		return res.status(400).json({ error: "Username already taken" }); // response indicating username taken
+	}
+	const existingUserByEmail = await getUserByEmail(email);
+	if (existingUserByEmail) {
+		return res.status(400).json({ error: "email already taken" });
+	}
+	let passwordHash;
+	try {
+		// Now 'password' should have a value from req.body
+		passwordHash = await bcrypt.hash(password, saltRounds);
+	} catch (hashError) {
+		console.error("Error hashing password:", hashError);
+		// Check if it's the specific 'data required' error again, though it shouldn't be now
+		if (hashError.message.includes("data and salt arguments required")) {
+			console.error("bcrypt error likely due to password still being undefined/null.");
+		}
+		return res.status(500).json({ error: "Failed to process password." });
+	}
+	const userId = uuidv4(); // Generate a unique user ID
 	try {
 		const verification = await verifyRegistrationResponse({
-			response: req.body,
+			response: webAuthnResponse,
 			expectedChallenge: regInfo.challenge,
 			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,
@@ -114,21 +150,23 @@ module.exports = async (req, res) => {
 
 		if (verification.verified && verification.registrationInfo) {
 			const regInfoData = verification.registrationInfo;
-			const username = regInfo.email.split("@")[0];
-			// --- Convert binary data to Base64 before storing ---
+			// const username = regInfo.email.split("@")[0];
+			// const { registrationInfo } = verification;
+
 			const passKeyDataForStorage = {
-				id: regInfoData.credentialID,
-				publicKey: Buffer.from(regInfoData.credentialPublicKey).toString("base64"), // <--- CONVERT TO BASE64
+				id: Buffer.from(regInfoData.credentialID).toString("base64url"),
+				publicKey: Buffer.from(regInfoData.credentialPublicKey).toString("base64"),
 				counter: regInfoData.counter,
 				deviceType: regInfoData.credentialDeviceType,
 				backedUp: regInfoData.credentialBackedUp,
 
-				transports: req?.body?.response?.transports,
+				transports: webAuthnResponse?.response?.transports,
 			};
-			await createUser(regInfo.userId, username, regInfo.email, passKeyDataForStorage);
+			await createUser(userId, username, email, passwordHash, passKeyDataForStorage);
 			res.setHeader("Set-Cookie", `regInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None`);
 			return res.status(200).json({ verified: verification.verified });
 		} else {
+			console.warn("WebAuthn registration verification failed:", verification);
 			return res.status(400).json({ verified: false, error: "Verification failed" });
 		}
 	} catch (error) {

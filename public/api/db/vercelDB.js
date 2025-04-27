@@ -1,18 +1,23 @@
 const { kv } = require("@vercel/kv");
 const { Buffer } = require("buffer");
 
-async function createUser(userId, username, email, passKeyData) {
+async function createUser(userId, username, email, passwordHash, passKeyData) {
 	console.log(`KV: Creating user ${username} with ID ${userId}`);
 	const user = {
 		id: userId,
 		username,
 		email,
+		passwordHash,
 		passKey: passKeyData,
 	};
 
 	await kv.set(`user:${userId}`, user);
 	await kv.set(`user_by_username:${username}`, userId);
-	await kv.set(`user_by_email:${email}`, userId);
+	if (email) {
+		// Only set email index if email is provided
+		await kv.set(`user_by_email:${email}`, userId);
+	}
+	console.log(`KV: User ${username} created successfully.`);
 	return user;
 }
 
@@ -26,14 +31,18 @@ async function getUserByUsername(username) {
 	}
 	// 2. Retrieve the full user object using the ID
 	const user = await kv.get(`user:${userId}`);
-	console.log(`KV: Found user for ID ${userId}:`, user);
+	if (!user) {
+		console.log(`KV: No user data found for user ID: ${userId}`);
+		return null;
+	}
+	console.log(`KV: Found user for ID ${userId}:`, user ? "User data retrieved" : "User data not found");
 	return user;
 }
 
 async function getUserById(userId) {
 	console.log(`KV: Searching for user with ID: ${userId}`);
 	const user = await kv.get(`user:${userId}`);
-	console.log(`KV: Found user for ID ${userId}:`, user);
+	console.log(`KV: Found user for ID ${userId}:`, user ? "User data retrieved" : "User data not found");
 	return user;
 }
 async function getUserByEmail(email) {
@@ -47,7 +56,7 @@ async function getUserByEmail(email) {
 	// 2. Retrieve the full user object using the ID
 	console.log(`KV: Found user ID ${userId} for email ${email}. Fetching user object.`);
 	const user = await kv.get(`user:${userId}`);
-	console.log(`KV: Found user for ID ${userId}:`, user);
+	console.log(`KV: Found user for ID ${userId}:`, user ? "User data retrieved" : "User data not found");
 	return user;
 }
 
@@ -59,34 +68,46 @@ async function updateUserCounter(userId, newCounter) {
 		return;
 	}
 	user.passKey.counter = newCounter;
-	await kv.set(`user:${userId}`, user); // Overwrite the user object with the updated counter
+	await kv.set(`user:${userId}`, user);
+	console.log(`KV: Counter updated for user ${userId}.`);
+}
+async function addPassKeyToUser(userId, passKeyData) {
+	console.log(`KV: Adding/Updating passkey for user ID ${userId}`);
+	const user = await getUserById(userId);
+	if (!user) {
+		console.error(`KV: Cannot add passkey, user not found: ${userId}`);
+		return null;
+	}
+	user.passKey = passKeyData;
+	await kv.set(`user:${userId}`, user);
+	console.log(`KV: Passkey added/updated for user ${userId}.`);
+	return user;
 }
 async function getUserPassKeyForVerification(userId) {
-	console.log(`KV: Getting passkey for verification for user ID: ${userId}`); // Added logging
+	console.log(`KV: Getting passkey for verification for user ID: ${userId}`);
 	const user = await getUserById(userId);
 	if (!user) {
 		console.error(`KV: User not found for verification: ${userId}`);
 		return null;
 	}
-	if (!user.passKey || !user.passKey.id || !user.passKey.publicKey) {
-		console.error(`KV: User ${userId} found, but has no passKey for verification.`);
+	if (!user.passKey || typeof user.passKey !== "object" || !user.passKey.id || !user.passKey.publicKey) {
+		console.warn(`KV: User ${userId} found, but has incomplete or no passKey data for verification.`);
 		return null;
 	}
 	try {
 		// --- Convert stored Base64/Base64URL back to Buffers ---
 		// SimpleWebAuthn expects credentialID as raw bytes (Buffer/Uint8Array)
 		// Assuming user.passKey.id is stored as Base64URL
-		const credentialIDBuffer = Buffer.from(user.passKey.id, "base64url"); // Use 'base64url'
+		const credentialIDBuffer = Buffer.from(user.passKey.id, "base64url");
 
 		// Assuming user.passKey.publicKey is stored as standard Base64
-		const credentialPublicKeyBuffer = Buffer.from(user.passKey.publicKey, "base64"); // Use 'base64'
-		// --- End Conversion ---
+		const credentialPublicKeyBuffer = Buffer.from(user.passKey.publicKey, "base64");
 
 		return {
 			credentialID: credentialIDBuffer,
 			credentialPublicKey: credentialPublicKeyBuffer,
 			counter: user.passKey.counter,
-			transports: user.passKey.transports,
+			transports: user.passKey.transports || undefined,
 		};
 	} catch (error) {
 		console.error(`KV: Error converting passKey data for user ${userId}:`, error);
@@ -101,4 +122,5 @@ module.exports = {
 	getUserById,
 	getUserByUsername,
 	getUserByEmail,
+	addPassKeyToUser,
 };

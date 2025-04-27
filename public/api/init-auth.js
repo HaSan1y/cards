@@ -1,6 +1,7 @@
 const { generateAuthenticationOptions } = require("@simplewebauthn/server");
 // const { getUserByUsername } = require("./db/wds-basicDB.js");
-const { getUserByUsername } = require("./db/vercelDB.js");
+const { getUserByUsername, getUserPassKeyForVerification } = require("./db/vercelDB.js");
+const bcrypt = require("bcrypt");
 
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
@@ -86,32 +87,67 @@ module.exports = async (req, res) => {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
 		return res.status(500).json({ error: "Server configuration error for origin" });
 	}
-	const username = req.query?.username;
-	console.log("Received auth request for username:", username);
+	// const username = req.query?.username;
+	const { username, password } = req.body;
+
 	if (!username) {
 		return res.status(400).json({ error: "Username is required" });
+	}
+	if (!password) {
+		return res.status(400).json({ error: "Password is required" });
 	}
 
 	const user = await getUserByUsername(username);
 	console.log("User found:", user);
-	if (!user) {
-		return res.status(400).json({ error: "No user for this username" });
+	if (!user || !user.passwordHash) {
+		console.log(`Login failed for ${username}: User not found or no password hash.`);
+		return res.status(401).json({ error: "Invalid credentials" });
+	}
+	const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+
+	if (!isPasswordValid) {
+		// Password does not match
+		console.log(`Login failed for ${username}: Invalid password.`);
+		return res.status(401).json({ error: "Unauthorized - Invalid credentials" });
+	}
+
+	// --- PASSWORD IS VALID ---
+	console.log(`Password verified for ${username}. Proceeding with WebAuthn.`);
+
+	// Now, check if the user has a passkey registered for WebAuthn login
+	const userPassKey = await getUserPassKeyForVerification(user.id);
+	if (!user.passKey || !user.passKey.id) {
+		console.log(`User ${username} authenticated with password, but no passkey ID found in user object for WebAuthn options generation.`);
+		// You might still want to return an error here if passkey login is mandatory after password
+		return res.status(400).json({ error: "Passkey data incomplete for this user." });
+	}
+	if (!userPassKey) {
+		// Password is correct, but no passkey registered.
+		// How to handle this?
+		// Option 1: Return an error indicating passkey needed.
+		// Option 2: Log the user in based on password alone (requires session management).
+		// Option 3: Return a specific status/message telling the frontend the password was okay,
+		//           but passkey login isn't possible (maybe prompt user to register one).
+		console.log(`User ${username} authenticated with password, but no passkey found for WebAuthn.`);
+
+		return res.status(500).json({ error: "Failed to prepare passkey data." });
 	}
 	try {
+		console.log("Generating options with Credential ID:", user.passKey.id);
+		console.log("Generating options with Transports:", userPassKey.transports);
 		const options = await generateAuthenticationOptions({
 			rpID: currentRpConfig.rpId,
-			allowCredentials: user.passKey
-				? [
-						{
-							id: user.passKey.id,
-							type: "public-key",
-							transports: user.passKey.transports,
-						},
-				  ]
-				: [],
+			allowCredentials: [
+				{
+					id: user.passKey.id,
+					type: "public-key",
+					//transports: userPassKey.transports,
+				},
+			],
+			userVerification: "preferred",
 		});
 
-		if (!user.passKey || options.allowCredentials.length === 0) {
+		if (options.allowCredentials.length === 0) {
 			console.warn(`User ${username} has no registered passkeys.`);
 			return res.status(400).json({ error: "No passkeys registered for this user." });
 		}
@@ -122,7 +158,7 @@ module.exports = async (req, res) => {
 					userId: user.id,
 					challenge: options.challenge,
 				}),
-			)}; HttpOnly; Path=/; Max-Age=60; Secure; SameSite=None`,
+			)}; HttpOnly; Path=/; Max-Age=300; Secure; SameSite=None`,
 		);
 		return res.status(200).json(options);
 	} catch (error) {

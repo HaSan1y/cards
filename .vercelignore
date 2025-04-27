@@ -1,0 +1,15 @@
+# Ignore Netlify's configuration file
+netlify.toml
+
+# Ignore Netlify's functions directory (adjust path if different)
+netlify/
+# or maybe it's public/api/net/ if you structured it that way
+# public/api/net/
+
+# Ignore any other Netlify-specific build artifacts or files
+.netlify/
+
+Nverify-register.js
+Nverify-auth.js
+Ninit-auth.js
+Ninit-register.js
