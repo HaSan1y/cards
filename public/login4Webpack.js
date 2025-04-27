@@ -98,11 +98,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (submitButton.hasAttribute("data-login")) {
 				console.log("Login attempt");
 				await login();
-				window.location.reload();
+				// window.location.reload();
 			} else if (submitButton.hasAttribute("data-signup")) {
 				console.log("Signup attempt");
 				await signup();
-				window.location.reload();
+				// window.location.reload();
 			} else {
 				console.log("Button has neither data-login nor data-signup attribute");
 				updateFormMode();

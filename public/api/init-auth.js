@@ -141,7 +141,7 @@ module.exports = async (req, res) => {
 				{
 					id: user.passKey.id,
 					type: "public-key",
-					//transports: userPassKey.transports,
+					transports: userPassKey.transports,
 				},
 			],
 			userVerification: "preferred",
