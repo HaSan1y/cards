@@ -93,7 +93,8 @@ module.exports = async (req, res) => {
 	if (!email) {
 		return res.status(400).json({ error: "Email is required" });
 	}
-
+	// const existingUser = await getUserByEmail(email);
+	// const excludeCredentials = existingUser?.passKey?.id ? [{ id: Buffer.from(existingUser.passKey.id, "base64url"), type: "public-key" }] : [];
 	if ((await getUserByEmail(email)) != null) {
 		return res.status(400).json({ error: "User already exists" });
 	}
@@ -101,12 +102,11 @@ module.exports = async (req, res) => {
 		const options = await generateRegistrationOptions({
 			rpID: currentRpConfig.rpId, // Use RP ID based on origin
 			rpName: currentRpConfig.rpName, // Use RP Name based on origin
+			//userID: existingUser ? existingUser.id : generateNewUserId(),
 			userName: email,
-			// Optional: Prevent users from registering multiple credentials if they already have one
-			// excludeCredentials: existingUser?.passKey?.id ? [{ id: existingUser.passKey.id, type: 'public-key' }] : [],
 			authenticatorSelection: {
-				// userVerification: 'preferred', // 'preferred', 'required', 'discouraged'
-				// residentKey: 'preferred', // 'preferred', 'required', 'discouraged' (for discoverable credentials)
+				/*userVerification: "preferred",
+				residentKey: "preferred",*/
 			},
 		});
 		// res.cookie(
@@ -126,7 +126,3 @@ module.exports = async (req, res) => {
 		return res.status(500).json({ error: "Failed to initialize registration" });
 	}
 };
-
-//////////////////////////////////////////////////////////////////////////////////////////////net
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -159,7 +159,6 @@ module.exports = async (req, res) => {
 				counter: regInfoData.counter,
 				deviceType: regInfoData.credentialDeviceType,
 				backedUp: regInfoData.credentialBackedUp,
-
 				transports: webAuthnResponse?.response?.transports,
 			};
 			await createUser(userId, username, email, passwordHash, passKeyDataForStorage);

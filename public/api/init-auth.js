@@ -135,11 +135,12 @@ module.exports = async (req, res) => {
 	try {
 		console.log("Generating options with Credential ID:", user.passKey.id);
 		console.log("Generating options with Transports:", userPassKey.transports);
+		console.log("Generating options with User userPassKey:", userPassKey);
 		const options = await generateAuthenticationOptions({
 			rpID: currentRpConfig.rpId,
 			allowCredentials: [
 				{
-					id: user.passKey.id,
+					id: userPassKey.credentialID.toString("base64url"),
 					type: "public-key",
 					transports: userPassKey.transports,
 				},

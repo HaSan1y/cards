@@ -136,7 +136,6 @@ module.exports = async (req, res) => {
 				expectedOrigin: effectiveOrigin,
 				expectedRPID: currentRpConfig.rpId,
 				authenticator: authenticatorData,
-				//requireUserVerification: false,
 			});
 			console.log("Verification Result:", verification);
 		} catch (verificationError) {

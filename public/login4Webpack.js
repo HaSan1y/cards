@@ -236,13 +236,12 @@ async function login() {
 		if (submitButton) submitButton.disabled = true;
 		// 1. Get challenge from server
 		const initResponse = await fetch(`${SERVER_URL}init-auth`, {
-			// No query params needed now
-			method: "POST", // Use POST
+			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ username, password }), // Send as JSON body
-			credentials: "include", // Keep credentials if using cookies/sessions
+			body: JSON.stringify({ username, password }),
+			credentials: "include",
 		});
 		if (submitButton) submitButton.disabled = false;
 		if (!initResponse.ok) {
@@ -256,9 +255,8 @@ async function login() {
 			throw new Error(errorData.error || `Authentication failed`);
 		}
 		const options = await initResponse.json();
-		console.log("Options being passed to startAuthentication:", JSON.stringify(options, null, 2));
 		if (options.allowCredentials && options.allowCredentials.length > 0) {
-			console.log("Credential ID requested:", options.allowCredentials[0].id);
+			console.log("Cr ID request:", options.allowCredentials[0].id);
 		}
 		const authJSON = await startAuthentication(options);
 		if (submitButton) submitButton.disabled = true;
