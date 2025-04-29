@@ -175,6 +175,7 @@ async function signup(username, email, password) {
 		});
 
 		const initData = await initResponse.json(); // Always try to parse JSON
+		console.log("initData:", initData);
 
 		if (!initResponse.ok) {
 			// Use error message from server response if available
@@ -185,8 +186,10 @@ async function signup(username, email, password) {
 			console.error("Incomplete data received from init-register:", initData);
 			throw new Error("Server did not provide necessary data to start passkey registration.");
 		}
-		const options = initData.options; // Assuming the response *is* the options object
-		// Store the challenge, userId, and email from the response body
+		const options = initData.options;
+		const cleanOptions = { ...options };
+		delete cleanOptions.hints;
+		delete cleanOptions.extensions;
 		expectedChallenge = initData.challenge;
 		userIdForRegistration = initData.userId;
 		emailFromInit = initData.email; // Use email confirmed by server
@@ -201,8 +204,8 @@ async function signup(username, email, password) {
 		// 2. Start WebAuthn Registration Ceremony
 		let regJSON;
 		try {
-			console.log("Calling startRegistration with options:", options);
-			regJSON = await startRegistration(options);
+			console.log("Calling startRegistration with options:", cleanOptions);
+			regJSON = await startRegistration({ publicKey: cleanOptions });
 			console.log("startRegistration successful:", regJSON);
 		} catch (regError) {
 			if (regError.name === "InvalidStateError" || regError.name === "NotAllowedError") {
@@ -279,8 +282,8 @@ async function login(username, password) {
 			body: JSON.stringify({ username, password }),
 			credentials: "include",
 		});
-
 		const initData = await initResponse.json();
+		console.log("initData:", initData);
 
 		if (!initResponse.ok) {
 			// Prioritize server error message
@@ -294,6 +297,9 @@ async function login(username, password) {
 		}
 
 		const options = initData.options;
+		const cleanOptions = { ...options };
+		delete cleanOptions.hints;
+		delete cleanOptions.extensions;
 		expectedChallenge = initData.challenge; // Store challenge
 		userIdForVerification = initData.userId; // Store userId
 		console.log(`init-auth successful. Challenge: ${expectedChallenge}, UserID: ${userIdForVerification}`);
@@ -301,7 +307,7 @@ async function login(username, password) {
 		// 2. Start WebAuthn Authentication Ceremony
 		let authJSON;
 		try {
-			authJSON = await startAuthentication(options);
+			authJSON = await startAuthentication({ publicKey: cleanOptions });
 			console.log("startAuthentication successful:", authJSON);
 		} catch (authError) {
 			if (authError.name === "NotAllowedError") {

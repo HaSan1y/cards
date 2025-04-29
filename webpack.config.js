@@ -11,11 +11,4 @@ module.exports = {
 	resolve: {
 		modules: ["node_modules"],
 	},
-	externals: {
-		"@simplewebauthn/browser": "SimpleWebAuthnBrowser",
-	},
-	// 	devServer: {
-	//   port: 8080,
-	//   // ... other options
-	// }
 };

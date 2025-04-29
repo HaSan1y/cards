@@ -19,12 +19,13 @@
 		"node": "20.13.1"
 	},
 	"dependencies": {
-		"@simplewebauthn/browser": "^10.0.0",
-		"@simplewebauthn/server": "^10.0.1",
+		"@simplewebauthn/browser": "^13.1.0",
+		"@simplewebauthn/server": "^13.1.0",
 		"@vercel/kv": "^3.0.0",
 		"bcrypt": "^5.1.1",
 		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
+		"crypto": "^1.0.1",
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
 		"express-fileupload": "^1.5.0",

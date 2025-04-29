@@ -1,5 +1,5 @@
 const { generateRegistrationOptions } = require("@simplewebauthn/server");
-// const { getUserByEmail } = require("./db/wds-basicDB.js");
+const crypto = require("crypto");
 const { getUserByEmail } = require("./db/vercelDB.js");
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
@@ -31,7 +31,7 @@ const RP_CONFIG = {
 //////////////////////////////////////////////////////////////////////////////////////////////verce
 module.exports = async (req, res) => {
 	const origin = req.headers.origin;
-	const host = req.headers.host; // e.g., 'localhost:3000'
+	const host = req.headers.host;
 	console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
 	let isAllowed = false;
 	let effectiveOrigin = origin;
@@ -48,6 +48,19 @@ module.exports = async (req, res) => {
 		isAllowed = true;
 		effectiveOrigin = origin;
 	}
+	// 	const ALLOWED_ORIGINS = new Set([
+	//   'http://localhost:3000',
+	//   'http://localhost:8888',
+	//   'https://db-2-cards.vercel.app',
+	//   'https://elegant-bubblegum-a62895.netlify.app'
+	// ]);
+
+	// const HOST_TO_ORIGIN = {
+	//   'localhost:3000': 'http://localhost:3000',
+	//   'localhost:8888': 'http://localhost:8888',
+	//   'db-2-cards.vercel.app': 'https://db-2-cards.vercel.app',
+	//   'elegant-bubblegum-a62895.netlify.app': 'https://elegant-bubblegum-a62895.netlify.app'
+	// };
 	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
 	else if (!origin) {
 		if (host === localhost3000Host) {
@@ -61,7 +74,7 @@ module.exports = async (req, res) => {
 		} else if (host === vercelHost) {
 			isAllowed = true;
 			effectiveOrigin = vercelOrigin;
-			// console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
+			console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
 		} else if (host === netlifyHost) {
 			isAllowed = true;
 			effectiveOrigin = netlifyOrigin;
@@ -90,7 +103,7 @@ module.exports = async (req, res) => {
 	}
 	res.setHeader("Access-Control-Allow-Origin", effectiveOrigin);
 	res.setHeader("Access-Control-Allow-Credentials", "true");
-	res.setHeader("Content-Type", "application/json"); // Set common headers
+	res.setHeader("Content-Type", "application/json");
 	const currentRpConfig = RP_CONFIG[effectiveOrigin];
 	if (!currentRpConfig) {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
@@ -100,7 +113,7 @@ module.exports = async (req, res) => {
 	if (!email) {
 		return res.status(400).json({ error: "Email is required" });
 	}
-	// const existingUser = await getUserByEmail(email);
+
 	// const excludeCredentials = existingUser?.passKey?.id ? [{ id: Buffer.from(existingUser.passKey.id, "base64url"), type: "public-key" }] : [];
 	const existingUser = await getUserByEmail(email);
 	if (existingUser) {
@@ -110,11 +123,20 @@ module.exports = async (req, res) => {
 	}
 	try {
 		console.log(`Generating registration options for email: ${email}`);
+		let userIdBuffer;
+		if (existingUser && existingUser.id) {
+			userIdBuffer = Buffer.from(existingUser.id, "base64url");
+		} else {
+			userIdBuffer = crypto.randomBytes(16);
+		}
 		const options = await generateRegistrationOptions({
-			rpID: currentRpConfig.rpId, // Use RP ID based on origin
-			rpName: currentRpConfig.rpName, // Use RP Name based on origin
-			userName: email,
-			//userID: existingUser ? existingUser.id : generateNewUserId(),
+			rpID: currentRpConfig.rpId,
+			rpName: currentRpConfig.rpName,
+			user: {
+				id: userIdBuffer,
+				name: email,
+				displayName: email,
+			},
 			attestationType: "none", // Optional: 'none' is common for less strict requirements
 			authenticatorSelection: {
 				residentKey: "preferred", // Allow discoverable credentials (passkeys)

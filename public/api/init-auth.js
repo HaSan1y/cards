@@ -152,7 +152,7 @@ module.exports = async (req, res) => {
 			rpID: currentRpConfig.rpId,
 			allowCredentials: [
 				{
-					id: authenticatorData.credentialID,
+					id: authenticatorData.credentialID.toString("base64url"),
 					type: "public-key",
 					transports: authenticatorData.transports,
 				},
