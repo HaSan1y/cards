@@ -133,8 +133,8 @@ module.exports = async (req, res) => {
 	try {
 		const verification = await verifyAuthenticationResponse({
 			response: webAuthnResponse,
-			expectedChallenge: expectedChallenge, // The challenge received from the client request body
-			expectedOrigin: effectiveOrigin,
+			expectedChallenge, // The challenge received from the client request body
+			expectedOrigin,
 			expectedRPID: currentRpConfig.rpId,
 			authenticator: authenticatorData,
 			requireUserVerification: false,
@@ -151,34 +151,15 @@ module.exports = async (req, res) => {
 				// Log the error but potentially still consider the login successful
 				console.error(`!!! FAILED to update counter for user ${userId} after successful verification:`, updateError);
 				// Rethrow or handle specifically
-				throw updateError; // Pass it to the outer catch
+				//throw updateError; // Pass it to the outer catch
 			}
-		}
-
-		if (verification.verified) {
-			// console.log(`Verification successful for user ${authInfo.userId}. Attempting to update counter from ${authenticatorData.counter} to ${verification.authenticationInfo.newCounter}`);
-			try {
-				await updateUserCounter(authInfo.userId, verification.authenticationInfo.newCounter);
-				// console.log(`Counter updated successfully for user ${authInfo.userId}.`);
-			} catch (updateError) {
-				console.error(`!!! FAILED to update counter for user ${authInfo.userId}:`, updateError);
-				// Decide how critical this is. Maybe still return success but log the error?
-				// For now, let the main error handler catch it if it bubbles up, or just log it.
-			}
-
-			// TODO: Implement proper session management here if needed (e.g., set a session cookie, JWT)
-			// For now, just return verification success
 			return res.status(200).json({ verified: true, username: user.username }); // Send username back for confirmation
 		} else {
 			console.warn(`Verification failed for user ${userId}:`, verification);
 			return res.status(400).json({ verified: false, error: "Passkey verification failed." });
 		}
 	} catch (error) {
-		console.error(`Error during verifyAuthenticationResponse call for user ${userId}:`, error);
-		// Log the data that might have caused the issue
-		console.error("WebAuthn Response received:", webAuthnResponse);
-		console.error("Authenticator data used:", authenticatorData);
-		console.error("Expected Challenge:", expectedChallenge);
-		return res.status(500).json({ verified: false, error: "Internal server error during authentication." });
+		console.error(`Verification failed for user ${userId}:`, error);
+		return res.status(400).json({ verified: false, error: "Passkey verification failed." });
 	}
 };

@@ -164,7 +164,8 @@ async function signup(username, email, password) {
 
 	try {
 		// wont work for netlify */N* gotta refactor l8
-		const effectiveApiUrl = SERVER_URL.endsWith("/") ? SERVER_URL : SERVER_URL + "/"; // Ensure trailing slash
+		// const effectiveApiUrl = SERVER_URL.endsWith("/") ? SERVER_URL : SERVER_URL + "/"; // Ensure trailing slash
+		const effectiveApiUrl = SERVER_URL;
 
 		// 1. Initialize Registration - Pass email as query param
 		const initResponse = await fetch(`${effectiveApiUrl}init-register?email=${encodeURIComponent(email)}`, {
@@ -265,7 +266,8 @@ async function login(username, password) {
 
 	try {
 		// wont work for netlify /N* gotta refactor l8
-		const effectiveApiUrl = SERVER_URL.endsWith("/") ? SERVER_URL : SERVER_URL + "/"; // Ensure trailing slash
+		// const effectiveApiUrl = SERVER_URL.endsWith("/") ? SERVER_URL : SERVER_URL + "/"; // Ensure trailing slash
+		const effectiveApiUrl = SERVER_URL;
 
 		console.log(`Calling init-auth for user: ${username}`);
 		const initResponse = await fetch(`${effectiveApiUrl}init-auth`, {
