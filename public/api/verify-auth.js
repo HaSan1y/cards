@@ -3,9 +3,10 @@ const { verifyAuthenticationResponse } = require("@simplewebauthn/server");
 const { updateUserCounter, getUserById, getUserPassKeyForVerification } = require("./db/vercelDB.js");
 
 const ALLOWED_ORIGINS = [
-	"http://localhost:3000", // Local development
+	"http://localhost:3000",
 	"https://db-2-cards.vercel.app", // Vercel deployment
 	"https://elegant-bubblegum-a62895.netlify.app", // Netlify deployment (if used)
+	"http://localhost:8888",
 ];
 
 // Relying Party configuration based on the origin
@@ -19,7 +20,7 @@ const RP_CONFIG = {
 		rpName: "Vercel h451",
 	},
 	"https://elegant-bubblegum-a62895.netlify.app": {
-		rpId: "elegant-bubblegum-a62895.netlify.app", // RP ID for Netlify MUST match the domain
+		rpId: "elegant-bubblegum-a62895.netlify.app",
 		rpName: "Netlify h451",
 	},
 	"http://localhost:8888": {
@@ -27,53 +28,57 @@ const RP_CONFIG = {
 		rpName: "Local Netlify Dev h451",
 	},
 };
-function parseCookies(cookieHeader) {
-	const cookies = {};
-	if (!cookieHeader) return cookies;
-	cookieHeader.split(";").forEach((cookie) => {
-		const [name, ...rest] = cookie.trim().split("=");
-		cookies[name] = decodeURIComponent(rest.join("="));
-	});
-	return cookies;
-}
+// function parseCookies(cookieHeader) {
+// 	const cookies = {};
+// 	if (!cookieHeader) return cookies;
+// 	cookieHeader.split(";").forEach((cookie) => {
+// 		const [name, ...rest] = cookie.trim().split("=");
+// 		cookies[name] = decodeURIComponent(rest.join("="));
+// 	});
+// 	return cookies;
+// }
 module.exports = async (req, res) => {
 	const origin = req.headers.origin;
 	const host = req.headers.host; // e.g., 'localhost:3000'
-	console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
+	// console.log(`[Vercel Init-Register] Received Request: Method=${req.method}, Origin='${origin}', Host='${host}'`);
 	let isAllowed = false;
-	let effectiveOrigin = origin; // Will store the origin to use in response headers
+	let effectiveOrigin = origin;
 
 	const vercelHost = "db-2-cards.vercel.app";
 	const vercelOrigin = "https://db-2-cards.vercel.app";
-	const netlifyHost = "elegant-bubblegum-a62895.netlify.app"; // Make sure this is the correct host header value for Netlify
+	const netlifyHost = "elegant-bubblegum-a62895.netlify.app";
 	const netlifyOrigin = "https://elegant-bubblegum-a62895.netlify.app";
-	const localhostHost = "localhost:3000";
-	const localhostOrigin = "http://localhost:3000";
-	// Check 1: Standard CORS check (Origin header is present and allowed)
-	if (origin && ALLOWED_ORIGINS.includes(origin)) {
+	const localhost3000Host = "localhost:3000";
+	const localhost3000Origin = "http://localhost:3000";
+	const localhost8888Host = "localhost:8888";
+	const localhost8888Origin = "http://localhost:8888";
+	const CURRENT_ALLOWED_ORIGINS = [localhost3000Origin, localhost8888Origin, vercelOrigin, netlifyOrigin];
+	if (origin && CURRENT_ALLOWED_ORIGINS.includes(origin)) {
 		isAllowed = true;
 		effectiveOrigin = origin;
-	}
-	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
-	else if (!origin && host === localhostHost) {
-		// This assumes your local dev server runs on port 3000
-		isAllowed = true;
-		// For the response header, reconstruct the expected local origin
-		effectiveOrigin = localhostOrigin;
-		console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
-	} else if (!origin && host === vercelHost) {
-		isAllowed = true;
-		effectiveOrigin = vercelOrigin; // Use the standard Vercel origin for response headers
-		console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
-	} else if (!origin && host === netlifyHost) {
-		isAllowed = true;
-		effectiveOrigin = netlifyOrigin; // Use the standard Netlify origin for response headers
-		console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+	} else if (!origin) {
+		if (host === localhost3000Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost3000Origin;
+			console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
+		} else if (host === localhost8888Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost8888Origin;
+			console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
+		} else if (host === vercelHost) {
+			isAllowed = true;
+			effectiveOrigin = vercelOrigin;
+			console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
+		} else if (host === netlifyHost) {
+			isAllowed = true;
+			effectiveOrigin = netlifyOrigin;
+			console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+		}
 	}
 
 	// --- CORS Preflight Handling (OPTIONS request) ---
 	if (req.method === "OPTIONS") {
-		if (isAllowed) {
+		if (isAllowed && RP_CONFIG[effectiveOrigin]) {
 			res.setHeader("Access-Control-Allow-Origin", effectiveOrigin);
 			res.setHeader("Access-Control-Allow-Credentials", "true");
 			res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -90,80 +95,90 @@ module.exports = async (req, res) => {
 		console.error(`Request blocked: Origin='${origin}', effectiveOrigin='${effectiveOrigin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
 		return res.status(403).json({ error: "Invalid request origin/host" });
 	}
-	res.setHeader("Access-Control-Allow-Origin", effectiveOrigin); // Crucial: Allow the specific valid origin
+	res.setHeader("Access-Control-Allow-Origin", effectiveOrigin);
 	res.setHeader("Access-Control-Allow-Credentials", "true");
-	res.setHeader("Content-Type", "application/json"); // Set common headers
+	res.setHeader("Content-Type", "application/json");
 	const currentRpConfig = RP_CONFIG[effectiveOrigin];
 	if (!currentRpConfig) {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
 		return res.status(500).json({ error: "Server configuration error for origin" });
 	}
-	const cookies = parseCookies(req.headers.cookie);
-	const authInfo = cookies.authInfo ? JSON.parse(cookies.authInfo) : null;
-	console.log("Parsed authInfo cookie:", authInfo); // Log cookie
-	if (!authInfo) {
-		return res.status(400).json({ error: "Authentication info not found" });
+	const { expectedChallenge, userId, ...webAuthnResponse } = req.body; // Separate challenge/userId from the actual WebAuthn response
+
+	if (!expectedChallenge) {
+		console.error("Verification failed: Missing expected challenge in request body.");
+		return res.status(400).json({ error: "Missing challenge for verification." });
 	}
-	// try {
-	// } catch (error) {
-	// 	console.error("Error parsing authInfo cookie:", error);
-	// 	return res.status(400).json({ error: "Invalid authentication info" });
-	// }
-	const user = await getUserById(authInfo.userId);
+	if (!userId) {
+		console.error("Verification failed: Missing user ID in request body.");
+		return res.status(400).json({ error: "Missing user identifier for verification." });
+	}
+	if (!webAuthnResponse || !webAuthnResponse.id || !webAuthnResponse.rawId || !webAuthnResponse.response || !webAuthnResponse.type) {
+		console.error("Verification failed: Incomplete WebAuthn response data in request body.");
+		return res.status(400).json({ error: "Incomplete WebAuthn response." });
+	}
+	const user = await getUserById(userId);
 	if (!user) {
-		console.error(`User not found during verification: User ID ${authInfo.userId}`);
+		console.error(`User not found during verification: User ID ${userId}`);
 		return res.status(400).json({ error: "User associated with this login attempt not found." });
 	}
-	const authenticatorData = await getUserPassKeyForVerification(user);
-	console.log("Data from getUserPassKeyForVerification:", authenticatorData);
+	const authenticatorData = await getUserPassKeyForVerification(userId);
+
 	if (!authenticatorData) {
-		// Check if user exists and has a passKey object
-		console.error(`User validation failed for verification: User ID ${authInfo.userId}`);
+		console.error(`User validation failed for verification: User ID ${userId}`);
 		return res.status(400).json({ error: "User not found or no passkey registered for user." });
 	}
+	console.log(`Attempting verification for user ${user.username} (ID: ${userId}) with challenge: ${expectedChallenge}`);
+
 	try {
-		let verification;
-		try {
-			console.log("Calling verifyAuthenticationResponse with:");
-			console.log("  Response:", req.body);
-			console.log("  Expected Challenge:", authInfo.challenge);
-			console.log("  Expected Origin:", effectiveOrigin);
-			console.log("  Expected RPID:", currentRpConfig.rpId);
-			console.log("  Authenticator Data:", authenticatorData);
-			verification = await verifyAuthenticationResponse({
-				response: req.body,
-				expectedChallenge: authInfo.challenge,
-				expectedOrigin: effectiveOrigin,
-				expectedRPID: currentRpConfig.rpId,
-				authenticator: authenticatorData,
-			});
-			console.log("Verification Result:", verification);
-		} catch (verificationError) {
-			console.error("!!! Error during verifyAuthenticationResponse call:", verificationError);
-			// Rethrow or handle specifically
-			throw verificationError; // Pass it to the outer catch
+		const verification = await verifyAuthenticationResponse({
+			response: webAuthnResponse,
+			expectedChallenge: expectedChallenge, // The challenge received from the client request body
+			expectedOrigin: effectiveOrigin,
+			expectedRPID: currentRpConfig.rpId,
+			authenticator: authenticatorData,
+			requireUserVerification: false,
+		});
+
+		if (verification.verified) {
+			console.log(`Verification successful for user ${user.username} (ID: ${userId}).`);
+			// Update the authenticator counter in the DB
+			try {
+				console.log(`Attempting to update counter from ${authenticatorData.counter} to ${verification.authenticationInfo.newCounter}`);
+				await updateUserCounter(userId, verification.authenticationInfo.newCounter);
+				console.log(`Counter updated successfully for user ${userId}.`);
+			} catch (updateError) {
+				// Log the error but potentially still consider the login successful
+				console.error(`!!! FAILED to update counter for user ${userId} after successful verification:`, updateError);
+				// Rethrow or handle specifically
+				throw updateError; // Pass it to the outer catch
+			}
 		}
 
 		if (verification.verified) {
-			console.log(`Verification successful for user ${authInfo.userId}. Attempting to update counter from ${authenticatorData.counter} to ${verification.authenticationInfo.newCounter}`);
+			// console.log(`Verification successful for user ${authInfo.userId}. Attempting to update counter from ${authenticatorData.counter} to ${verification.authenticationInfo.newCounter}`);
 			try {
 				await updateUserCounter(authInfo.userId, verification.authenticationInfo.newCounter);
-				console.log(`Counter updated successfully for user ${authInfo.userId}.`);
+				// console.log(`Counter updated successfully for user ${authInfo.userId}.`);
 			} catch (updateError) {
 				console.error(`!!! FAILED to update counter for user ${authInfo.userId}:`, updateError);
 				// Decide how critical this is. Maybe still return success but log the error?
 				// For now, let the main error handler catch it if it bubbles up, or just log it.
 			}
 
-			res.setHeader("Set-Cookie", `authInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None`);
-			// Save user in a session cookie
-			return res.status(200).json({ verified: true });
+			// TODO: Implement proper session management here if needed (e.g., set a session cookie, JWT)
+			// For now, just return verification success
+			return res.status(200).json({ verified: true, username: user.username }); // Send username back for confirmation
 		} else {
-			console.warn("Verification failed:", verification);
-			return res.status(400).json({ verified: false, error: "Passkey Verification failed" });
+			console.warn(`Verification failed for user ${userId}:`, verification);
+			return res.status(400).json({ verified: false, error: "Passkey verification failed." });
 		}
 	} catch (error) {
-		console.error("Error verifying authentication response:", error);
+		console.error(`Error during verifyAuthenticationResponse call for user ${userId}:`, error);
+		// Log the data that might have caused the issue
+		console.error("WebAuthn Response received:", webAuthnResponse);
+		console.error("Authenticator data used:", authenticatorData);
+		console.error("Expected Challenge:", expectedChallenge);
 		return res.status(500).json({ verified: false, error: "Internal server error during authentication." });
 	}
 };

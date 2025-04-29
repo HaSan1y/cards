@@ -35,13 +35,17 @@ async function getUserByUsername(username) {
 		console.log(`KV: No user data found for user ID: ${userId}`);
 		return null;
 	}
-	console.log(`KV: Found user for ID ${userId}:`, user ? "User data retrieved" : "User data not found");
+	// console.log(`KV: Found user for ID ${userId}:`, user ? "User data retrieved" : "User data not found");
 	return user;
 }
 
 async function getUserById(userId) {
 	console.log(`KV: Searching for user with ID: ${userId}`);
 	const user = await kv.get(`user:${userId}`);
+	if (!user) {
+		console.log(`KV: No user data found for user ID: ${userId}`);
+		return null;
+	}
 	console.log(`KV: Found user for ID ${userId}:`, user ? "User data retrieved" : "User data not found");
 	return user;
 }
@@ -56,6 +60,10 @@ async function getUserByEmail(email) {
 	// 2. Retrieve the full user object using the ID
 	console.log(`KV: Found user ID ${userId} for email ${email}. Fetching user object.`);
 	const user = await kv.get(`user:${userId}`);
+	if (!user) {
+		console.log(`KV: No user data found for user ID: ${userId}`);
+		return null;
+	}
 	console.log(`KV: Found user for ID ${userId}:`, user ? "User data retrieved" : "User data not found");
 	return user;
 }
@@ -90,8 +98,9 @@ async function getUserPassKeyForVerification(userId) {
 		console.error(`KV: User not found for verification: ${userId}`);
 		return null;
 	}
-	if (!user.passKey || typeof user.passKey !== "object" || !user.passKey.id || !user.passKey.publicKey) {
-		console.warn(`KV: User ${userId} found, but has incomplete or no passKey data for verification.`);
+	if (!user.passKey || typeof user.passKey !== "object" || typeof user.passKey.id !== "string" || typeof user.passKey.publicKey !== "string") {
+		console.warn(`KV: User ${userId} found, but has incomplete, missing, or incorrectly typed passKey data for verification.`);
+		console.warn(`KV: passKey data:`, user.passKey); // Log the problematic data
 		return null;
 	}
 	try {
@@ -102,12 +111,13 @@ async function getUserPassKeyForVerification(userId) {
 
 		// Assuming user.passKey.publicKey is stored as standard Base64
 		const credentialPublicKeyBuffer = Buffer.from(user.passKey.publicKey, "base64");
+		const counter = typeof user.passKey.counter === "number" ? user.passKey.counter : 0; // Default to 0 if invalid/missing
 
 		return {
 			credentialID: credentialIDBuffer,
 			credentialPublicKey: credentialPublicKeyBuffer,
-			counter: user.passKey.counter,
-			transports: user.passKey.transports || undefined,
+			counter: counter,
+			transports: Array.isArray(user.passKey.transports) ? user.passKey.transports : undefined,
 		};
 	} catch (error) {
 		console.error(`KV: Error converting passKey data for user ${userId}:`, error);

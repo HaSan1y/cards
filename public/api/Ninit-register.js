@@ -39,81 +39,66 @@ exports.handler = async (event) => {
 	const vercelOrigin = "https://db-2-cards.vercel.app";
 	const netlifyHost = "elegant-bubblegum-a62895.netlify.app";
 	const netlifyOrigin = "https://elegant-bubblegum-a62895.netlify.app";
-	const localhost3000Host = "localhost:3000"; // Keep if you sometimes test against this
+	const localhost3000Host = "localhost:3000";
 	const localhost3000Origin = "http://localhost:3000";
-	const localhost8888Host = "localhost:8888"; // Common for `netlify dev`
+	const localhost8888Host = "localhost:8888";
 	const localhost8888Origin = "http://localhost:8888";
-	const ALLOWED_ORIGINS = [
-		localhost3000Origin,
-		localhost8888Origin, // Add Netlify dev origin
-		vercelOrigin,
-		netlifyOrigin,
-	];
-	// Check 1: Standard CORS check (Origin header is present and allowed)
-	if (origin && ALLOWED_ORIGINS.includes(origin)) {
+	const CURRENT_ALLOWED_ORIGINS = [localhost3000Origin, localhost8888Origin, vercelOrigin, netlifyOrigin];
+	if (origin && CURRENT_ALLOWED_ORIGINS.includes(origin)) {
 		isAllowed = true;
 		effectiveOrigin = origin;
-	}
-	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
-	else if (!origin && host === localhost3000Host) {
-		// This assumes your local dev server runs on port 3000
-		isAllowed = true;
-		// For the response header, reconstruct the expected local origin
-		effectiveOrigin = localhost3000Origin;
-		console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
-	} else if (!origin && host === localhost8888Host) {
-		// Check for Netlify dev port
-		isAllowed = true;
-		effectiveOrigin = localhost8888Origin;
-		console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
-	} else if (!origin && host === vercelHost) {
-		isAllowed = true;
-		effectiveOrigin = vercelOrigin; // Use the standard Vercel origin for response headers
-		console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
-	} else if (!origin && host === netlifyHost) {
-		isAllowed = true;
-		effectiveOrigin = netlifyOrigin; // Use the standard Netlify origin for response headers
-		console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+	} else if (!origin) {
+		if (host === localhost3000Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost3000Origin;
+			console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
+		} else if (host === localhost8888Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost8888Origin;
+			console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
+		} else if (host === vercelHost) {
+			isAllowed = true;
+			effectiveOrigin = vercelOrigin;
+			console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
+		} else if (host === netlifyHost) {
+			isAllowed = true;
+			effectiveOrigin = netlifyOrigin;
+			console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+		}
 	}
 	const httpMethod = event.httpMethod;
 	if (httpMethod === "OPTIONS") {
-		if (isAllowed) {
-			const isValidEffectiveOrigin = RP_CONFIG[effectiveOrigin] && ALLOWED_ORIGINS.includes(effectiveOrigin);
-			if (isValidEffectiveOrigin) {
-				return {
-					statusCode: 204, // No Content
-					headers: {
-						"Access-Control-Allow-Origin": effectiveOrigin, // Echo back the allowed origin
-						"Access-Control-Allow-Credentials": "true",
-						"Access-Control-Allow-Methods": "GET, POST, OPTIONS", // Adjust methods as needed
-						"Access-Control-Allow-Headers": "Content-Type", // Adjust headers as needed
-					},
-					body: "", // No body needed for preflight
-				};
-			} else {
-				console.error(`OPTIONS request blocked: Determined origin '${effectiveOrigin}' not configured/allowed. Original Origin='${origin}', Host='${host}'`);
-			}
+		if (isAllowed && RP_CONFIG[effectiveOrigin]) {
+			// const isValidEffectiveOrigin = RP_CONFIG[effectiveOrigin] && ALLOWED_ORIGINS.includes(effectiveOrigin);
+			// if (isValidEffectiveOrigin) {
+			return {
+				statusCode: 204,
+				headers: {
+					"Access-Control-Allow-Origin": effectiveOrigin,
+					"Access-Control-Allow-Credentials": "true",
+					"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+					"Access-Control-Allow-Headers": "Content-Type",
+				},
+				body: "",
+			};
+		} else {
+			console.error(`OPTIONS request blocked: Determined origin '${effectiveOrigin}' not configured/allowed. Original Origin='${origin}', Host='${host}'`);
+			return { statusCode: 403, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "Origin not allowed" }) };
 		}
-		console.error(`OPTIONS request blocked: Origin='${origin}', Host='${host}'`);
-		return {
-			statusCode: 403,
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ error: "Origin not allowed" }),
-		};
-	}
-	if (!isAllowed) {
-		console.error(`Request blocked: Origin='${origin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
-		return {
-			statusCode: 403,
-			headers: { "Content-Type": "application/json" }, // Add content-type for error
-			body: JSON.stringify({ error: "Invalid request origin/host" }),
-		};
 	}
 	const commonHeaders = {
 		"Access-Control-Allow-Origin": effectiveOrigin,
 		"Access-Control-Allow-Credentials": "true",
 		"Content-Type": "application/json",
 	};
+	if (!isAllowed) {
+		console.error(`Request blocked: Origin='${origin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
+		return {
+			statusCode: 403,
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ error: "Invalid request origin/host" }),
+		};
+	}
 
 	// 3. Get RP Config for this origin
 	const currentRpConfig = RP_CONFIG[effectiveOrigin];
@@ -121,7 +106,7 @@ exports.handler = async (event) => {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
 		return {
 			statusCode: 500,
-			headers: commonHeaders, // Include CORS headers even for server errors if origin was initially allowed
+			headers: commonHeaders,
 			body: JSON.stringify({ error: "Server configuration error for origin" }),
 		};
 	}
@@ -132,7 +117,7 @@ exports.handler = async (event) => {
 			headers: commonHeaders,
 			body: JSON.stringify({ error: "Email is required" }),
 		};
-	const existingUser = await getUserByEmail(email); // Assuming this returns the user or null/undefined
+	const existingUser = await getUserByEmail(email);
 	if (existingUser != null) {
 		return {
 			statusCode: 400,
@@ -141,36 +126,32 @@ exports.handler = async (event) => {
 		};
 	}
 	try {
+		console.log(`Generating registration options for email: ${email}`);
+
 		const options = await generateRegistrationOptions({
 			rpID: currentRpConfig.rpId,
 			rpName: currentRpConfig.rpName,
 			userName: email,
-			//?	userID: email,
+			attestationType: "none", // Optional: 'none' is common for less strict requirements
 			authenticatorSelection: {
-				// userVerification: 'preferred', // 'preferred', 'required', 'discouraged'
-				// residentKey: 'preferred', // 'preferred', 'required', 'discouraged' (for discoverable credentials)
+				residentKey: "preferred",
+				requireResidentKey: false,
+				userVerification: "preferred",
 			},
 			// Optional: Exclude existing credentials if user somehow exists but check failed above
 			// excludeCredentials: existingUser?.passKey?.id ? [{ id: existingUser.passKey.id, type: 'public-key' }] : [],
 		});
-		const regInfo = {
-			userId: options.user.id, // Use the ID generated by simplewebauthn
-			email,
-			challenge: options.challenge,
-		};
+		console.log(`Generated options for ${email}. User ID: ${options.user.id}, Challenge: ${options.challenge}`);
+
 		return {
 			statusCode: 200,
-			headers: {
-				...commonHeaders,
-				"Set-Cookie": `regInfo=${encodeURIComponent(
-					JSON.stringify({
-						userId: options.user.id,
-						email,
-						challenge: options.challenge,
-					}),
-				)}; HttpOnly; Path=/; Max-Age=60; Secure; SameSite=None`, // Max-Age=60 is very short (1 min)
-			},
-			body: JSON.stringify(options),
+			headers: commonHeaders, // No Set-Cookie header
+			body: JSON.stringify({
+				options: options,
+				challenge: options.challenge,
+				userId: options.user.id,
+				email: email,
+			}),
 		};
 	} catch (error) {
 		console.error("Error generating registration options:", error);

@@ -1,6 +1,9 @@
 const { verifyRegistrationResponse } = require("@simplewebauthn/server");
 // const { createUser } = require("./db/wds-basicDB.js");
-const { createUser } = require("./db/vercelDB.js");
+const { createUser, getUserByUsername, getUserByEmail } = require("./db/vercelDB.js");
+const bcrypt = require("bcrypt");
+const { Buffer } = require("buffer");
+const saltRounds = 10;
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
 	"https://db-2-cards.vercel.app", // Vercel deployment
@@ -28,15 +31,15 @@ const RP_CONFIG = {
 	},
 };
 
-function parseCookies(cookieHeader) {
-	const cookies = {};
-	if (!cookieHeader) return cookies;
-	cookieHeader.split(";").forEach((cookie) => {
-		const [name, ...rest] = cookie.trim().split("=");
-		cookies[name] = decodeURIComponent(rest.join("="));
-	});
-	return cookies;
-}
+// function parseCookies(cookieHeader) {
+// 	const cookies = {};
+// 	if (!cookieHeader) return cookies;
+// 	cookieHeader.split(";").forEach((cookie) => {
+// 		const [name, ...rest] = cookie.trim().split("=");
+// 		cookies[name] = decodeURIComponent(rest.join("="));
+// 	});
+// 	return cookies;
+// }
 exports.handler = async (event) => {
 	const origin = event.headers.origin;
 	const host = event.headers.host; // e.g., 'localhost:3000'
@@ -48,155 +51,160 @@ exports.handler = async (event) => {
 	const vercelOrigin = "https://db-2-cards.vercel.app";
 	const netlifyHost = "elegant-bubblegum-a62895.netlify.app"; // Make sure this is the correct host header value for Netlify
 	const netlifyOrigin = "https://elegant-bubblegum-a62895.netlify.app";
-	const localhost3000Host = "localhost:3000"; // Keep if you sometimes test against this
+	const localhost3000Host = "localhost:3000";
 	const localhost3000Origin = "http://localhost:3000";
 	const localhost8888Host = "localhost:8888"; // Common for `netlify dev`
 	const localhost8888Origin = "http://localhost:8888";
-	const ALLOWED_ORIGINS = [
-		localhost3000Origin,
-		localhost8888Origin, // Add Netlify dev origin
-		vercelOrigin,
-		netlifyOrigin,
-	];
-	// Check 1: Standard CORS check (Origin header is present and allowed)
-	if (origin && ALLOWED_ORIGINS.includes(origin)) {
+	const CURRENT_ALLOWED_ORIGINS = [localhost3000Origin, localhost8888Origin, vercelOrigin, netlifyOrigin];
+	if (origin && CURRENT_ALLOWED_ORIGINS.includes(origin)) {
 		isAllowed = true;
 		effectiveOrigin = origin;
-	}
-	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
-	else if (!origin && host === localhost3000Host) {
-		// This assumes your local dev server runs on port 3000
-		isAllowed = true;
-		// For the response header, reconstruct the expected local origin
-		effectiveOrigin = localhost3000Origin;
-		console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
-	} else if (!origin && host === localhost8888Host) {
-		// Check for Netlify dev port
-		isAllowed = true;
-		effectiveOrigin = localhost8888Origin;
-		console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
-	} else if (!origin && host === vercelHost) {
-		isAllowed = true;
-		effectiveOrigin = vercelOrigin; // Use the standard Vercel origin for response headers
-		console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
-	} else if (!origin && host === netlifyHost) {
-		isAllowed = true;
-		effectiveOrigin = netlifyOrigin; // Use the standard Netlify origin for response headers
-		console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+	} else if (!origin) {
+		if (host === localhost3000Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost3000Origin;
+			console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
+		} else if (host === localhost8888Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost8888Origin;
+			console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
+		} else if (host === vercelHost) {
+			isAllowed = true;
+			effectiveOrigin = vercelOrigin;
+			console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
+		} else if (host === netlifyHost) {
+			isAllowed = true;
+			effectiveOrigin = netlifyOrigin;
+			console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+		}
 	}
 	const httpMethod = event.httpMethod;
 	if (httpMethod === "OPTIONS") {
-		if (isAllowed) {
-			const isValidEffectiveOrigin = RP_CONFIG[effectiveOrigin] && ALLOWED_ORIGINS.includes(effectiveOrigin);
-			if (isValidEffectiveOrigin) {
-				return {
-					statusCode: 204, // No Content
-					headers: {
-						"Access-Control-Allow-Origin": effectiveOrigin, // Echo back the allowed origin
-						"Access-Control-Allow-Credentials": "true",
-						"Access-Control-Allow-Methods": "GET, POST, OPTIONS", // Adjust methods as needed
-						"Access-Control-Allow-Headers": "Content-Type", // Adjust headers as needed
-					},
-					body: "", // No body needed for preflight
-				};
-			} else {
-				console.error(`OPTIONS request blocked: Determined origin '${effectiveOrigin}' not configured/allowed. Original Origin='${origin}', Host='${host}'`);
-			}
+		if (isAllowed && RP_CONFIG[effectiveOrigin]) {
+			// const isValidEffectiveOrigin = RP_CONFIG[effectiveOrigin] && ALLOWED_ORIGINS.includes(effectiveOrigin);
+			// if (isValidEffectiveOrigin) {
+			return {
+				statusCode: 204,
+				headers: {
+					"Access-Control-Allow-Origin": effectiveOrigin,
+					"Access-Control-Allow-Credentials": "true",
+					"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+					"Access-Control-Allow-Headers": "Content-Type",
+				},
+				body: "",
+			};
+		} else {
+			console.error(`OPTIONS request blocked: Determined origin '${effectiveOrigin}' not configured/allowed. Original Origin='${origin}', Host='${host}'`);
 		}
-		console.error(`OPTIONS request blocked: Origin='${origin}', Host='${host}'`);
-		return {
-			statusCode: 403,
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ error: "Origin not allowed" }),
-		};
 	}
-	if (!isAllowed) {
-		console.error(`Request blocked: Origin='${origin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
-		return {
-			statusCode: 403,
-			headers: {
-				"Content-Type": "application/json",
-				// Do NOT send Allow-Origin header if the origin is truly disallowed
-			},
-			body: JSON.stringify({ error: "Invalid request origin/host" }),
-		};
-	}
-
 	const commonHeaders = {
 		"Access-Control-Allow-Origin": effectiveOrigin,
 		"Access-Control-Allow-Credentials": "true",
 		"Content-Type": "application/json",
 	};
+	if (!isAllowed) {
+		console.error(`Request blocked: Origin='${origin}', Host='${host}'.`);
+
+		return { statusCode: 403, headers: commonHeaders, body: JSON.stringify({ error: "Invalid request origin/host" }) };
+	}
 
 	// 3. Get RP Config for this origin
 	const currentRpConfig = RP_CONFIG[effectiveOrigin];
 	if (!currentRpConfig) {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
-		return {
-			statusCode: 500,
-			headers: commonHeaders, // Include CORS headers even for server errors if origin was initially allowed
-			body: JSON.stringify({ error: "Server configuration error for origin" }),
-		};
+		return { statusCode: 500, headers: commonHeaders, body: JSON.stringify({ error: "Server configuration error for origin" }) };
 	}
-	const cookies = parseCookies(event.headers.cookie);
-	const regInfo = cookies.regInfo ? JSON.parse(cookies.regInfo) : null;
+	// const cookies = parseCookies(event.headers.cookie);
+	// const regInfo = cookies.regInfo ? JSON.parse(cookies.regInfo) : null;
 
-	if (!regInfo) {
-		return {
-			statusCode: 400,
-			headers: commonHeaders,
-			body: JSON.stringify({ error: "Registration info not found" }),
-		};
-	}
-	const body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+	// if (!regInfo) {
+	// 	return {
+	// 		statusCode: 400,
+	// 		headers: commonHeaders,
+	// 		body: JSON.stringify({ error: "Registration info not found" }),
+	// 	};
+	// }
+	// const body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+	let body;
 	try {
+		body = JSON.parse(event.body);
+	} catch (e) {
+		console.error("Failed to parse request body:", event.body);
+		return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ error: "Invalid request body." }) };
+	}
+	const { username, email, password, expectedChallenge, userId, ...webAuthnResponse } = body;
+	if (!username || !email || !password || !expectedChallenge || !userId || !webAuthnResponse?.id) {
+		console.error("Missing required fields in request body for /Nverify-register", {
+			username,
+			email,
+			password_present: !!password,
+			expectedChallenge,
+			userId,
+			webAuthnResponse_id: webAuthnResponse?.id,
+		});
+		return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ error: "Missing required registration fields or WebAuthn data." }) };
+	}
+
+	// Check for existing users
+	const existingUserByUsername = await getUserByUsername(username);
+	if (existingUserByUsername) {
+		return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ error: "Username already taken" }) };
+	}
+	const existingUserByEmail = await getUserByEmail(email);
+	if (existingUserByEmail) {
+		return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ error: "Email already taken" }) };
+	}
+
+	// Hash password
+	let passwordHash;
+	try {
+		passwordHash = await bcrypt.hash(password, saltRounds);
+	} catch (hashError) {
+		console.error("Error hashing password:", hashError);
+		return { statusCode: 500, headers: commonHeaders, body: JSON.stringify({ error: "Failed to process password." }) };
+	}
+
+	try {
+		console.log(`Verifying registration for user ${username} (ID: ${userId}) with challenge: ${expectedChallenge}`);
 		const verification = await verifyRegistrationResponse({
-			response: body,
-			expectedChallenge: regInfo.challenge,
+			response: webAuthnResponse,
+			expectedChallenge: expectedChallenge, // Use challenge from body
 			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,
+			requireUserVerification: false,
 		});
 
 		if (verification.verified && verification.registrationInfo) {
+			console.log(`Registration verified for ${username}. Storing user data.`);
 			const regInfoData = verification.registrationInfo;
-			// --- Convert binary data to Base64 before storing ---
+
+			// Store data correctly (as in Vercel version)
 			const passKeyDataForStorage = {
-				id: regInfoData.credentialID,
+				id: Buffer.from(regInfoData.credentialID).toString("base64url"),
 				publicKey: Buffer.from(regInfoData.credentialPublicKey).toString("base64"),
 				counter: regInfoData.counter,
 				deviceType: regInfoData.credentialDeviceType,
 				backedUp: regInfoData.credentialBackedUp,
-
-				transports: body?.response?.transports,
+				transports: webAuthnResponse?.response?.transports || [],
 			};
-			const username = regInfo.email.split("@")[0];
-			await createUser(regInfo.userId, username, regInfo.email, passKeyDataForStorage);
 
+			// *** FIX: Use data from body for createUser ***
+			await createUser(userId, username, email, passwordHash, passKeyDataForStorage);
+
+			// *** FIX: Remove cookie clearing ***
 			return {
 				statusCode: 200,
-				headers: {
-					...commonHeaders,
-					"Set-Cookie": `regInfo=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=None`,
-				},
-				body: JSON.stringify({ verified: verification.verified }),
+				headers: commonHeaders, // No Set-Cookie header
+				body: JSON.stringify({ verified: true }),
 			};
 		} else {
-			return {
-				statusCode: 400,
-				headers: {
-					...commonHeaders,
-				},
-				body: JSON.stringify({ verified: false, error: "Verification failed" }),
-			};
+			console.warn("WebAuthn registration verification failed:", verification);
+			return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ verified: false, error: "Passkey verification failed." }) };
 		}
 	} catch (error) {
-		console.error("Error verifying registration response:", error);
-		return {
-			statusCode: 500,
-			headers: {
-				...commonHeaders,
-			},
-			body: JSON.stringify({ error: "Internal server error" }),
-		};
+		console.error(`Error verifying registration response for ${username}:`, error);
+		console.error("WebAuthn Response received:", webAuthnResponse);
+		console.error("Expected Challenge:", expectedChallenge);
+		return { statusCode: 500, headers: commonHeaders, body: JSON.stringify({ error: "Internal server error during registration verification." }) };
 	}
 };

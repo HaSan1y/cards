@@ -1,6 +1,6 @@
 const { generateAuthenticationOptions } = require("@simplewebauthn/server");
 // const { getUserByUsername } = require("./db/wds-basicDB.js");
-const { getUserByUsername } = require("./db/vercelDB.js");
+const { getUserByUsername, getUserById, getUserPassKeyForVerification } = require("./db/vercelDB.js");
 
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
@@ -43,72 +43,53 @@ exports.handler = async (event) => {
 	const localhost3000Origin = "http://localhost:3000";
 	const localhost8888Host = "localhost:8888"; // Common for `netlify dev`
 	const localhost8888Origin = "http://localhost:8888";
-	const ALLOWED_ORIGINS = [
-		localhost3000Origin,
-		localhost8888Origin, // Add Netlify dev origin
-		vercelOrigin,
-		netlifyOrigin,
-	];
-	// Check 1: Standard CORS check (Origin header is present and allowed)
-	if (origin && ALLOWED_ORIGINS.includes(origin)) {
+	const CURRENT_ALLOWED_ORIGINS = [localhost3000Origin, localhost8888Origin, vercelOrigin, netlifyOrigin];
+	if (origin && CURRENT_ALLOWED_ORIGINS.includes(origin)) {
 		isAllowed = true;
 		effectiveOrigin = origin;
-	}
-	// Check 2: Allow same-origin from localhost (Origin header is missing, but host matches)
-	else if (!origin && host === localhost3000Host) {
-		// This assumes your local dev server runs on port 3000
-		isAllowed = true;
-		// For the response header, reconstruct the expected local origin
-		effectiveOrigin = localhost3000Origin;
-		console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
-	} else if (!origin && host === localhost8888Host) {
-		// Check for Netlify dev port
-		isAllowed = true;
-		effectiveOrigin = localhost8888Origin;
-		console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
-	} else if (!origin && host === vercelHost) {
-		isAllowed = true;
-		effectiveOrigin = vercelOrigin; // Use the standard Vercel origin for response headers
-		console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
-	} else if (!origin && host === netlifyHost) {
-		isAllowed = true;
-		effectiveOrigin = netlifyOrigin; // Use the standard Netlify origin for response headers
-		console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+	} else if (!origin) {
+		if (host === localhost3000Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost3000Origin;
+			console.warn("Allowing same-origin request from host 'localhost:3000' (Origin header undefined).");
+		} else if (host === localhost8888Host) {
+			isAllowed = true;
+			effectiveOrigin = localhost8888Origin;
+			console.warn("Allowing same-origin request from host 'localhost:8888' (Origin header undefined).");
+		} else if (host === vercelHost) {
+			isAllowed = true;
+			effectiveOrigin = vercelOrigin;
+			console.warn(`Allowing same-origin request from host '${vercelHost}' (Origin header undefined).`);
+		} else if (host === netlifyHost) {
+			isAllowed = true;
+			effectiveOrigin = netlifyOrigin;
+			console.warn(`Allowing same-origin request from host '${netlifyHost}' (Origin header undefined).`);
+		}
 	}
 	const httpMethod = event.httpMethod;
 	if (httpMethod === "OPTIONS") {
-		if (isAllowed) {
-			const isValidEffectiveOrigin = RP_CONFIG[effectiveOrigin] && ALLOWED_ORIGINS.includes(effectiveOrigin);
-			if (isValidEffectiveOrigin) {
-				return {
-					statusCode: 204, // No Content
-					headers: {
-						"Access-Control-Allow-Origin": effectiveOrigin, // Echo back the allowed origin
-						"Access-Control-Allow-Credentials": "true",
-						"Access-Control-Allow-Methods": "GET, POST, OPTIONS", // Adjust methods as needed
-						"Access-Control-Allow-Headers": "Content-Type", // Adjust headers as needed
-					},
-					body: "", // No body needed for preflight
-				};
-			} else {
-				// Origin not allowed for preflight
-				console.error(`OPTIONS request blocked: Determined origin '${effectiveOrigin}' not configured/allowed. Original Origin='${origin}', Host='${host}'`);
-			}
+		if (isAllowed && RP_CONFIG[effectiveOrigin]) {
+			// const isValidEffectiveOrigin = RP_CONFIG[effectiveOrigin] && ALLOWED_ORIGINS.includes(effectiveOrigin);
+			// if (isValidEffectiveOrigin) {
+			return {
+				statusCode: 204,
+				headers: {
+					"Access-Control-Allow-Origin": effectiveOrigin,
+					"Access-Control-Allow-Credentials": "true",
+					"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+					"Access-Control-Allow-Headers": "Content-Type",
+				},
+				body: "",
+			};
+		} else {
+			console.error(`OPTIONS request blocked: Origin='${origin}', Host='${host}'`);
+			return { statusCode: 403, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ error: "Origin not allowed" }) };
 		}
-		console.error(`OPTIONS request blocked: Origin='${origin}', Host='${host}'`);
-		return {
-			statusCode: 403,
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ error: "Origin not allowed" }),
-		};
 	}
+
 	if (!isAllowed) {
-		console.error(`Request blocked: Origin='${origin}', Host='${host}'. Allowed Origins: ${ALLOWED_ORIGINS.join(", ")}`);
-		return {
-			statusCode: 403,
-			headers: commonHeaders, //{ "Content-Type": "application/json" },
-			body: JSON.stringify({ error: "Invalid request origin/host" }),
-		};
+		console.error(`Request blocked: Origin='${origin}', Host='${host}'.`);
+		return { statusCode: 403, headers: commonHeaders, body: JSON.stringify({ error: "Invalid request origin/host" }) };
 	}
 	const commonHeaders = {
 		"Access-Control-Allow-Origin": effectiveOrigin,
@@ -120,77 +101,88 @@ exports.handler = async (event) => {
 	const currentRpConfig = RP_CONFIG[effectiveOrigin];
 	if (!currentRpConfig) {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
-		return {
-			statusCode: 500,
-			headers: commonHeaders, // Include CORS headers even for server errors if origin was initially allowed
-			body: JSON.stringify({ error: "Server configuration error for origin" }),
-		};
+		return { statusCode: 500, headers: commonHeaders, body: JSON.stringify({ error: "Server configuration error for origin" }) };
 	}
-	const username = event.queryStringParameters?.username;
-	console.log("Received auth request for username:", username);
-	if (!username) {
-		return {
-			statusCode: 400,
-			headers: commonHeaders,
-			body: JSON.stringify({ error: "Username is required" }),
-		};
+	let body;
+	try {
+		body = JSON.parse(event.body);
+	} catch (e) {
+		console.error("Failed to parse request body:", event.body);
+		return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ error: "Invalid request body." }) };
+	}
+	const { username, password } = body;
+	if (!username || !password) {
+		return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ error: "Username and password are required" }) };
 	}
 
 	const user = await getUserByUsername(username);
 
-	if (!user) {
-		return {
-			statusCode: 400,
-			headers: commonHeaders,
-			body: JSON.stringify({ error: "No user for this username" }),
-		};
+	if (!user || !user.passwordHash) {
+		console.log(`Login failed for ${username}: User not found or no password hash.`);
+		return { statusCode: 401, headers: commonHeaders, body: JSON.stringify({ error: "Invalid credentials" }) };
 	}
+
+	// *** FIX: Add password validation ***
+	let isPasswordValid = false;
+	try {
+		isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+	} catch (compareError) {
+		console.error(`Error comparing password for ${username}:`, compareError);
+		return { statusCode: 500, headers: commonHeaders, body: JSON.stringify({ error: "Error during authentication process" }) };
+	}
+
+	if (!isPasswordValid) {
+		console.log(`Login failed for ${username}: Invalid password.`);
+		return { statusCode: 401, headers: commonHeaders, body: JSON.stringify({ error: "Invalid username or password" }) };
+	}
+
+	console.log(`Password verified for ${username}. Checking for passkey..`);
+
+	// *** FIX: Use getUserPassKeyForVerification ***
+	const authenticatorData = await getUserPassKeyForVerification(user.id);
+	if (!authenticatorData || !authenticatorData.credentialID) {
+		console.log(`User ${username} authenticated with password, but no usable passkey found.`);
+		console.log(`Result from getUserPassKeyForVerification:`, authenticatorData);
+		return { statusCode: 400, headers: commonHeaders, body: JSON.stringify({ error: "Password correct, but no passkey registered or passkey data is invalid." }) };
+	}
+	console.log(`  Using Credential ID (Buffer converted to base64url for logging): ${authenticatorData.credentialID.toString("base64url")}`);
+
 	try {
 		const options = await generateAuthenticationOptions({
 			rpID: currentRpConfig.rpId,
-			// rpName: currentRpConfig.rpName,
-			// userName: email,
-			allowCredentials: user.passKey
-				? [
-						{
-							id: user.passKey.id,
-							type: "public-key",
-							transports: user.passKey.transports,
-						},
-				  ]
-				: [],
+			allowCredentials: [
+				// *** FIX: Use data from authenticatorData ***
+				{
+					id: authenticatorData.credentialID, // Use the Buffer
+					type: "public-key",
+					transports: authenticatorData.transports,
+				},
+			],
+			userVerification: "preferred",
 		});
-		if (!user.passKey || options.allowCredentials.length === 0) {
-			console.warn(`User ${username} has no registered passkeys.`);
-			return {
-				statusCode: 400, // Or maybe 404 Not Found if no credentials means user can't log in this way
-				headers: commonHeaders,
-				body: JSON.stringify({ error: "No passkeys registered for this user." }),
-			};
+
+		if (!options || !options.challenge || options.allowCredentials.length === 0) {
+			console.warn(`generateAuthenticationOptions returned invalid options for ${username}.`);
+			console.warn(`Authenticator Data Sent:`, authenticatorData);
+			console.warn(`Generated Options:`, options);
+			return { statusCode: 500, headers: commonHeaders, body: JSON.stringify({ error: "Failed to generate valid authentication options." }) };
 		}
+
+		console.log(`Successfully generated WebAuthn options for ${username}.`);
+
+		// *** FIX: Return data in body, remove cookie ***
 		return {
 			statusCode: 200,
-			headers: {
-				...commonHeaders,
-				"Set-Cookie": `authInfo=${encodeURIComponent(JSON.stringify({ userId: user.id, challenge: options.challenge }))}; HttpOnly; Path=/; Max-Age=60; Secure; SameSite=None`,
-			},
-			body: JSON.stringify(options),
+			headers: commonHeaders, // No Set-Cookie
+			body: JSON.stringify({
+				options: options,
+				challenge: options.challenge,
+				userId: user.id,
+			}),
 		};
 	} catch (error) {
-		// Make sure user.passKey exists before trying to access its properties in error scenarios
-		if (error instanceof TypeError && error.message.includes("Cannot read properties of undefined (reading 'id')")) {
-			console.error(`Error generating authentication options: User ${username} likely has no passKey object or passKey.id is missing.`);
-			return {
-				statusCode: 400,
-				headers: commonHeaders,
-				body: JSON.stringify({ error: "User data incomplete or passkey not found." }),
-			};
-		}
-		console.error("Error generating authentication options:", error);
-		return {
-			statusCode: 500,
-			headers: commonHeaders,
-			body: JSON.stringify({ error: "Failed to generate authentication options" }),
-		};
+		console.error(`Error generating authentication options for ${username}:`, error);
+		console.error(`Authenticator Data used:`, authenticatorData);
+		return { statusCode: 500, headers: commonHeaders, body: JSON.stringify({ error: "Failed to generate authentication options" }) };
 	}
 };
