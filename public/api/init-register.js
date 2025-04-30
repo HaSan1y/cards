@@ -130,7 +130,7 @@ module.exports = async (req, res) => {
 			userIdBuffer = crypto.randomBytes(16);
 		}
 		const options = await generateRegistrationOptions({
-			rpID: currentRpConfig.rpId,
+			rpId: currentRpConfig.rpId,
 			rpName: currentRpConfig.rpName,
 			user: {
 				id: userIdBuffer,

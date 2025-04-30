@@ -1,6 +1,7 @@
 const { generateRegistrationOptions } = require("@simplewebauthn/server");
 // const { getUserByEmail } = require("./db/wds-basicDB.js");
 const { getUserByEmail } = require("./db/vercelDB.js");
+const crypto = require("crypto");
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
 	"https://db-2-cards.vercel.app", // Vercel deployment
@@ -127,11 +128,17 @@ exports.handler = async (event) => {
 	}
 	try {
 		console.log(`Generating registration options for email: ${email}`);
-
+		const userIdBuffer = crypto.randomBytes(16);
 		const options = await generateRegistrationOptions({
-			rpID: currentRpConfig.rpId,
+			rpId: currentRpConfig.rpId,
 			rpName: currentRpConfig.rpName,
-			userName: email,
+			// userName: email,
+			user: {
+				// Corrected: Use user object
+				id: userIdBuffer, // Assign the generated ID
+				name: email, // Use email as the required 'name'
+				displayName: email, // Use email as the display name
+			},
 			attestationType: "none", // Optional: 'none' is common for less strict requirements
 			authenticatorSelection: {
 				residentKey: "preferred",
@@ -142,14 +149,15 @@ exports.handler = async (event) => {
 			// excludeCredentials: existingUser?.passKey?.id ? [{ id: existingUser.passKey.id, type: 'public-key' }] : [],
 		});
 		console.log(`Generated options for ${email}. User ID: ${options.user.id}, Challenge: ${options.challenge}`);
+		const userIdBase64Url = userIdBuffer.toString("base64url");
 
 		return {
 			statusCode: 200,
-			headers: commonHeaders, // No Set-Cookie header
+			headers: commonHeaders,
 			body: JSON.stringify({
 				options: options,
 				challenge: options.challenge,
-				userId: options.user.id,
+				userId: userIdBase64Url,
 				email: email,
 			}),
 		};

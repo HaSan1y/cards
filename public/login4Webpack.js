@@ -187,12 +187,51 @@ async function signup(username, email, password) {
 			throw new Error("Server did not provide necessary data to start passkey registration.");
 		}
 		const options = initData.options;
+		// --- Add Detailed Logging ---
+		console.log("Received options object:", JSON.stringify(options, null, 2));
+		if (options.user) {
+			console.log("Received options.user object:", JSON.stringify(options.user, null, 2));
+			if (typeof options.user.name === "undefined") {
+				console.error("CRITICAL: options.user.name is UNDEFINED in the object received from the server!");
+			} else {
+				console.log("options.user.name value:", options.user.name);
+			}
+		} else {
+			console.error("CRITICAL: options.user is MISSING in the object received from the server!");
+		}
+		// --- End Detailed Logging ---
+		/*
+		// Utility to convert base64url string to Uint8Array
+		function base64urlToUint8Array(base64urlString) {
+			const padding = "=".repeat((4 - (base64urlString.length % 4)) % 4);
+			const base64 = (base64urlString + padding).replace(/-/g, "+").replace(/_/g, "/");
+			const rawData = window.atob(base64);
+			const outputArray = new Uint8Array(rawData.length);
+			for (let i = 0; i < rawData.length; ++i) {
+				outputArray[i] = rawData.charCodeAt(i);
+			}
+			return outputArray;
+		}
+
+		// Convert certain fields from base64url string to Uint8Array as required by WebAuthn API
 		const cleanOptions = { ...options };
-		delete cleanOptions.hints;
-		delete cleanOptions.extensions;
+		cleanOptions.challenge = base64urlToUint8Array(cleanOptions.challenge);
+		if (cleanOptions.user && cleanOptions.user.id) {
+			cleanOptions.user.id = base64urlToUint8Array(cleanOptions.user.id);
+		}
+		if (cleanOptions.excludeCredentials) {
+			cleanOptions.excludeCredentials = cleanOptions.excludeCredentials.map((cred) => {
+				return {
+					...cred,
+					id: base64urlToUint8Array(cred.id),
+				};
+			});
+		}
+		 delete cleanOptions.hints;
+		 delete cleanOptions.extensions;*/
 		expectedChallenge = initData.challenge;
 		userIdForRegistration = initData.userId;
-		emailFromInit = initData.email; // Use email confirmed by server
+		emailFromInit = initData.email;
 
 		console.log(`init-register successful. Challenge: ${expectedChallenge}, UserID: ${userIdForRegistration}`);
 
@@ -201,11 +240,25 @@ async function signup(username, email, password) {
 			console.warn(`Email mismatch between form ('${email}') and init-register response ('${emailFromInit}'). Using server response.`);
 			// Decide if this is an error or just use emailFromInit
 		}
+
 		// 2. Start WebAuthn Registration Ceremony
 		let regJSON;
+		//  const minimalOptionsForBrowser = {
+		//       challenge: options.challenge,
+		//       rp: options.rp,
+		//       user: options.user, // Ensure this includes id, name, displayName
+		//       pubKeyCredParams: options.pubKeyCredParams,
+		//       timeout: options.timeout,
+		//       attestation: options.attestation,
+		//       authenticatorSelection: options.authenticatorSelection
+		//       // Intentionally omit: excludeCredentials, extensions, hints
+		//  };
+		//  console.log("Calling startRegistration with MINIMAL options:", minimalOptionsForBrowser);
+		//  console.log("Minimal options user object:", JSON.stringify(minimalOptionsForBrowser.user, null, 2)); // Double-check user part
+
 		try {
-			console.log("Calling startRegistration with options:", cleanOptions);
-			regJSON = await startRegistration({ publicKey: cleanOptions });
+			regJSON = await startRegistration(options);
+			// regJSON = await startRegistration({ publicKey: cleanOptions });
 			console.log("startRegistration successful:", regJSON);
 		} catch (regError) {
 			if (regError.name === "InvalidStateError" || regError.name === "NotAllowedError") {
@@ -297,9 +350,22 @@ async function login(username, password) {
 		}
 
 		const options = initData.options;
-		const cleanOptions = { ...options };
-		delete cleanOptions.hints;
-		delete cleanOptions.extensions;
+		// --- Add Detailed Logging ---
+		console.log("Received options object:", JSON.stringify(options, null, 2));
+		if (options.user) {
+			console.log("Received options.user object:", JSON.stringify(options.user, null, 2));
+			if (typeof options.user.name === "undefined") {
+				console.error("CRITICAL: options.user.name is UNDEFINED in the object received from the server!");
+			} else {
+				console.log("options.user.name value:", options.user.name);
+			}
+		} else {
+			console.error("CRITICAL: options.user is MISSING in the object received from the server!");
+		}
+		// --- End Detailed Logging ---
+		/*	const cleanOptions = { ...options };
+		// delete cleanOptions.hints;
+		// delete cleanOptions.extensions;*/
 		expectedChallenge = initData.challenge; // Store challenge
 		userIdForVerification = initData.userId; // Store userId
 		console.log(`init-auth successful. Challenge: ${expectedChallenge}, UserID: ${userIdForVerification}`);
@@ -307,7 +373,8 @@ async function login(username, password) {
 		// 2. Start WebAuthn Authentication Ceremony
 		let authJSON;
 		try {
-			authJSON = await startAuthentication({ publicKey: cleanOptions });
+			authJSON = await startAuthentication(options);
+			// authJSON = await startAuthentication({ publicKey: cleanOptions });
 			console.log("startAuthentication successful:", authJSON);
 		} catch (authError) {
 			if (authError.name === "NotAllowedError") {
