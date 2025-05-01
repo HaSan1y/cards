@@ -20,7 +20,7 @@ let sessionData = {
 };
 
 // Function to create a new card
-function createCard(id, sentence, solution) {
+function createCardsl(id, sentence, solution) {
 	const card = {
 		id,
 		sentence,
@@ -65,7 +65,7 @@ async function handleSessionSubmit(event) {
 		cardIdCounter = existingCards.length > 0 ? Math.max(...existingCards.map((c) => c.id)) + 1 : 0;
 
 		const cardId = cardIdCounter++;
-		createCard(cardId, sentence, solution);
+		createCardsl(cardId, sentence, solution);
 		// Reread cards after creation and display all
 		displaysesCards();
 	} catch (error) {
