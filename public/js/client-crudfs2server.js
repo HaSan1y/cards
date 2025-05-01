@@ -236,10 +236,10 @@ async function postsensolData(event) {
 
 	const xhrSen = new XMLHttpRequest();
 	// cors issue:
-	// to make it work locally-> make the request from url http://localhost:5500/public/
+	// to make it work locally-> make the request from url http://localhost:5500/public/  //1.open with five-server v 2.change url to localhost
 	// also run the server (with right click, run) server-crudfs2client.js   ->:3000
-	// http://127.0.0.1:* is ur running server not ur url, also del cookies i guess
-	xhrSen.open("POST", `http://127.0.0.1:3000/${filePath}`, true); // unwork on vercel do db there
+	// http://127.0.0.1:* is ur running server NOT ur URL. also del cookie/cache ...i guess?
+	xhrSen.open("POST", `http://127.0.0.1:3000/${filePath}`, true);
 	xhrSen.setRequestHeader("Content-Type", "application/json");
 	const data = {
 		t1: t1,

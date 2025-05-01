@@ -1,19 +1,17 @@
 // import "htmx.org";
 // import "/initiate-htmx.js";
-// document.addEventListener("DOMContentLoaded", () => {
-// 	const htmxButton = document.getElementById("htmx-proxy");
-// 	const currentUrl = window.location.origin;
-// 	console.log("Current URL:", currentUrl);
-// 	if (currentUrl.includes("netlify.app")) {
-// 		htmxButton.setAttribute("hx-get", "/.netlify/functions/Uhtmx-joke");
-// 	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000") || currentUrl.includes("localhost:8888")) {
-// 		htmxButton.setAttribute("hx-get", "/api/Uhtmx-joke");
-// 	} else {
-// 		console.log("Unknown URL, no API endpoint configured.");
-// 	}
-// });
 
 document.addEventListener("DOMContentLoaded", () => {
+	// 	const htmxButton = document.getElementById("htmx-proxy");
+	// 	const currentUrl = window.location.origin;
+	// 	console.log("Current URL:", currentUrl);
+	// 	if (currentUrl.includes("netlify.app")) {
+	// 		htmxButton.setAttribute("hx-get", "/.netlify/functions/Uhtmx-joke");
+	// 	} else if (currentUrl.includes("vercel.app") || currentUrl.includes("localhost:3000") || currentUrl.includes("localhost:8888")) {
+	// 		htmxButton.setAttribute("hx-get", "/api/Uhtmx-joke");
+	// 	} else {
+	// 		console.log("Unknown URL, no API endpoint configured.");
+	// 	}
 	// --- Service Worker Registration ---
 	if ("serviceWorker" in navigator) {
 		navigator.serviceWorker
@@ -138,24 +136,6 @@ colorOptions.forEach((option) => {
 // window.addEventListener("load", () => {document.onload = ;
 executeCodes();
 setTheme();
-
-// const formx = document.querySelector('form.xx');
-// formx.addEventListener('submit', (e) => {
-//   e.preventDefault(); ///
-//   const files = document.getElementById("files");
-//   const formData = new FormData();
-//   //  formData.append("name", name.value);
-//   for (let i = 0; i < files.files.length; i++) {
-//     formData.append("files", files.files[i]);
-//   }
-//   fetch('http://127.0.0.1:5000/api', {
-//     method: 'POST',
-//     body: formData,
-//   })
-//     .then(res => res.json())
-//     .then(data => console.log(data));
-// })
-// });
 
 // database switcher
 const cardHolder = document.getElementById("cardHolder");
@@ -338,7 +318,7 @@ window.switchDatabase = async function switchDatabase() {
 		document.getElementById("txtbtn").innerHTML = "";
 		document.getElementById("sessionbtn").innerHTML = "";
 		document.getElementById("buttons").innerHTML = ""; // Clear general buttons area if needed
-		// document.getElementById("zbtns").innerHTML = "";
+		// document.getElementById("zbtns").innerHTML = ""||undefined;
 
 		// Hide forms
 		coco.style.display = "none";
@@ -351,41 +331,38 @@ window.switchDatabase = async function switchDatabase() {
 
 		// Example: Add a button to cache a specific resource
 		const cacheDemoButton = document.createElement("button");
-		cacheDemoButton.textContent = "Cache 'sen.txt'";
+		cacheDemoButton.textContent = "Cache: 'sen.txt'+'sol.txt'";
 		cacheDemoButton.type = "button";
 		cacheDemoButton.classList.add("btn-primary");
+		cacheDemoButton.style.color = "#333333";
 		cacheDemoButton.onclick = async () => {
 			const cacheName = "my-cache-v1"; // Same name as in sw.js or a new one
 			const cache = await caches.open(cacheName);
 			try {
-				// Add a try...catch here for better debugging
-				await cache.add("/sen.txt"); // Add the resource to the cache
+				await cache.add("/sen.txt");
 				console.log("'sen.txt' added to cache:", cacheName);
-				alert("'sen.txt' added to cache. Check DevTools!");
+				await cache.add("/sol.txt");
+				console.log("'sol.txt' added to cache:", cacheName);
+				alert("'sen.txt'+'sol.txt' added to cache. Check DevTools!");
 			} catch (error) {
-				console.error("Failed to cache '/sen.txt':", error); // Log the specific error
-				alert(`Failed to cache '/sen.txt': ${error.message}`);
+				console.error("Failed to cache '/sen.txt'+'sol.txt':", error);
+				alert(`Failed to cache '/sen.txt'+'sol.txt': ${error.message}`);
 			}
 		};
 		cardHolder.appendChild(cacheDemoButton);
 
 		const showCacheButton = document.createElement("button");
-		showCacheButton.textContent = "Show Cached sen.txt";
+		showCacheButton.textContent = "Show Cached: sen.txt+sol.txt";
 		showCacheButton.type = "button";
 		showCacheButton.classList.add("btn-primary");
-		showCacheButton.style.marginLeft = "10px"; //
+		showCacheButton.style.marginLeft = "10px";
+		showCacheButton.style.color = "#333333";
 		showCacheButton.onclick = showCachedSenTxt;
 		cardHolder.appendChild(showCacheButton);
 	} else if (selectedValue === "socket") {
 		console.log("Switching to WebSocket Chat");
 		// --- WebSocket Chat Setup ---
 		setupWebSocketChat();
-
-		// --- CacheDB Setup --- (Existing code)
-		console.log("Switching to Cache API view");
-		// Clear specific UI elements from other modes
-		// cardHolder.innerHTML = "";
-		document.getElementById("dbbtn").innerHTML = "";
 	} else {
 		console.log("Invalid database selection");
 	}
@@ -395,24 +372,31 @@ async function showCachedSenTxt() {
 	const cacheName = "my-cache-v1"; // Or whatever your cache is named
 	try {
 		const cache = await caches.open(cacheName);
-		const response = await cache.match("/sen.txt");
+		const responseSen = await cache.match("/sen.txt");
+		const responseSol = await cache.match("/sol.txt");
 		const displayArea = document.getElementById("cardHolder");
 
-		if (response) {
-			const text = await response.text();
-			// displayArea.innerHTML = `<p>Content of cached /sen.txt:</p><pre>${text}</pre>`;
-			const contentDiv = document.createElement("div");
-			contentDiv.style.marginTop = "20px";
-			contentDiv.innerHTML = `<p>Content of cached /sen.txt:</p><pre style="background-color: #f0f0f0; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">${text}</pre>`;
-			displayArea.appendChild(contentDiv);
-			console.log("Displayed sen.txt from cache.");
+		if (responseSen && responseSol) {
+			// 			display: grid;
+			// grid-template-columns: repeat(2, 1fr);
+			const senText = await responseSen.text();
+			const solText = await responseSol.text();
+			const senContentDiv = document.createElement("div");
+			senContentDiv.style.marginTop = "20px";
+			senContentDiv.innerHTML = `<p>Content of cached /sen.txt:</p><pre style="background-color: #f0f0f0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; color: #333;">${senText}</pre>`;
+			displayArea.appendChild(senContentDiv);
+			const solContentDiv = document.createElement("div");
+			solContentDiv.style.marginTop = "20px";
+			solContentDiv.innerHTML = `<p>Content of cached /sol.txt:</p><pre style="background-color: #f0f0f0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; color: #333;">${solText}</pre>`;
+			displayArea.appendChild(solContentDiv);
+			console.log("Displayed sol.txt+sol.txt from cache.");
 		} else {
 			// Append the message instead of replacing everything
 			const messageDiv = document.createElement("div");
 			messageDiv.style.marginTop = "20px";
-			messageDiv.innerHTML = "<p>/sen.txt not found in cache.</p>";
+			messageDiv.innerHTML = "<p>/sen.txt+/sol.txt not found in cache.</p>";
 			displayArea.appendChild(messageDiv);
-			console.log("sen.txt not found in cache.");
+			console.log("sen.txt+sol.txt not found in cache.");
 		}
 	} catch (error) {
 		console.error("Error accessing cache:", error);
