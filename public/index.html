@@ -27,10 +27,9 @@
 		style-src 'self' https://translate.google.com https://fonts.googleapis.com https://fonts.gstatic.com; 
 		style-src-elem 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://www.gstatic.com;
 		style-src-attr 'self' 'nonce-abc123' https://translate-pa.googleapis.com" /> -->
-	<!-- script-src 'self' | 'unsafe-inline' | 'unsafe-eval';default-src 'self' allow scripts only from the same origin -->
+	<!-- script-src 'self' | 'unsafe-inline' | 'unsafe-eval'; default-src 'self' ;scripts from same origin -->
 
 	<!-- <link rel="preload" href="./js/script.js" as="script" /> as image, style, font, script -->
-
 	<script type="module" src="./js/script.js" nonce="abc123" defer></script>
 	<script src="./js/client-crudfs2server.js" nonce="abc123" defer></script>
 	<script src="./js/with-indexdb.js" nonce="abc123" defer></script>
@@ -54,7 +53,7 @@
 	<!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
 	<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> -->
 
-	<!-- <link rel="stylesheet" href="./css/output.css" type="text/css" /> -->
+	<!-- <link rel="stylesheet" href="./css/output.css" type="text/css" /> twcss output-->
 	<link rel="stylesheet" href="./css/style.css" type="text/css" />
 	<link rel="stylesheet" href="./css/cardstyle.css" type="text/css" />
 	<link rel="stylesheet" href="./css/radio-form.css" type="text/css" />
@@ -234,7 +233,8 @@
 							<option data-url="https://github.com/HaSan1y/nextjs" value="htmx">HTMX?</option>
 							<option value="sessiondb">Session storage</option>
 							<option value="localdb">Local storage</option>
-							<!-- <option value="Cache">Cache storage?</option> -->
+							<option value="cachedb">Cache? (makes website offline useable?)</option>
+							<!-- <option value="socket">sockets? </option> -->
 						</select>
 					</div>
 					<button nonce="abc123" type="button" class="btn-primary text-white" onclick="switchDatabase()"
@@ -245,7 +245,7 @@
 					<!-- <div id="script-output"></div> -->
 				</div>
 			</div>
-			<!-- do not delete one for indexdb + 1 form for server -->
+			<!-- do not delete one form for indexdb, + 1 form for server, + 1 form for local/sessionstorage -->
 			<form id="dbbtn" style="display: none">
 				<label for="t1"> <input type="text" id="t1" name="t1" placeholder="title" maxlength="12" required
 						autocomplete="off" /></label>
@@ -282,7 +282,7 @@
 						</div>
 						<div class="backSide">
 							<p class="title">BACK SIDE</p>
-							<p>Leave Me</p>
+							<button>delete</button>
 						</div>
 					</div>
 				</div> -->
@@ -386,10 +386,7 @@
 				<!-- <div id="insultid"></div>  -->
 				<div id="advice"></div>
 				<div id="err"></div>
-				<!-- <picture> -->
-				<!-- <source id="img" src="./img/1.jpg" type="image/webp" /> -->
-				<!-- <img id="img" alt="Random Image" /> -->
-				<!-- <img id="imgg" src="http://localhost:3000/pproxy" height="200" width="200" alt="Random Image" /> -->
+
 				<!-- htmx -->
 				<button hx-get="/api/htmx-joke" hx-trigger="click" id="htmx-proxy" hidden hx-target="#joke"
 					hx-swap="innerHTML" hx-indicator="#indicator" class="btn btn-primary">
@@ -400,6 +397,7 @@
 				<!-- hx-trigger="click[ctrlKey]" hx-trigger="every 2s"-->
 
 				<!-- </picture> -->
+				<!-- <source id="img" src="./img/1.jpg" type="image/webp" /> -->
 				<img id="imgg" src="" class="htmx-img" height="200" width="200" alt="Loading" hidden />
 			</div>
 		</div>
@@ -516,7 +514,8 @@
 			new google.translate.TranslateElement({ pageLanguage: "en" }, "google_translate_element");
 		}
 	</script>
-	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementImit"></script>
+	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementImit">
+	</script>
 	<!-- npm i wowjs //animate.css-->
 	<script src="./js/wow/wow.min.js" nonce="abc123"></script>
 	<!-- v has to be lastly initiated new WOW().init()-->

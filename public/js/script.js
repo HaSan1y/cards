@@ -14,6 +14,20 @@
 // });
 
 document.addEventListener("DOMContentLoaded", () => {
+	// --- Service Worker Registration ---
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker
+			.register("/sw.js") // Path relative to origin root
+			.then((registration) => {
+				console.log("Service Worker registered with scope:", registration.scope);
+			})
+			.catch((error) => {
+				console.error("Service Worker registration failed:", error);
+			});
+	} else {
+		console.log("Service Worker not supported in this browser.");
+	}
+	// --- End Service Worker Registration ---
 	const repoSelectElements = document.getElementsByClassName("repoSelect");
 
 	for (let i = 0; i < repoSelectElements.length; i++) {
@@ -304,22 +318,82 @@ window.switchDatabase = async function switchDatabase() {
 		coco.style.display = "none";
 		txtbtn.style.display = "none";
 		dbbtn.style.display = "none";
-		// s1.style.display = "block";
-		// s2.style.display = "block";
-		// s3.style.display = "block";
 		localbtn.style.display = "block"; // Show the form
 		localbtn.addEventListener("submit", handleSessionSubmit); // Reuse the same handler
 		sessionbtn.reset();
 		window.currentStorageType = "local"; // Set storage type
 		displaysesCards(); // Display cards from localStorage
+	} else if (selectedValue === "cachedb") {
+		console.log("Switching to Cache API view");
+		// Clear specific UI elements from other modes
+		document.getElementById("dbbtn").innerHTML = "";
+		document.getElementById("txtbtn").innerHTML = "";
+		document.getElementById("sessionbtn").innerHTML = "";
+		document.getElementById("buttons").innerHTML = ""; // Clear general buttons area if needed
+		// document.getElementById("zbtns").innerHTML = "";
 
-		// } else if (isCacheDB) {
-		// 	console.log("CacheDB is not implemented yet");
-		// } else {
-		// 	console.log("Invalid database selection");
+		// Hide forms
+		coco.style.display = "none";
+		txtbtn.style.display = "none";
+		dbbtn.style.display = "none";
+		sessionbtn.style.display = "none";
+
+		// Clear card display area
+		cardHolder.innerHTML = "<p>Cache API selected. Use DevTools (Application > Cache Storage) to inspect.</p>";
+
+		// Example: Add a button to cache a specific resource
+		// const cacheButtonContainer = document.getElementById("buttons"); // Or another suitable container
+		const cacheDemoButton = document.createElement("button");
+		cacheDemoButton.textContent = "Cache 'sen.txt'";
+		cacheDemoButton.type = "button";
+		cacheDemoButton.classList.add("btn-primary");
+		cacheDemoButton.onclick = async () => {
+			const cacheName = "my-cache-v1"; // Same name as in sw.js or a new one
+			const cache = await caches.open(cacheName);
+			try {
+				// Add a try...catch here for better debugging
+				await cache.add("/sen.txt"); // <--- This might be failing!
+				console.log("'sen.txt' added to cache:", cacheName);
+				alert("'sen.txt' added to cache. Check DevTools!");
+			} catch (error) {
+				console.error("Failed to cache '/sen.txt':", error); // Log the specific error
+				alert(`Failed to cache '/sen.txt': ${error.message}`);
+			}
+		};
+		// cacheButtonContainer.appendChild(cacheDemoButton);
+		const showCacheButton = document.createElement("button");
+		showCacheButton.textContent = "Show Cached sen.txt";
+		showCacheButton.onclick = showCachedSenTxt;
+		cardHolder.appendChild(showCacheButton);
+		cardHolder.appendChild(cacheDemoButton);
+	} else if (selectedValue === "socket") {
+		console.log("Switching to socket database");
+	} else {
+		console.log("Invalid database selection");
 	}
 };
 window.switchDatabase = switchDatabase;
+async function showCachedSenTxt() {
+	const cacheName = "my-cache-v1"; // Or whatever your cache is named
+	try {
+		const cache = await caches.open(cacheName);
+		const response = await cache.match("/sen.txt");
+		// const response = await cache.match("http://localhost:8888/sen.txt");
+		const displayArea = document.getElementById("cardHolder"); // Or another element
+
+		if (response) {
+			const text = await response.text();
+			displayArea.innerHTML = `<p>Content of cached /sen.txt:</p><pre>${text}</pre>`;
+			console.log("Displayed sen.txt from cache.");
+		} else {
+			displayArea.innerHTML = "<p>/sen.txt not found in cache.</p>";
+			console.log("sen.txt not found in cache.");
+		}
+	} catch (error) {
+		console.error("Error accessing cache:", error);
+		document.getElementById("cardHolder").innerHTML = `<p>Error accessing cache: ${error.message}</p>`;
+	}
+}
 const apiEndpoints = {
 	"https://db-2-cards.vercel.app": {
 		joke: "/api/vercel-proxy?type=joke",
