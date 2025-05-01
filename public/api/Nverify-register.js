@@ -166,9 +166,20 @@ exports.handler = async (event) => {
 
 	try {
 		console.log(`Verifying registration for user ${username} (ID: ${userId}) with challenge: ${expectedChallenge}`);
+		const verificationInput = {
+			...webAuthnResponse,
+			id: Buffer.from(webAuthnResponse.id, "base64url"),
+			// id: webAuthnResponse.id,
+			rawId: Buffer.from(webAuthnResponse.rawId, "base64url"),
+			response: {
+				...webAuthnResponse.response,
+				clientDataJSON: Buffer.from(webAuthnResponse.response.clientDataJSON, "base64url"),
+				attestationObject: Buffer.from(webAuthnResponse.response.attestationObject, "base64url"),
+			},
+		};
 		const verification = await verifyRegistrationResponse({
-			response: webAuthnResponse,
-			expectedChallenge: expectedChallenge, // Use challenge from body
+			response: verificationInput, // : webAuthnRespons
+			expectedChallenge: expectedChallenge,
 			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,
 			requireUserVerification: false,
@@ -177,7 +188,10 @@ exports.handler = async (event) => {
 		if (verification.verified && verification.registrationInfo) {
 			console.log(`Registration verified for ${username}. Storing user data.`);
 			const regInfoData = verification.registrationInfo;
-
+			if (!regInfoData || !regInfoData.credentialID || !regInfoData.credentialPublicKey) {
+				console.error("Verification successful but registrationInfo is incomplete:", regInfoData);
+				throw new Error("Verification succeeded, but credential data was missing.");
+			}
 			// Store data correctly (as in Vercel version)
 			const passKeyDataForStorage = {
 				id: Buffer.from(regInfoData.credentialID).toString("base64url"),

@@ -130,15 +130,17 @@ exports.handler = async (event) => {
 		console.log(`Generating registration options for email: ${email}`);
 		const userIdBuffer = crypto.randomBytes(16);
 		const options = await generateRegistrationOptions({
-			rpId: currentRpConfig.rpId,
 			rpName: currentRpConfig.rpName,
-			// userName: email,
-			user: {
-				// Corrected: Use user object
-				id: userIdBuffer, // Assign the generated ID
-				name: email, // Use email as the required 'name'
-				displayName: email, // Use email as the display name
-			},
+			rpId: currentRpConfig.rpId,
+			userID: userIdBuffer,
+			userName: email,
+			userDisplayName: email,
+			// user: {
+			// 	// Corrected: Use user object
+			// 	id: userIdBuffer, // Assign the generated ID
+			// 	name: email, // Use email as the required 'name'
+			// 	displayName: email, // Use email as the display name
+			// },
 			attestationType: "none", // Optional: 'none' is common for less strict requirements
 			authenticatorSelection: {
 				residentKey: "preferred",

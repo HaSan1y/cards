@@ -132,6 +132,7 @@ module.exports = async (req, res) => {
 		const options = await generateRegistrationOptions({
 			rpId: currentRpConfig.rpId,
 			rpName: currentRpConfig.rpName,
+			//  userID: isoUint8Array.fromUTF8String('customUserIDHere'),
 			user: {
 				id: userIdBuffer,
 				name: email,

@@ -31,10 +31,11 @@
 
 	<!-- <link rel="preload" href="./js/script.js" as="script" /> as image, style, font, script -->
 
+	<script type="module" src="./js/script.js" nonce="abc123" defer></script>
 	<script src="./js/client-crudfs2server.js" nonce="abc123" defer></script>
 	<script src="./js/with-indexdb.js" nonce="abc123" defer></script>
 	<script src="./js/with-local+session.js" nonce="abc123" defer></script>
-	<script type="module" src="./js/script.js" nonce="abc123"></script>
+
 	<script type="text/javascript" src="./js/select.js" nonce="abc123" defer></script>
 	<script src="https://unpkg.com/htmx.org" nonce="abc123" defer></script>
 	<!-- Load the Twitch embed script-->
@@ -230,9 +231,9 @@
 							<option value="0">decide on which DB</option>
 							<option value="indexdb">IndexDB</option>
 							<option value="server">Server(local)</option>
-							<option data-url="https://github.com/HaSan1y/nextjs" value="htmx">HTMX</option>
-							<option value="sessiondb">Session storage?</option>
-							<option value="localdb">Local storage?</option>
+							<option data-url="https://github.com/HaSan1y/nextjs" value="htmx">HTMX?</option>
+							<option value="sessiondb">Session storage</option>
+							<option value="localdb">Local storage</option>
 							<!-- <option value="Cache">Cache storage?</option> -->
 						</select>
 					</div>

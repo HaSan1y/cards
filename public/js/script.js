@@ -145,6 +145,8 @@ setTheme();
 
 // database switcher
 const cardHolder = document.getElementById("cardHolder");
+// let currentStorageType = "session";
+window.currentStorageType = "session"; // Make it explicitly global
 
 window.switchDatabase = async function switchDatabase() {
 	console.log("Switching database");
@@ -276,19 +278,14 @@ window.switchDatabase = async function switchDatabase() {
 		newsesSubmitButton.classList.add("btn-primary");
 		newsesSubmitButton.id = "sessiondbsubmitbtn";
 		sessionbtn.appendChild(newsesSubmitButton);
-		// const wipesesDBButton = document.createElement("button");
-		// wipesesDBButton.textContent = "wipe SessionDB";
-		// wipesesDBButton.type = "button";
-		// wipesesDBButton.id = "wipesessionDBButton";
-		// wipesesDBButton.setAttribute("onclick", "wipesessionData()");
-		// wipesesDBButton.classList.add("btn-primary");
-		// document.getElementById("buttons").appendChild(wipesesDBButton);
 		coco.style.display = "none";
 		txtbtn.style.display = "none";
 		dbbtn.style.display = "none";
 		sessionbtn.style.display = "block";
 		sessionbtn.addEventListener("submit", handleSessionSubmit);
 		sessionbtn.reset();
+		window.currentStorageType = "session";
+		displaysesCards(); // Add this line to show existing cards on switch
 
 		// sessionStorage.setItem("user", JSON.stringify(user);// Store data
 		// let value = JSON.parse(sessionStorage.getItem("user");// Retrieve data
@@ -296,11 +293,25 @@ window.switchDatabase = async function switchDatabase() {
 		// sessionStorage.clear();// Clear all session storage data
 	} else if (isLocalDB) {
 		console.log("Switching to LocalDB");
-		localStorage.setItem("settings", JSON.stringify(settings));
-		let value = JSON.parse(localStorage.getItem("settings"));
-		localStorage.removeItem("key");
-		localStorage.clear();
-		console.log("Retrieved settings:", value);
+		const localbtn = document.getElementById("sessionbtn"); // Reuse the same form for simplicity? Or create a new one? Let's reuse for now.
+		const newlocSubmitButton = document.createElement("button");
+		newlocSubmitButton.textContent = "Add text to LocalDB";
+		newlocSubmitButton.type = "submit";
+		newlocSubmitButton.classList.add("btn-primary");
+		newlocSubmitButton.id = "localdbsubmitbtn"; // Give it a unique ID if needed
+		//localbtn.innerHTML = ""; // Clear previous buttons if reusing form
+		localbtn.appendChild(newlocSubmitButton);
+		coco.style.display = "none";
+		txtbtn.style.display = "none";
+		dbbtn.style.display = "none";
+		// s1.style.display = "block";
+		// s2.style.display = "block";
+		// s3.style.display = "block";
+		localbtn.style.display = "block"; // Show the form
+		localbtn.addEventListener("submit", handleSessionSubmit); // Reuse the same handler
+		sessionbtn.reset();
+		window.currentStorageType = "local"; // Set storage type
+		displaysesCards(); // Display cards from localStorage
 
 		// } else if (isCacheDB) {
 		// 	console.log("CacheDB is not implemented yet");
