@@ -159,8 +159,8 @@ setTheme();
 
 // database switcher
 const cardHolder = document.getElementById("cardHolder");
-// let currentStorageType = "session";
-window.currentStorageType = "session"; // Make it explicitly global
+window.currentStorageType = "session";
+let socket = null; // Variable to hold the WebSocket connection
 
 window.switchDatabase = async function switchDatabase() {
 	console.log("Switching database");
@@ -226,7 +226,15 @@ window.switchDatabase = async function switchDatabase() {
 	const isIndexDB = selectedValue === "indexdb";
 	const isSessionDB = selectedValue === "sessiondb";
 	const isLocalDB = selectedValue === "localdb";
+	// const isSocketDB = selectedValue === "socket";
 	// const isCacheDB = selectedValue === "cachedb";
+
+	// Close the WebSocket connection
+	if (socket && selectedValue !== "socket") {
+		socket.close();
+		socket = null;
+		console.log("WebSocket connection closed.");
+	}
 	if (isServer) {
 		console.log("Switching to server database");
 		const ssubmitButtonContainer = document.getElementById("dbbtn");
@@ -312,7 +320,7 @@ window.switchDatabase = async function switchDatabase() {
 		newlocSubmitButton.textContent = "Add text to LocalDB";
 		newlocSubmitButton.type = "submit";
 		newlocSubmitButton.classList.add("btn-primary");
-		newlocSubmitButton.id = "localdbsubmitbtn"; // Give it a unique ID if needed
+		newlocSubmitButton.id = "localdbsubmitbtn";
 		//localbtn.innerHTML = ""; // Clear previous buttons if reusing form
 		localbtn.appendChild(newlocSubmitButton);
 		coco.style.display = "none";
@@ -342,7 +350,6 @@ window.switchDatabase = async function switchDatabase() {
 		cardHolder.innerHTML = "<p>Cache API selected. Use DevTools (Application > Cache Storage) to inspect.</p>";
 
 		// Example: Add a button to cache a specific resource
-		// const cacheButtonContainer = document.getElementById("buttons"); // Or another suitable container
 		const cacheDemoButton = document.createElement("button");
 		cacheDemoButton.textContent = "Cache 'sen.txt'";
 		cacheDemoButton.type = "button";
@@ -352,7 +359,7 @@ window.switchDatabase = async function switchDatabase() {
 			const cache = await caches.open(cacheName);
 			try {
 				// Add a try...catch here for better debugging
-				await cache.add("/sen.txt"); // <--- This might be failing!
+				await cache.add("/sen.txt"); // Add the resource to the cache
 				console.log("'sen.txt' added to cache:", cacheName);
 				alert("'sen.txt' added to cache. Check DevTools!");
 			} catch (error) {
@@ -360,14 +367,25 @@ window.switchDatabase = async function switchDatabase() {
 				alert(`Failed to cache '/sen.txt': ${error.message}`);
 			}
 		};
-		// cacheButtonContainer.appendChild(cacheDemoButton);
+		cardHolder.appendChild(cacheDemoButton);
+
 		const showCacheButton = document.createElement("button");
 		showCacheButton.textContent = "Show Cached sen.txt";
+		showCacheButton.type = "button";
+		showCacheButton.classList.add("btn-primary");
+		showCacheButton.style.marginLeft = "10px"; //
 		showCacheButton.onclick = showCachedSenTxt;
 		cardHolder.appendChild(showCacheButton);
-		cardHolder.appendChild(cacheDemoButton);
 	} else if (selectedValue === "socket") {
-		console.log("Switching to socket database");
+		console.log("Switching to WebSocket Chat");
+		// --- WebSocket Chat Setup ---
+		setupWebSocketChat();
+
+		// --- CacheDB Setup --- (Existing code)
+		console.log("Switching to Cache API view");
+		// Clear specific UI elements from other modes
+		// cardHolder.innerHTML = "";
+		document.getElementById("dbbtn").innerHTML = "";
 	} else {
 		console.log("Invalid database selection");
 	}
@@ -378,20 +396,108 @@ async function showCachedSenTxt() {
 	try {
 		const cache = await caches.open(cacheName);
 		const response = await cache.match("/sen.txt");
-		// const response = await cache.match("http://localhost:8888/sen.txt");
-		const displayArea = document.getElementById("cardHolder"); // Or another element
+		const displayArea = document.getElementById("cardHolder");
 
 		if (response) {
 			const text = await response.text();
-			displayArea.innerHTML = `<p>Content of cached /sen.txt:</p><pre>${text}</pre>`;
+			// displayArea.innerHTML = `<p>Content of cached /sen.txt:</p><pre>${text}</pre>`;
+			const contentDiv = document.createElement("div");
+			contentDiv.style.marginTop = "20px";
+			contentDiv.innerHTML = `<p>Content of cached /sen.txt:</p><pre style="background-color: #f0f0f0; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">${text}</pre>`;
+			displayArea.appendChild(contentDiv);
 			console.log("Displayed sen.txt from cache.");
 		} else {
-			displayArea.innerHTML = "<p>/sen.txt not found in cache.</p>";
+			// Append the message instead of replacing everything
+			const messageDiv = document.createElement("div");
+			messageDiv.style.marginTop = "20px";
+			messageDiv.innerHTML = "<p>/sen.txt not found in cache.</p>";
+			displayArea.appendChild(messageDiv);
 			console.log("sen.txt not found in cache.");
 		}
 	} catch (error) {
 		console.error("Error accessing cache:", error);
-		document.getElementById("cardHolder").innerHTML = `<p>Error accessing cache: ${error.message}</p>`;
+		const errorDiv = document.createElement("div");
+		errorDiv.style.marginTop = "20px";
+		errorDiv.innerHTML = `<p>Error accessing cache: ${error.message}</p>`;
+		document.getElementById("cardHolder").appendChild(errorDiv);
+	}
+}
+// --- Function to set up WebSocket Chat UI and Logic ---
+function setupWebSocketChat() {
+	// Clear existing UI
+	coco.style.display = "none";
+	txtbtn.style.display = "none";
+	dbbtn.style.display = "none";
+	sessionbtn.style.display = "none";
+	cardHolder.innerHTML = `
+		<h2>WebSocket Chat</h2>
+		<div id="chat-messages" style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; margin-bottom: 10px; padding: 10px; background-color: #f9f9f9;"></div>
+		<input type="text" id="chat-input" placeholder="Enter message..." style="width: 80%; padding: 8px;" />
+		<button id="chat-send" class="btn-primary" style="padding: 8px 15px;">Send</button>
+	`;
+
+	const messagesDiv = document.getElementById("chat-messages");
+	const input = document.getElementById("chat-input");
+	const sendButton = document.getElementById("chat-send");
+
+	// Establish WebSocket connection
+	// Use wss:// for secure connections (if your server uses HTTPS)
+	const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+	const wsUrl = `${wsProtocol}//${window.location.host}`; // Connect to the same host/port
+	socket = new WebSocket(wsUrl);
+
+	socket.onopen = () => {
+		console.log("WebSocket connection established");
+		addChatMessage("System", "Connected to chat.");
+	};
+
+	socket.onmessage = (event) => {
+		console.log("Message from server:", event.data);
+		// Assuming simple text messages for now
+		// In a real app, you might parse JSON: const msgData = JSON.parse(event.data);
+		addChatMessage("Server", event.data); // Display message
+	};
+
+	socket.onerror = (error) => {
+		console.error("WebSocket error:", error);
+		addChatMessage("System", "Connection error.");
+	};
+
+	socket.onclose = () => {
+		console.log("WebSocket connection closed");
+		addChatMessage("System", "Disconnected from chat.");
+		socket = null; // Clear the socket variable
+	};
+
+	// Send message function
+	const sendMessage = () => {
+		const message = input.value.trim();
+		if (message && socket && socket.readyState === WebSocket.OPEN) {
+			socket.send(message); // Send the raw message text
+			addChatMessage("You", message); // Display your own message immediately
+			input.value = ""; // Clear input
+		} else if (!message) {
+			console.log("Cannot send empty message");
+		} else {
+			console.error("WebSocket is not connected.");
+			addChatMessage("System", "Cannot send message. Not connected.");
+		}
+	};
+
+	// Event listeners for sending
+	sendButton.onclick = sendMessage;
+	input.addEventListener("keypress", (event) => {
+		if (event.key === "Enter") {
+			sendMessage();
+		}
+	});
+
+	// Helper to add messages to the chat display
+	function addChatMessage(sender, message) {
+		const messageElement = document.createElement("p");
+		messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`; // Basic formatting
+		messagesDiv.appendChild(messageElement);
+		messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom
 	}
 }
 const apiEndpoints = {
