@@ -1,7 +1,7 @@
 const { generateAuthenticationOptions } = require("@simplewebauthn/server");
 // const { getUserByUsername } = require("./db/wds-basicDB.js");
 const { getUserByUsername, getUserById, getUserPassKeyForVerification } = require("./db/vercelDB.js");
-
+const bcrypt = require("bcrypt");
 const ALLOWED_ORIGINS = [
 	"http://localhost:3000", // Local development
 	"https://db-2-cards.vercel.app", // Vercel deployment
@@ -153,7 +153,7 @@ exports.handler = async (event) => {
 			allowCredentials: [
 				// *** FIX: Use data from authenticatorData ***
 				{
-					id: authenticatorData.credentialID, // Use the Buffer
+					id: authenticatorData.credentialID, //.toString("base64url"),
 					type: "public-key",
 					transports: authenticatorData.transports,
 				},

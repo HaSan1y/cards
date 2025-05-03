@@ -187,6 +187,10 @@ async function signup(username, email, password) {
 			throw new Error("Server did not provide necessary data to start passkey registration.");
 		}
 		const options = initData.options;
+		if (!options.user || typeof options.user.name !== "string" || options.user.name === "") {
+			console.error("CRITICAL (Client Check): options.user.name is missing or invalid in the object received from the server!", options.user);
+			throw new Error("Server configuration error: User name missing in registration options. Please contact support or the administrator.");
+		}
 		// --- Add Detailed Logging ---
 		console.log("Received options object:", JSON.stringify(options, null, 2));
 		if (options.user) {
@@ -352,16 +356,16 @@ async function login(username, password) {
 		const options = initData.options;
 		// --- Add Detailed Logging ---
 		console.log("Received options object:", JSON.stringify(options, null, 2));
-		if (options.user) {
-			console.log("Received options.user object:", JSON.stringify(options.user, null, 2));
-			if (typeof options.user.name === "undefined") {
-				console.error("CRITICAL: options.user.name is UNDEFINED in the object received from the server!");
-			} else {
-				console.log("options.user.name value:", options.user.name);
-			}
-		} else {
-			console.error("CRITICAL: options.user is MISSING in the object received from the server!");
-		}
+		// if (options.user) {
+		// 	console.log("Received options.user object:", JSON.stringify(options.user, null, 2));
+		// 	if (typeof options.user.name === "undefined") {
+		// 		console.error("CRITICAL: options.user.name is UNDEFINED in the object received from the server!");
+		// 	} else {
+		// 		console.log("options.user.name value:", options.user.name);
+		// 	}
+		// } else {
+		// 	console.error("CRITICAL: options.user is MISSING in the object received from the server!");
+		// }
 		// --- End Detailed Logging ---
 		/*	const cleanOptions = { ...options };
 		// delete cleanOptions.hints;

@@ -169,6 +169,34 @@ footer {
   text-decoration: underline;
 }
 
+.space-x-4 {
+  gap: 1rem;
+}
+
+::backdrop {
+  background-image: linear-gradient(45deg, magenta, rebeccapurple, dodgerblue, green);
+  opacity: 0.75;
+}
+
+.modal[open] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 20px;
+}
+
 /* terms */
 .modal-footer {
   display: flex;
@@ -659,15 +687,7 @@ li {
 #subscribe {
   color: white;
   border: none;
-  padding: 8px 12px;
   cursor: pointer;
-  z-index: 0;
-  position: absolute;
-  right: 0;
-  padding-block: 1px;
-  padding-inline: 5px;
-  transform: translateY(-50%);
-  top: 50%;
 }
 
 .grid-cols-4 {
@@ -710,13 +730,6 @@ select {
   outline: none;
   padding: 8px;
   font-size: 16px;
-}
-
-.asdf {
-  display: flex;
-  position: relative;
-  border: 1px solid #ccc; /* Optional */
-  border-radius: 5px;
 }
 
 label input {
@@ -1259,6 +1272,10 @@ fieldset {
     opacity: 1;
   }
 }
+.x {
+  display: flex;
+}
+
 hr {
   height: 0;
   color: inherit;
@@ -1285,10 +1302,6 @@ small {
   visibility: collapse;
 }
 
-.absolute {
-  position: absolute;
-}
-
 .relative {
   position: relative;
 }
@@ -1299,6 +1312,14 @@ small {
 
 .top-0 {
   top: 0px;
+}
+
+.right-4 {
+  right: 0.5rem;
+}
+
+.top-4 {
+  top: 0.5rem;
 }
 
 .z-0 {
@@ -1410,7 +1431,7 @@ small {
   gap: 2rem;
 }
 
-.i a {
+.iconsHolder a {
   width: 2.1rem;
   height: 2.1rem;
 }

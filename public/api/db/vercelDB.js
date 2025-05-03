@@ -93,35 +93,32 @@ async function addPassKeyToUser(userId, passKeyData) {
 }
 async function getUserPassKeyForVerification(userId) {
 	console.log(`KV: Getting passkey for verification for user ID: ${userId}`);
-	const user = await getUserById(userId);
-	if (!user) {
+	const userData = await getUserById(userId);
+	if (!userData) {
 		console.error(`KV: User not found for verification: ${userId}`);
 		return null;
 	}
-	if (!user.passKey || typeof user.passKey !== "object" || typeof user.passKey.id !== "string" || typeof user.passKey.publicKey !== "string") {
+	if (!userData || !userData.passKey || typeof userData.passKey.id !== "string" || typeof userData.passKey.publicKey !== "string" || typeof userData.passKey.counter !== "number") {
 		console.warn(`KV: User ${userId} found, but has incomplete, missing, or incorrectly typed passKey data for verification.`);
-		console.warn(`KV: passKey data:`, user.passKey); // Log the problematic data
+		console.warn(`KV: passKey data:`, userData?.passKey); // Log the problematic data
 		return null;
 	}
 	try {
 		// --- Convert stored Base64/Base64URL back to Buffers ---
 		// SimpleWebAuthn expects credentialID as raw bytes (Buffer/Uint8Array)
 		// Assuming user.passKey.id is stored as Base64URL
-		const credentialIDBuffer = Buffer.from(user.passKey.id, "base64url");
-
-		// Assuming user.passKey.publicKey is stored as standard Base64
-		const credentialPublicKeyBuffer = Buffer.from(user.passKey.publicKey, "base64");
-		const counter = typeof user.passKey.counter === "number" ? user.passKey.counter : 0; // Default to 0 if invalid/missing
+		const credentialID = Buffer.from(userData.passKey.id, "base64url");
+		const credentialPublicKey = Buffer.from(userData.passKey.publicKey, "base64");
 
 		return {
-			credentialID: credentialIDBuffer,
-			credentialPublicKey: credentialPublicKeyBuffer,
-			counter: counter,
-			transports: Array.isArray(user.passKey.transports) ? user.passKey.transports : undefined,
+			credentialID: credentialID,
+			credentialPublicKey: credentialPublicKey,
+			counter: userData.passKey.counter,
+			transports: userData.passKey.transports, // Array.isArray(userData.passKey.transports) ? userData.passKey.transports : undefined,
 		};
 	} catch (error) {
-		console.error(`KV: Error converting passKey data for user ${userId}:`, error);
-		console.error(`KV: Faulty passKey data:`, user.passKey); // Log the problematic data
+		console.error(`KV: Error converting passKey data for userData  ${userData.Id}:`, error);
+		console.error(`KV: Faulty passKey data:`, userData.passKey); // Log the problematic data
 		return null;
 	}
 }

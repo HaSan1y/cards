@@ -166,7 +166,7 @@ exports.handler = async (event) => {
 
 	try {
 		console.log(`Verifying registration for user ${username} (ID: ${userId}) with challenge: ${expectedChallenge}`);
-		const verificationInput = {
+		/*const verificationInput = {
 			...webAuthnResponse,
 			id: Buffer.from(webAuthnResponse.id, "base64url"),
 			// id: webAuthnResponse.id,
@@ -176,9 +176,9 @@ exports.handler = async (event) => {
 				clientDataJSON: Buffer.from(webAuthnResponse.response.clientDataJSON, "base64url"),
 				attestationObject: Buffer.from(webAuthnResponse.response.attestationObject, "base64url"),
 			},
-		};
+		};*/
 		const verification = await verifyRegistrationResponse({
-			response: verificationInput, // : webAuthnRespons
+			response: webAuthnResponse, //verificationInput,
 			expectedChallenge: expectedChallenge,
 			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,
@@ -188,15 +188,22 @@ exports.handler = async (event) => {
 		if (verification.verified && verification.registrationInfo) {
 			console.log(`Registration verified for ${username}. Storing user data.`);
 			const regInfoData = verification.registrationInfo;
-			if (!regInfoData || !regInfoData.credentialID || !regInfoData.credentialPublicKey) {
-				console.error("Verification successful but registrationInfo is incomplete:", regInfoData);
+			// Log types to be certain right before the check, checking the nested structure
+			console.log(
+				`Type of regInfoData: ${typeof regInfoData}, Type of regInfoData.credential: ${typeof regInfoData?.credential}, Type of credential.id: ${typeof regInfoData?.credential
+					?.id}, Type of credential.publicKey: ${typeof regInfoData?.credential?.publicKey}`,
+			);
+
+			// Refined check using optional chaining on the nested 'credential' property
+			if (!regInfoData?.credential?.id || !regInfoData?.credential?.publicKey) {
+				console.error("Verification successful but credential.id or credential.publicKey is missing/falsy:", regInfoData);
 				throw new Error("Verification succeeded, but credential data was missing.");
 			}
 			// Store data correctly (as in Vercel version)
 			const passKeyDataForStorage = {
-				id: Buffer.from(regInfoData.credentialID).toString("base64url"),
-				publicKey: Buffer.from(regInfoData.credentialPublicKey).toString("base64"),
-				counter: regInfoData.counter,
+				id: regInfoData.credential.id, // Keep as base64url string for storage
+				publicKey: Buffer.from(regInfoData.credential.publicKey).toString("base64"), // Convert Uint8Array to base64 string for storage
+				counter: regInfoData.credential.counter, // Use counter from nested object
 				deviceType: regInfoData.credentialDeviceType,
 				backedUp: regInfoData.credentialBackedUp,
 				transports: webAuthnResponse?.response?.transports || [],

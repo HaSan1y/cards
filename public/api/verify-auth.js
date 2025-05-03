@@ -133,8 +133,8 @@ module.exports = async (req, res) => {
 	try {
 		const verification = await verifyAuthenticationResponse({
 			response: webAuthnResponse,
-			expectedChallenge, // The challenge received from the client request body
-			expectedOrigin,
+			expectedChallenge: expectedChallenge, // Explicit for clarity
+			expectedOrigin: effectiveOrigin, // Ensure we use the variable 'effectiveOrigin' here
 			expectedRPID: currentRpConfig.rpId,
 			authenticator: authenticatorData,
 			requireUserVerification: false,

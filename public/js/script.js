@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// --- Service Worker Registration ---
 	if ("serviceWorker" in navigator) {
 		navigator.serviceWorker
-			.register("/sw.js") // Path relative to origin root
+			.register("./sw.js") // Path relative to origin root
 			.then((registration) => {
 				console.log("Service Worker registered with scope:", registration.scope);
 			})
@@ -339,9 +339,9 @@ window.switchDatabase = async function switchDatabase() {
 			const cacheName = "my-cache-v1"; // Same name as in sw.js or a new one
 			const cache = await caches.open(cacheName);
 			try {
-				await cache.add("/sen.txt");
+				await cache.add("./sen.txt");
 				console.log("'sen.txt' added to cache:", cacheName);
-				await cache.add("/sol.txt");
+				await cache.add("./sol.txt");
 				console.log("'sol.txt' added to cache:", cacheName);
 				alert("'sen.txt'+'sol.txt' added to cache. Check DevTools!");
 			} catch (error) {

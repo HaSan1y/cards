@@ -181,9 +181,10 @@ module.exports = async (req, res) => {
 			console.log(`Registration verified for ${username}. Storing user data.`);
 
 			const passKeyDataForStorage = {
-				id: Buffer.from(regInfoData.credentialID).toString("base64url"),
-				publicKey: Buffer.from(regInfoData.credentialPublicKey).toString("base64"),
-				counter: regInfoData.counter,
+				id: regInfoData.credential.id,
+				publicKey: Buffer.from(regInfoData.credential.publicKey).toString("base64"),
+				counter: regInfoData.credential.counter,
+
 				deviceType: regInfoData.credentialDeviceType,
 				backedUp: regInfoData.credentialBackedUp,
 				transports: webAuthnResponse?.response?.transports || [],

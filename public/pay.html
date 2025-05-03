@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Process Payment</title>
+   <link rel="stylesheet" href="./css/style.css"> <!-- Link your CSS -->
+   <style>
+      body {
+         padding: 20px;
+         font-family: sans-serif;
+      }
+
+      .payment-details {
+         margin-bottom: 20px;
+         padding: 15px;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+      }
+
+      button {
+         padding: 10px 15px;
+         margin-right: 10px;
+         cursor: pointer;
+      }
+
+      #error-message {
+         color: red;
+         margin-top: 10px;
+      }
+   </style>
+</head>
+
+<body>
+   <h1>Confirm Payment</h1>
+
+   <div class="payment-details">
+      <h2>Payment Information</h2>
+      <p><strong>Paying to:</strong> <span id="merchant-origin"></span></p>
+      <p><strong>Total:</strong> <span id="payment-total"></span></p>
+      <p><strong>Method Data (raw):</strong>
+      <pre id="method-data"></pre>
+      </p>
+      <!-- Add more UI elements here to show items, select payment card (if applicable), etc. -->
+   </div>
+
+   <div>
+      <button id="confirm-payment">Confirm Payment</button>
+      <button id="cancel-payment">Cancel</button>
+   </div>
+
+   <p id="status"></p>
+   <p id="error-message"></p>
+
+   <script src="./js/payment-handler.js"></script>
+</body>
+
+</html>

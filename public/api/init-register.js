@@ -109,9 +109,10 @@ module.exports = async (req, res) => {
 		console.error(`No RP config found for allowed origin: ${effectiveOrigin}`);
 		return res.status(500).json({ error: "Server configuration error for origin" });
 	}
-	const email = req.query.email;
-	if (!email) {
-		return res.status(400).json({ error: "Email is required" });
+	const email = req.query.email || "user@example.com";
+	const username = req.query.username || "user";
+	if (!email || !username) {
+		return res.status(400).json({ error: "Email or username is required" });
 	}
 
 	// const excludeCredentials = existingUser?.passKey?.id ? [{ id: Buffer.from(existingUser.passKey.id, "base64url"), type: "public-key" }] : [];
@@ -132,12 +133,15 @@ module.exports = async (req, res) => {
 		const options = await generateRegistrationOptions({
 			rpId: currentRpConfig.rpId,
 			rpName: currentRpConfig.rpName,
+			userID: userIdBuffer,
 			//  userID: isoUint8Array.fromUTF8String('customUserIDHere'),
-			user: {
-				id: userIdBuffer,
-				name: email,
-				displayName: email,
-			},
+			// user: {
+			// 	id: userIdBuffer,
+			// 	name: email,
+			// 	displayName: email,
+			// },
+			userName: username,
+			userDisplayName: username,
 			attestationType: "none", // Optional: 'none' is common for less strict requirements
 			authenticatorSelection: {
 				residentKey: "preferred", // Allow discoverable credentials (passkeys)
@@ -160,10 +164,10 @@ module.exports = async (req, res) => {
 		// 	)}; HttpOnly; Path=/; Max-Age=60; Secure; SameSite=None`,
 		// );
 		return res.status(200).json({
-			options: options,
+			options,
 			challenge: options.challenge, // Pass challenge needed for verification
-			userId: options.user.id, // Pass generated user ID needed for verification/creation
-			email: email, // Pass email back for confirmation/use in verify step
+			userId: userIdBuffer.toString("base64url"), //options.user.id, // Pass generated user ID needed for verification/creation
+			email, // Pass email back for confirmation/use in verify step
 		});
 	} catch (error) {
 		console.error("Error generating registration options:", error);

@@ -4,10 +4,11 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="icon" type="image/png" sizes="16x16" href="./image/favicon-16x16.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-32x32.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="./image/favicon-192x192.png" />
-	<!-- <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/apple-touch-icon.png" /> -->
+	<link rel="icon" type="image/png" sizes="16x16" href="./image/icons/favicon.ico" />
+	<link rel="icon" type="image/png" sizes="16x16" href="./image/icons/favicon-16x16.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="./image/icons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="./image/icons/favicon-192x192.png" />
+	<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./image/icons/apple-touch-icon.png" />
 	<link rel="manifest" href="./image/site.webmanifest" />
 	<title>cards</title>
 	<!-- <base href="./public" /> -->
@@ -81,16 +82,17 @@
 				<div class="dropdown-menu rounded-0 m-0">
 					<ul>
 						<li>
-							<a href="https://h4-html-css.vercel.app" class="dropdown-item">Portf 1</a>
+							<a href="https://h4-html-css.vercel.app" class="dropdown-item" title="Portf1">Portf 1</a>
 						</li>
 						<li>
-							<a href="https://portf2-zeta.vercel.app" class="dropdown-item">Portf 2</a>
+							<a href="https://portf2-zeta.vercel.app" class="dropdown-item" title="Portf2">Portf 2</a>
 						</li>
 						<li>
-							<a href="https://soloist.ai/script4sale" class="dropdown-item">script4u</a>
+							<a href="https://soloist.ai/script4sale" class="dropdown-item" title="script4u">script4u</a>
 						</li>
 						<li>
-							<a href="#" class="dropdown-item active">404 Error</a>
+							<a href="./pay.html" class="dropdown-item" target="_self" referrerpolicy="no-referrer"
+								title="pay">pay</a>
 						</li>
 					</ul>
 				</div>
@@ -100,10 +102,10 @@
 				<div class="dropdown-menu">
 					<ul>
 						<li>
-							<a href="https://github.com/HaSan1y" class="dropdown-item">Github</a>
+							<a href="https://github.com/HaSan1y" class="dropdown-item" title="Github">Github</a>
 						</li>
 						<li>
-							<a href="./lindex.html" class="dropdown-item">login/register</a>
+							<a href="./lindex.html" class="dropdown-item" title="login/register">login/register</a>
 						</li>
 						<li>
 							<a href="#" class="dropdown-item active">404 Error</a>
@@ -111,7 +113,7 @@
 					</ul>
 				</div>
 			</div>
-			<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link">Contact</a>
+			<a href="mailto:hasan.yildirim@outlook.com" class="nav-item nav-link" title="contact">Contact</a>
 		</div>
 	</nav>
 
@@ -208,20 +210,10 @@
 		<div class="conainer">
 			<div class="msg">
 				<p hidden>
-					<!-- <p contenteditable="true">I Hasan Yildirim constructed this Website &rBarr;</p> -->
 					<br />
 				</p>
 				<p hidden>Site-Logic:</p>
 				<p hidden>Client/You can Store/retrieve/translate Text 2x FrontSide(Question), 1x BackSide(Solution).</p>
-				<p hidden>
-					Click on any IndexDB-Card to view its (Backside) Solution (pre-written by you)Text. Works as long as you
-					Input <i><b>always</b></i> Unique Inputs..
-				</p>
-				<em hidden>Restart Your Browser after Deleting an IndexDB-Card. indexdb(sol-ID) wont reset to 0 or -1 or -2
-					cus im clueless..</em>
-				<p hidden>dont forget to deploy a server-provider which allows CRUD Manipulation with the ServerJS file</p>
-				<!-- <span><a id="blink" href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span> -->
-				<!-- <hr /> -->
 				<div id="coco">
 					<div class="dboptionswitcher">
 						<select id="selectswitchdb" class="repoSelect" name="form-select" aria-label="Default select example"
@@ -427,16 +419,49 @@
 	<footer class="text-gray-300 footer wow fadeIn" data-wow-delay="0.1s">
 		<div class="mx-auto px-4">
 			<div class="pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-				<div class="">
+				<div>
 					<h5 class="text-white text-lg font-semibold mb-6">Get In Touch</h5>
-					<div class="col-lg">
-						<p class="flex items-center touch"><i class="mr-2 h-5 w-5 fa fa-map-marker-alt"></i>123 Street</p>
-						<p class="flex items-center touch"><i class="mr-2 h-5 w-5 fa fa-phone-alt"></i>+0</p>
-						<p class="flex items-center touch"><i
-								class="mr-2 h-5 w-5 fa fa-envelope"></i>Hasan.yildirim&#64;outlook.com</p>
-					</div>
+					<!-- Contact Form Section -->
+					<section class="container contact-section py-8">
+						<!-- <h2 class="text-center text-2xl font-bold mb-6">Contact Me</h2> -->
+						<dialog id="contactDialog" class="modal relative">
+							<form action="https://formspree.io/f/xblogzkw" method="POST" id="contactForm"
+								class="max-w-xl mx-auto bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md ">
+								<div class="x absolute top-4 right-4">
+									<label for="closeDialogBtn">close:</label>
+									<input type="checkbox" id="closeDialogBtn"
+										class="mt-2 w-full bg-gray-300 dark:bg-gray-600 p-2 rounded" />
 
-					<div class="flex space-x-4 d-flex pt-2 i">
+								</div>
+								<div class="mb-4">
+									<label for="contactName" class="block text-sm font-medium mb-1">Name</label>
+									<input type="text" id="contactName" name="name" required
+										class="w-full p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
+								</div>
+								<div class="mb-4">
+									<label for="contactEmail" class="block text-sm font-medium mb-1">Your Email (for
+										reply)</label>
+									<input type="email" id="contactEmail" name="email" required
+										class="w-full p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
+								</div>
+								<div class="mb-4">
+									<label for="contactSubject" class="block text-sm font-medium mb-1">Subject</label>
+									<input type="text" id="contactSubject" name="subject" required
+										class="w-full p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
+								</div>
+								<div class="mb-4">
+									<label for="contactMessage" class="block text-sm font-medium mb-1">Message</label>
+									<textarea id="contactMessage" name="message" rows="4" required
+										class="w-full p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"></textarea>
+								</div>
+								<div id="contactFormStatus" class="mb-4 text-sm"></div>
+								<button type="submit" class="btn-primary w-full">Send Message</button>
+							</form>
+						</dialog>
+						<button id="showDialogBtn" class="btn-primary mt-4">Show the dialog</button>
+					</section>
+					<!-- End Contact Form Section -->
+					<div class="flex space-x-4 d-flex mt-8 iconsHolder">
 						<a class="text-gray-400 hover:text-white transition-colors btn-social" href="https://x.com/"><i
 								class="fab fa-twitter"></i></a>
 						<a class="text-gray-400 hover:text-white transition-colors btn-social"
@@ -479,10 +504,11 @@
 					<h5 class="text-white text-lg font-semibold mb-4">Newsletter</h5>
 					<!-- <p class="mb-4">Dolor amet sit justo.</p> -->
 					<form class="">
-						<label class="block text-sm font-medium text-gray-300 mb-2" for="email">Email</label>
-						<div class="h-3 asdf">
-							<input class="w-full rounded-md focus:outline-none focus:ring-2" type="email" placeholder="Email"
-								autocomplete="off" name="newsletter" id="email" required />
+						<label class="block text-sm font-medium text-gray-300 mb-2" for="il">Email</label>
+						<div class="flex items-center">
+							<input
+								class="flex-grow p-2 rounded-l-md focus:outline-none focus:ring-2 dark:bg-gray-700 dark:border-gray-600 border border-gray-300"
+								type="email" name="il" placeholder="Your Email" autocomplete="off" id="il" required />
 							<button type="button" class="rounded-r-md btn-primary" id="subscribe">SignUp</button>
 						</div>
 					</form>
@@ -492,10 +518,11 @@
 		<div class="border-t border-gray-700 container">
 			<div class="flex flex-col md:flex-row justify-between items-center copyright row">
 				<div class="text-center md:text-left mb-4 md:mb-0 text-md-start mb-md-0">
-					&copy; 2024
-					<!--a class="" href="#">Your Site Name</a>, All Rights Reserved.-->
-					<span> <a id="blink" class="hover:text-white transition-colors"
-							href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a></span>
+					<!-- &copy; 2024 -->
+					<span>
+						<!-- <a id="blink" class="hover:text-white transition-colors"
+							href="mailto:hasan.yildirim@outlook.com">Hasan.yildirim&#64;outlook.com</a> -->
+					</span>
 				</div>
 				<div class="text-center text-md-end">
 					<div class="flex space-x-4 footer-menu">
@@ -508,7 +535,13 @@
 			</div>
 		</div>
 	</footer>
-	<!-- ^Back to Top -->
+	<script>
+		const dialog = document.getElementById("contactDialog");
+		const showButton = document.getElementById("showDialogBtn");
+		const closeButton = document.getElementById("closeDialogBtn");
+		showButton.addEventListener("click", () => { dialog.showModal(); dialog.focus(); dialog.scrollIntoView(); });
+		closeButton.addEventListener("click", () => { dialog.close(); });
+	</script>
 	<script nonce="abc123">
 		function googleTranslateElementImit() {
 			new google.translate.TranslateElement({ pageLanguage: "en" }, "google_translate_element");
