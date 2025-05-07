@@ -178,7 +178,7 @@ exports.handler = async (event) => {
 			},
 		};*/
 		const verification = await verifyRegistrationResponse({
-			response: webAuthnResponse, //verificationInput,
+			response: webAuthnResponse, // Pass the entire WebAuthn credential object
 			expectedChallenge: expectedChallenge,
 			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,

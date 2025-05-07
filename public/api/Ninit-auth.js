@@ -153,7 +153,7 @@ exports.handler = async (event) => {
 			allowCredentials: [
 				// *** FIX: Use data from authenticatorData ***
 				{
-					id: authenticatorData.credentialID, //.toString("base64url"),
+					id: authenticatorData.credentialID.toString("base64url"),
 					type: "public-key",
 					transports: authenticatorData.transports,
 				},

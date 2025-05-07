@@ -125,18 +125,66 @@ module.exports = async (req, res) => {
 	const authenticatorData = await getUserPassKeyForVerification(userId);
 
 	if (!authenticatorData) {
-		console.error(`User validation failed for verification: User ID ${userId}`);
-		return res.status(400).json({ error: "User not found or no passkey registered for user." });
+		console.error(`[VERIFY-AUTH] CRITICAL: getUserPassKeyForVerification returned null or undefined for userId: ${userId}. Cannot proceed with WebAuthn verification.`);
+		// Log the user object to see if passKey was missing or malformed there
+		const userForDebug = await getUserById(userId);
+		console.error(`[VERIFY-AUTH] User data at time of failure:`, JSON.stringify(userForDebug));
+		return res.status(400).json({ error: "Passkey data for this user is missing or invalid. Cannot verify." });
 	}
-	console.log(`Attempting verification for user ${user.username} (ID: ${userId}) with challenge: ${expectedChallenge}`);
 
+	// If authenticatorData is not null, log its contents
+	console.log(
+		`[VERIFY-AUTH] Authenticator data for verification (userId: ${userId}):`,
+		JSON.stringify(authenticatorData, (key, value) => {
+			if (value && value.type === "Buffer" && Array.isArray(value.data)) {
+				return `Buffer(<${Buffer.from(value.data).toString("base64url")}>)`;
+			}
+			if (value instanceof Buffer) {
+				// Handle direct Buffer instances too
+				return `Buffer(<${value.toString("base64url")}>)`;
+			}
+			return value;
+		}),
+	);
+
+	if (!authenticatorData.credentialID || !(authenticatorData.credentialID instanceof Buffer) || authenticatorData.credentialID.length === 0) {
+		console.error(
+			`[VERIFY-AUTH] CRITICAL: authenticatorData.credentialID is invalid. Type: ${typeof authenticatorData.credentialID}, IsBuffer: ${authenticatorData.credentialID instanceof Buffer}, Length: ${
+				authenticatorData.credentialID?.length
+			}`,
+		);
+		console.error(`[VERIFY-AUTH] Full authenticatorData (raw):`, authenticatorData);
+		return res.status(500).json({ error: "Internal error: Invalid authenticator data structure." });
+	}
+	console.log(
+		`[VERIFY-AUTH] authenticatorData.credentialID is a Buffer of length ${authenticatorData.credentialID.length}, value (base64url): ${authenticatorData.credentialID.toString("base64url")}`,
+	);
+
+	// Pre-flight check
+	if (!authenticatorData.credentialID) {
+		console.error("[VERIFY-AUTH PRE-FLIGHT CHECK] authenticatorData.credentialID IS FALSY! This is unexpected given previous logs.", authenticatorData.credentialID);
+		return res.status(500).json({ error: "Internal pre-flight check: credentialID is falsy." });
+	} else {
+		console.log(
+			`[VERIFY-AUTH PRE-FLIGHT CHECK] authenticatorData.credentialID IS TRUTHY. Type: ${typeof authenticatorData.credentialID}, Is Buffer: ${
+				authenticatorData.credentialID instanceof Buffer
+			}, Length: ${authenticatorData.credentialID.length}`,
+		);
+	}
+
+	console.log(`Attempting verification for user ${user.username} (ID: ${userId}) with challenge: ${expectedChallenge}`);
 	try {
 		const verification = await verifyAuthenticationResponse({
-			response: webAuthnResponse,
+			response: webAuthnResponse.response, // Pass the nested response object
 			expectedChallenge: expectedChallenge, // Explicit for clarity
 			expectedOrigin: effectiveOrigin, // Ensure we use the variable 'effectiveOrigin' here
 			expectedRPID: currentRpConfig.rpId,
-			authenticator: authenticatorData,
+			authenticator: {
+				credentialID: authenticatorData.credentialID,
+				credentialPublicKey: authenticatorData.credentialPublicKey,
+				counter: authenticatorData.counter,
+				transports: authenticatorData.transports,
+			},
 			requireUserVerification: false,
 		});
 

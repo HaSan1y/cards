@@ -169,7 +169,7 @@ module.exports = async (req, res) => {
 		console.log(`Verifying registration for user ${username} (ID: ${userId}) with challenge: ${expectedChallenge}`);
 
 		const verification = await verifyRegistrationResponse({
-			response: webAuthnResponse,
+			response: webAuthnResponse, // Pass the entire WebAuthn credential object
 			expectedChallenge: expectedChallenge,
 			expectedOrigin: effectiveOrigin,
 			expectedRPID: currentRpConfig.rpId,

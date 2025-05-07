@@ -117,7 +117,7 @@ async function getUserPassKeyForVerification(userId) {
 			transports: userData.passKey.transports, // Array.isArray(userData.passKey.transports) ? userData.passKey.transports : undefined,
 		};
 	} catch (error) {
-		console.error(`KV: Error converting passKey data for userData  ${userData.Id}:`, error);
+		console.error(`KV: Error converting passKey data for userData  ${userId}:`, error);
 		console.error(`KV: Faulty passKey data:`, userData.passKey); // Log the problematic data
 		return null;
 	}

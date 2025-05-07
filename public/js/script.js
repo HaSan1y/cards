@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 		console.log("Unknown URL, no API endpoint configured.");
 	// 	}
 	// --- Service Worker Registration ---
+	/*
 	if ("serviceWorker" in navigator) {
 		navigator.serviceWorker
 			.register("./sw.js") // Path relative to origin root
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		console.log("Service Worker not supported in this browser.");
 	}
 	// --- End Service Worker Registration ---
+	*/
 	const repoSelectElements = document.getElementsByClassName("repoSelect");
 
 	for (let i = 0; i < repoSelectElements.length; i++) {
