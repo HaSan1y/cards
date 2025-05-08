@@ -12,8 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 	} else {
 	// 		console.log("Unknown URL, no API endpoint configured.");
 	// 	}
+
 	// --- Service Worker Registration ---
-	/*
+
 	if ("serviceWorker" in navigator) {
 		navigator.serviceWorker
 			.register("./sw.js") // Path relative to origin root
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		console.log("Service Worker not supported in this browser.");
 	}
 	// --- End Service Worker Registration ---
-	*/
+
 	const repoSelectElements = document.getElementsByClassName("repoSelect");
 
 	for (let i = 0; i < repoSelectElements.length; i++) {
@@ -308,30 +309,26 @@ window.switchDatabase = async function switchDatabase() {
 		coco.style.display = "none";
 		txtbtn.style.display = "none";
 		dbbtn.style.display = "none";
-		localbtn.style.display = "block"; // Show the form
+		localbtn.style.display = "block";
 		localbtn.addEventListener("submit", handleSessionSubmit); // Reuse the same handler
 		sessionbtn.reset();
 		window.currentStorageType = "local"; // Set storage type
 		displaysesCards(); // Display cards from localStorage
 	} else if (selectedValue === "cachedb") {
 		console.log("Switching to Cache API view");
-		// Clear specific UI elements from other modes
+
 		document.getElementById("dbbtn").innerHTML = "";
 		document.getElementById("txtbtn").innerHTML = "";
 		document.getElementById("sessionbtn").innerHTML = "";
-		document.getElementById("buttons").innerHTML = ""; // Clear general buttons area if needed
+		document.getElementById("buttons").innerHTML = "";
 		// document.getElementById("zbtns").innerHTML = ""||undefined;
-
-		// Hide forms
 		coco.style.display = "none";
 		txtbtn.style.display = "none";
 		dbbtn.style.display = "none";
 		sessionbtn.style.display = "none";
-
 		// Clear card display area
 		cardHolder.innerHTML = "<p>Cache API selected. Use DevTools (Application > Cache Storage) to inspect.</p>";
 
-		// Example: Add a button to cache a specific resource
 		const cacheDemoButton = document.createElement("button");
 		cacheDemoButton.textContent = "Cache: 'sen.txt'+'sol.txt'";
 		cacheDemoButton.type = "button";
@@ -452,7 +449,7 @@ function setupWebSocketChat() {
 	socket.onclose = () => {
 		console.log("WebSocket connection closed");
 		addChatMessage("System", "Disconnected from chat.");
-		socket = null; // Clear the socket variable
+		socket = null;
 	};
 
 	// Send message function
@@ -460,8 +457,8 @@ function setupWebSocketChat() {
 		const message = input.value.trim();
 		if (message && socket && socket.readyState === WebSocket.OPEN) {
 			socket.send(message); // Send the raw message text
-			addChatMessage("You", message); // Display your own message immediately
-			input.value = ""; // Clear input
+			addChatMessage("You", message);
+			input.value = "";
 		} else if (!message) {
 			console.log("Cannot send empty message");
 		} else {
